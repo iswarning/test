@@ -1,0 +1,316 @@
+<x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        Quản lý khách hàng
+    </h2>
+</x-slot>
+<div>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <!-- <div class="card-header">
+                            <h3>Danh sách khách hàng</h3>
+                        </div> -->
+                        <div class="card-body">
+                            <div>
+                                @if (session()->has('message'))
+                                <div class="alert alert-success">
+                                    {{ session('message') }}
+                                </div>
+                                @endif
+                            </div>
+                            <div class="flex items-center justify-between mt-1 w-full">
+                                <x-jet-input id="searchInput" class="block mt-1 w-50" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model="keyWord" autofocus />
+                                @if(Auth::user()->type == 0)<x-jet-button wire:click="historyShowModal"> {{ __('Lịch sử chỉnh sửa') }} </x-jet-button>@endif
+                                @if(Auth::user()->type != 2)
+                                    <x-jet-button wire:click="createShowModal"> {{ __('Thêm khách hàng') }} </x-jet-button>
+                                @endif
+                                <!-- Create and update customer modal -->
+                                
+                                <x-jet-dialog-modal wire:model="modalFormCustomerVisible">
+                                        <x-slot name="title">
+                                            {{ __('Thêm khách hàng') }}
+                                        </x-slot>
+
+                                        <x-slot name="content">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="name" value="{{ __('Họ tên') }}" />
+                                                    <x-jet-input id="name" class="block mt-1 w-full" type="text" wire:model.debounce.0ms="customerData.name" />
+                                                    @error('customerData.name')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="cmnd" value="{{ __('Chứng minh nhân dân') }}" />
+                                                    <x-jet-input id="cmnd" class="block mt-1 w-full" type="text" wire:model.debounce.0ms="customerData.cmnd" />
+                                                    <br>
+                                                    @error('customerData.cmnd')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                </div>
+                                            </div>
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="birthday" value="{{ __('Ngày sinh') }}" />
+                                                    <x-jet-input id="birthday" type="date" wire:model="customerData.birthday" />
+                                                    @error('customerData.birthday')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="phone" value="{{ __('Số điện thoại') }}" />
+                                                    <x-jet-input id="phone" type="text" wire:model="customerData.phone" />
+                                                    @error('customerData.phone')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                </div>
+                                            </div>
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="household" value="{{ __('Hộ khẩu thường trú') }}" />
+                                                    <x-jet-input id="household" type="text" wire:model="customerData.household" />
+                                                    <br>
+                                                    @error('customerData.household')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="address" value="{{ __('Địa chỉ liên hệ') }}" />
+                                                    <x-jet-input id="address" type="text" wire:model="customerData.address" />
+                                                    <br>
+                                                    @error('customerData.address')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                </div>
+                                            </div>
+                                        </x-slot>
+                                    
+                                        <x-slot name="footer">
+                                            <x-jet-secondary-button wire:click="$toggle('modalFormCustomerVisible')" wire:loading.attr="disabled">
+                                                {{ __('Hủy') }}
+                                            </x-jet-secondary-button>
+
+                                            <x-jet-button class="ml-2" wire:click="nextModal" wire:loading.attr="disabled">
+                                                {{ __('Tiếp theo') }}
+                                            </x-jet-button>
+                                            
+                                        </x-slot>
+                                </x-jet-dialog-modal>
+
+                                <x-jet-dialog-modal wire:model="modalFormContractVisible">
+                                    <div wire:model="modalFormCustomerVisible">
+                                        <x-slot name="title">
+                                            {{ __('Thêm hợp đồng') }}
+                                        </x-slot>
+
+                                        <x-slot name="content">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="contract_no" value="{{ __('Mã hợp đồng') }}" />
+                                                    <x-jet-input id="contract_no" class="block mt-1 w-full" type="text" wire:model="contractData.contract_no" />
+                                                    @error('contractData.contract_no')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="type" value="{{ __('Loại hợp dồng') }}" />
+                                                    <x-jet-input id="type" class="block mt-1 w-full" type="text" wire:model="contractData.type" />
+                                                    @error('contractData.type')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                </div>
+                                            </div>
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="lot_number" value="{{ __('Mã lô') }}" />
+                                                    <x-jet-input id="lot_number" class="block mt-1 w-full" type="text" wire:model="contractData.lot_number" />
+                                                    @error('contractData.lot_number')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="area_signed" value="{{ __('Diện tích ký') }}" />
+                                                    <x-jet-input id="area_signed" class="block mt-1 w-full" type="text" wire:model="contractData.area_signed" />
+                                                    @error('contractData.area_signed')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                </div>
+                                            </div>
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
+                                                        </div>
+                                                        <select class="custom-select" wire:model="contractData.status">                                                       
+                                                            @foreach ($this->contractStatus as $status)
+                                                                <option value="{{$status->id}}">{{ $status->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <label class="input-group-text" for="inputGroupSelect01">Dự án</label>
+                                                        </div>
+                                                        <select class="custom-select" wire:model="contractData.project_id">
+                                                            <option value="0" selected>Chọn dự án</option>
+                                                            @foreach($projects as $project)
+                                                                <option value="{{$project->id}}">{{$project->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="signed_date" value="{{ __('Ngày ký') }}" />
+                                                    <x-jet-input type="date" wire:model="contractData.signed_date" id="signed_date"/>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="signed_date" value="{{ __('Giá bán') }}" />
+                                                    <x-jet-input type="text" wire:model="contractData.value" id="value"/>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
+                                                    <x-jet-input type="date" wire:model="paymentData.payment_date_95" id="payment_date_95"/>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
+                                                    <x-jet-input type="text" wire:model="paymentData.payment_progress" id="payment_progress"/>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-4">
+                                                <div class="col-md-6 flex">
+                                                    <x-jet-label for="signed" value="{{ __('Đã ký / chưa ký') }}" />
+                                                    <input id="signed" type="checkbox" wire:model="contractData.signed" class="form-checkbox h-5 w-5 text-green-500 ml-2">
+                                                </div>
+                                            </div>
+                                        </x-slot>
+                                    
+                                        <x-slot name="footer">
+                                            <x-jet-secondary-button wire:click="$toggle('modalFormContractVisible')" wire:loading.attr="disabled">
+                                                {{ __('Hủy') }}
+                                            </x-jet-secondary-button>
+                                            <x-jet-button class="ml-2" wire:click="backModal" wire:loading.attr="disabled">
+                                                {{ __('Quay lại') }}
+                                            </x-jet-button>
+
+                                            @if ($customerId)
+                                            <x-jet-button class="ml-2" wire:click="update" wire:loading.attr="disabled">
+                                                {{ __('Cập nhật') }}
+                                            </x-jet-button>
+                                            @else
+                                            <x-jet-button class="ml-2" wire:click="create" wire:loading.attr="disabled">
+                                                {{ __('Lưu') }}
+                                            </x-jet-button>
+                                            @endif
+                                            
+                                            
+                                            
+                                        </x-slot>
+                                    </div>
+                                </x-jet-dialog-modal>
+                                
+                            </div>
+                            <br>
+                            
+                            <!-- Data Table Customer -->
+                            @if($this->dataTableCustomerVisible == true)
+                                <table class="table table-striped" wire:model="dataTableCustomerVisible">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tên</th>
+                                            <th>CMND</th>
+                                            <th>Dự Án</th>
+                                            <th>Mã Lô</th>
+                                            <th>Tình trạng giữ chỗ</th>
+                                            <th>Tiến độ thanh toán</th>
+                                            <th>Ngày bàn giao</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        @foreach ($customers as $customer)      
+                                            @foreach($customer['contracts'] as $contract)
+                                            <tr>
+                                                <td>{{$customer->id}}</td>
+                                                <td>
+                                                    <a class="text-indigo-600 hover:text-indigo-900" href="{{ URL::to('/customer/'.$customer->id)}}">
+                                                        {{ $customer->name }}
+                                                    </a>
+                                                </td>
+                                                <td>{{$customer->cmnd}}</td>
+                                                <td>{{$contract->project_id}}</td>
+                                                <td>{{$contract->lot_number}}</td>
+                                                <td>{{$contract->status_created_by}}</td>
+                                                <td></td>
+                                                <td></td>
+                                                
+                                                <td>
+                                                @if(Auth::user()->type != 2)    
+                                                    <x-jet-button class="ml-2" wire:click="updateShowModal({{ $customer->id }},{{$contract->id}})"> {{ __('Sửa') }} </x-jet-button>
+                                                @endif
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                {{ $customers->links() }}
+                            @else               
+
+                            <!-- Data Table History -->
+                            
+                            <table class="table table-striped" wire:model="dataTableHistoryVisible">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($histories as $history)
+                                    <tr>
+                                        <td>{{$history->id}}</td>
+                                        <td>{{$history->title}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            {{ $histories->links() }}
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Confirm delete customer modal -->
+<!-- <x-jet-confirmation-modal wire:model="modalConfirmDeleteVisible">
+    <x-slot name="title">
+        {{ __('Xóa thông tin khách hàng') }}
+    </x-slot>
+
+    <x-slot name="content">
+        {{ __('Bạn có chắc muốn xóa thông tin khách hàng này?') }}
+    </x-slot>
+
+    <x-slot name="footer">
+        <x-jet-secondary-button wire:click="$toggle('modalConfirmDeleteVisible')" wire:loading.attr="disabled">
+            {{ __('Hủy') }}
+        </x-jet-secondary-button>
+
+        <x-jet-danger-button class="ml-2" wire:click="delete" wire:loading.attr="disabled">
+            {{ __('Xóa') }}
+        </x-jet-danger-button>
+    </x-slot>
+</x-jet-confirmation-modal> -->
