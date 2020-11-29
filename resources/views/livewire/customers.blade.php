@@ -27,7 +27,7 @@
                                     <x-jet-button wire:click="createShowModal"> {{ __('Thêm khách hàng') }} </x-jet-button>
                                 @endif
                                 <!-- Create and update customer modal -->
-                                
+
                                 <x-jet-dialog-modal wire:model="modalFormCustomerVisible">
                                         <x-slot name="title">
                                             {{ __('Thêm khách hàng') }}
@@ -86,7 +86,7 @@
                                                 </div>
                                             </div>
                                         </x-slot>
-                                    
+
                                         <x-slot name="footer">
                                             <x-jet-secondary-button wire:click="$toggle('modalFormCustomerVisible')" wire:loading.attr="disabled">
                                                 {{ __('Hủy') }}
@@ -95,7 +95,7 @@
                                             <x-jet-button class="ml-2" wire:click="nextModal" wire:loading.attr="disabled">
                                                 {{ __('Tiếp theo') }}
                                             </x-jet-button>
-                                            
+
                                         </x-slot>
                                 </x-jet-dialog-modal>
 
@@ -144,13 +144,51 @@
                                                         <div class="input-group-prepend">
                                                             <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
                                                         </div>
-                                                        <select class="custom-select" wire:model="contractData.status">                                                       
+                                                        <select class="custom-select" wire:model="contractData.status">
                                                             @foreach ($this->contractStatus as $status)
-                                                                <option value="{{$status->id}}">{{ $status->name }}</option>
+                                                                <option value="{{$loop->index}}">{{ $status }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
+                                                @if($contractData['status'] != 2)
+                                                <div class="col-md-6">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <label class="input-group-text" for="inputGroupSelect01">Giữ chỗ</label>
+                                                        </div>
+                                                        <select class="custom-select" wire:model="contractData.status_created_by">
+                                                            @foreach($this->contractStatusCreated as $item)
+                                                                <option value="{{$loop->index}}">{{$item}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="signed_date" value="{{ __('Ngày ký') }}" />
+                                                    <x-jet-input type="date" class="block mt-1 w-full" wire:model="contractData.signed_date" id="signed_date"/>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="signed_date" value="{{ __('Giá bán') }}" />
+                                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="contractData.value" id="value"/>
+                                                </div>
+
+                                            </div>
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
+                                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="paymentData.payment_progress" id="payment_progress"/>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
+                                                    <x-jet-input type="date" class="block mt-1 w-full" wire:model="paymentData.payment_date_95" id="payment_date_95"/>
+                                                </div>
+
+                                            </div>
+                                            <div class="row mt-4">
                                                 <div class="col-md-6">
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -164,35 +202,14 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <x-jet-label for="signed_date" value="{{ __('Ngày ký') }}" />
-                                                    <x-jet-input type="date" wire:model="contractData.signed_date" id="signed_date"/>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <x-jet-label for="signed_date" value="{{ __('Giá bán') }}" />
-                                                    <x-jet-input type="text" wire:model="contractData.value" id="value"/>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-4">
-                                                <div class="col-md-6">
-                                                    <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
-                                                    <x-jet-input type="date" wire:model="paymentData.payment_date_95" id="payment_date_95"/>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
-                                                    <x-jet-input type="text" wire:model="paymentData.payment_progress" id="payment_progress"/>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-4">
+
                                                 <div class="col-md-6 flex">
                                                     <x-jet-label for="signed" value="{{ __('Đã ký / chưa ký') }}" />
                                                     <input id="signed" type="checkbox" wire:model="contractData.signed" class="form-checkbox h-5 w-5 text-green-500 ml-2">
                                                 </div>
                                             </div>
                                         </x-slot>
-                                    
+
                                         <x-slot name="footer">
                                             <x-jet-secondary-button wire:click="$toggle('modalFormContractVisible')" wire:loading.attr="disabled">
                                                 {{ __('Hủy') }}
@@ -210,16 +227,16 @@
                                                 {{ __('Lưu') }}
                                             </x-jet-button>
                                             @endif
-                                            
-                                            
-                                            
+
+
+
                                         </x-slot>
                                     </div>
                                 </x-jet-dialog-modal>
-                                
+
                             </div>
                             <br>
-                            
+
                             <!-- Data Table Customer -->
                             @if($this->dataTableCustomerVisible == true)
                                 <table class="table table-striped" wire:model="dataTableCustomerVisible">
@@ -237,8 +254,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
-                                        @foreach ($customers as $customer)      
+
+                                        @foreach ($customers as $customer)
                                             @foreach($customer['contracts'] as $contract)
                                             <tr>
                                                 <td>{{$customer->id}}</td>
@@ -253,9 +270,9 @@
                                                 <td>{{$contract->status_created_by}}</td>
                                                 <td></td>
                                                 <td></td>
-                                                
+
                                                 <td>
-                                                @if(Auth::user()->type != 2)    
+                                                @if(Auth::user()->type != 2)
                                                     <x-jet-button class="ml-2" wire:click="updateShowModal({{ $customer->id }},{{$contract->id}})"> {{ __('Sửa') }} </x-jet-button>
                                                 @endif
                                                 </td>
@@ -265,10 +282,10 @@
                                     </tbody>
                                 </table>
                                 {{ $customers->links() }}
-                            @else               
+                            @else
 
                             <!-- Data Table History -->
-                            
+
                             <table class="table table-striped" wire:model="dataTableHistoryVisible">
                                 <thead>
                                     <tr>

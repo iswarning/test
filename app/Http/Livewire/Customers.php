@@ -9,9 +9,10 @@ use Livewire\WithPagination;
 use App\Models\History;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Contracts;
-use App\Models\ContractStatus;
+use App\Enums\ContractStatus;
 use App\Models\Project;
 use App\Models\Payment;
+use App\Enums\ContractStatusCreated;
 
 class Customers extends Component
 {
@@ -40,8 +41,10 @@ class Customers extends Component
     public $paymentData = [];
     public $modalFormVisible = false;
     public $contractStatus = [];
+    public $contractStatusCreated = [];
     public $contractData = [
-        'signed' => false
+        'signed' => false,
+        'status' => 0
     ];
 
     public function rules()
@@ -87,7 +90,7 @@ class Customers extends Component
 
     public function create()
     {
-        $this->validate();       
+        $this->validate();
         $customer = ModelsCustomers::create($this->customerData);
         $this->contractData['customer_id'] = $customer->id;
         $contract = Contracts::create($this->contractData);
@@ -100,7 +103,7 @@ class Customers extends Component
     public function update()
     {
         $this->validate();
-        ModelsCustomers::find($this->customerId)->update($this->customerData); 
+        ModelsCustomers::find($this->customerId)->update($this->customerData);
         $this->modalFormVisible = false;
         $this->dataUpdated = ModelsCustomers::find($this->customerId);
         Contracts::find($this->contractId)->update($this->contractData);
@@ -129,11 +132,11 @@ class Customers extends Component
             })->paginate($this->recordNum) ,
 
             'histories' => History::orderBy('id', 'desc')->paginate($this->recordNum) ,
-            'projects' => Project::all() 
+            'projects' => Project::all()
         ]);
-        
-        
-        
+
+
+
 
         // $searchKey = '%' . $this->keyWord . '%';
         // $customers = ModelsCustomers::whereHas('contracts', function ($query) use ($searchKey){
@@ -144,33 +147,34 @@ class Customers extends Component
         //         ->orWhere('lot_number', 'like', '%'.$searchKey.'%')
         //         ->orWhere('status_created_by', 'like', '%'.$searchKey.'%');
         // }])->get();
-    
-        
+
+
         // foreach($customers as $customer)
         // {
         //     foreach($customer->contracts as $contract)
         //     {
-                
+
         //         echo $contract->project_id;
         //     }
         // }
 
     }
-    
+
     /**
      * Show the form modal
      * of the create function
-     * 
+     *
       * @return void
      */
     public function createShowModal()
     {
         $this->reset();
-        $this->contractStatus = ContractStatus::all();
+        $this->contractStatus = ContractStatus::statusName;
+        $this->contractStatusCreated = ContractStatusCreated::statusName;
         $this->modalFormContractVisible = false;
         $this->modalFormCustomerVisible = true;
     }
-    
+
     public function updateShowModal($customer_id, $contract_id)
     {
         $this->dataNotUpdate = ModelsCustomers::findOrFail($customer_id);
@@ -184,7 +188,7 @@ class Customers extends Component
     }
 
     public function deleteShowModal($id)
-    { 
+    {
         $this->customerId = $id;
         $this->modalConfirmDeleteVisible = true;
     }
@@ -244,7 +248,7 @@ class Customers extends Component
 
     public function nextModal()
     {
-        
+
         $this->modalFormContractVisible = true;
         $this->modalFormCustomerVisible = false;
     }
