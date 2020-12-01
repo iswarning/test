@@ -42,7 +42,9 @@ class CustomerDetail extends Component
     public $paymentData = [];
     public $projectData = [];
     public $billlateData = [];
-    public $juridicalData = [];
+    public $juridicalData = [
+        'liquidation' => true
+    ];
     public $contractData = [
         'signed' => false
     ];
@@ -52,7 +54,15 @@ class CustomerDetail extends Component
 
     public function rules()
     {
-        $rules = [];
+        $rules = [
+            'customerData.name' => 'required',
+            'customerData.cmnd' => ['required', Rule::unique('customers', 'cmnd')->ignore($this->customerId)],
+            'customerData.address' => 'required',
+            'customerData.household' => 'required',
+            'customerData.birthday' => 'required',
+            'customerData.phone' => ['required', 'numeric'],
+        ];
+
         if($this->modalShowContractVisible == true)
         {
             $rules = [
@@ -71,18 +81,6 @@ class CustomerDetail extends Component
                 $rules['paymentData.payment_date_95'] = 'required';
                 $rules['paymentData.payment_progress'] = 'required';
             }
-        }
-
-        if($this->modalShowCustomerVisible == true)
-        {
-            $rules = [
-                'customerData.name' => 'required',
-                'customerData.cmnd' => ['required', Rule::unique('customers', 'cmnd')->ignore($this->customerId)],
-                'customerData.address' => 'required',
-                'customerData.household' => 'required',
-                'customerData.birthday' => 'required',
-                'customerData.phone' => ['required', 'numeric'],
-            ];
         }
 
         if($this->modalShowPaymentVisible == true)
@@ -117,6 +115,7 @@ class CustomerDetail extends Component
                 'juridicalData.bill_profile' => 'required',
                 'juridicalData.book_holder' => 'required',
                 'juridicalData.delivery_land_date' => 'required',
+                'juridicalData.delivery_book_date' => 'required',
                 'juridicalData.commitment' => 'required',
                 'juridicalData.contract_id' => 'required',
             ];
@@ -124,8 +123,6 @@ class CustomerDetail extends Component
 
         return $rules;
     }
-
-
 
     public function messages()
     {
@@ -170,7 +167,7 @@ class CustomerDetail extends Component
     public function mount($id)
     {
         $this->customerId = $id;
-
+        $this->customerData = Customers::find($this->customerId)->toArray();
         // Get project data for dropdown
         $this->projectData = Project::all();
 
@@ -205,16 +202,18 @@ class CustomerDetail extends Component
     public function render()
     {
         return view('livewire.customer-detail', [
-            'contract' =>  Contracts::where('customer_id',$this->customerId)->get(),
-            'customer' => Customers::find($this->customerId)->toArray()
-            ]);
+            'contract' =>  Contracts::where('customer_id',$this->customerId)->get()
+        ]);
+
     }
 
     public function createShowContract()
     {
-
-        $this->contractData = [];
+        $this->contractData = [
+            'signed' => false
+        ];
         $this->contractId = null;
+        $this->contractData = [];
         $this->modalShowContractVisible = true;
     }
 
@@ -237,6 +236,7 @@ class CustomerDetail extends Component
         $this->tab = $tab;
         $this->contractId = $id;
 
+
         $this->paymentData = Payment::where('contract_id',$this->contractId)->first();
         $this->paymentId = $this->paymentData['id'];
 
@@ -246,10 +246,15 @@ class CustomerDetail extends Component
             $this->infoBillLate = true;
         }else{
             $this->infoBillLate = false;
+            $this->billlateId= null;
         }
 
         $this->juridicalData = Juridical::where('contract_id', $this->contractId)->first();
-        if($this->juridicalData != null) $this->juridicalId = $this->juridicalData->id;
+        if($this->juridicalData != null) {
+            $this->juridicalId = $this->juridicalData->id;
+        }else{
+            $this->juridicalId = null;
+        }
 
     }
 
@@ -263,9 +268,7 @@ class CustomerDetail extends Component
     {
         $this->juridicalData['contract_id'] = $this->contractId;
         $this->juridicalData['liquidation'] = true;
-
         $this->validate();
-
         Juridical::create($this->juridicalData);
         $this->modalShowJuridicalVisible = false;
         session()->flash('message', 'Them thong tin phap ly thanh cong');

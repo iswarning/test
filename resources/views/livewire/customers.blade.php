@@ -22,7 +22,13 @@
                             </div>
                             <div class="flex items-center justify-between mt-1 w-full">
                                 <x-jet-input id="searchInput" class="block mt-1 w-50" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model="keyWord" autofocus />
-                                @if(Auth::user()->type == 0)<x-jet-button wire:click="historyShowModal"> {{ __('Lịch sử chỉnh sửa') }} </x-jet-button>@endif
+                                @if(Auth::user()->type == 0)
+                                    @if($dataTableCustomerVisible == true)
+                                    <x-jet-button wire:click="historyShowList"> {{ __('Lịch sử chỉnh sửa') }} </x-jet-button>
+                                    @else
+                                    <x-jet-button wire:click="customerShowList"> {{ __('Danh sach khach hang') }} </x-jet-button>
+                                    @endif
+                                @endif
                                 @if(Auth::user()->type != 2)
                                     <x-jet-button wire:click="createShowModal"> {{ __('Thêm khách hàng') }} </x-jet-button>
                                 @endif
@@ -237,6 +243,55 @@
                             </div>
                             <br>
 
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
+                                        </div>
+                                        <select class="custom-select" wire:model="selectStatus">
+                                            @foreach ($this->contractStatus as $status)
+                                                <option value="{{$loop->index}}">{{ $status }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">Thanh toán</label>
+                                        </div>
+                                        <select class="custom-select" wire:model="selectBill">
+                                            <option value="0">Đúng hạn</option>
+                                            <option value="1">Trễ hạn</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">Từ</label>
+                                        </div>
+                                        <select class="custom-select" wire:model="selectTimeFrom">
+                                            @foreach($customers as $customer)
+                                                    <option>{{$customer->contractCreated}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">Đến</label>
+                                        </div>
+                                        <select class="custom-select" wire:model="selectTimeTo">
+                                            @foreach($customers as $customer)
+                                                    <option>{{$customer->contractCreated}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Data Table Customer -->
                             @if($this->dataTableCustomerVisible == true)
                                 <table class="table table-striped" wire:model="dataTableCustomerVisible">
@@ -247,8 +302,8 @@
                                             <th>CMND</th>
                                             <th>Dự Án</th>
                                             <th>Mã Lô</th>
-                                            <th>Tình trạng giữ chỗ</th>
-                                            <th>Tiến độ thanh toán</th>
+                                            <th>Tình trạng</th>
+                                            <th>Tiến độ</th>
                                             <th>Ngày bàn giao</th>
                                             <th>Actions</th>
                                         </tr>
@@ -256,32 +311,34 @@
                                     <tbody>
 
                                         @foreach ($customers as $customer)
-                                            @foreach($customer['contracts'] as $contract)
+{{--                                            @foreach($customer['contracts'] as $contract)--}}
+{{--                                            @foreach (App\Models\Contracts::where('customer_id',$customer->id)->get() as $contract)--}}
                                             <tr>
-                                                <td>{{$customer->id}}</td>
+                                                <td>{{$customer->customerID}}</td>
                                                 <td>
-                                                    <a class="text-indigo-600 hover:text-indigo-900" href="{{ URL::to('/customer/'.$customer->id)}}">
-                                                        {{ $customer->name }}
+                                                    <a class="text-indigo-600 hover:text-indigo-900" href="{{ URL::to('/customer/'.$customer->customerID)}}">
+                                                        {{ $customer->customerName }}
                                                     </a>
                                                 </td>
                                                 <td>{{$customer->cmnd}}</td>
-                                                <td>{{$contract->project_id}}</td>
-                                                <td>{{$contract->lot_number}}</td>
-                                                <td>{{$contract->status_created_by}}</td>
-                                                <td></td>
-                                                <td></td>
+                                                <td>{{$customer->projectName}}</td>
+                                                <td>{{$customer->lot_number}}</td>
+                                                <td>{{$this->contractStatus[$customer->contractStatus]}}</td>
+                                                <td>{{$customer->payment_progress}}</td>
+                                                <td>{{$customer->delivery_book_date}}</td>
 
                                                 <td>
                                                 @if(Auth::user()->type != 2)
-                                                    <x-jet-button class="ml-2" wire:click="updateShowModal({{ $customer->id }},{{$contract->id}})"> {{ __('Sửa') }} </x-jet-button>
+                                                    <x-jet-button class="ml-2" wire:click="updateShowModal({{ $customer->customerID }},{{$customer->contractID}})"> {{ __('Sửa') }} </x-jet-button>
+                                                    <x-jet-button class="ml-2" wire:click="delete({{$customer->contractID}})"> {{ __('Xóa') }} </x-jet-button>
                                                 @endif
                                                 </td>
                                             </tr>
-                                            @endforeach
+
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {{ $customers->links() }}
+{{--                                {{ $customers->links() }}--}}
                             @else
 
                             <!-- Data Table History -->

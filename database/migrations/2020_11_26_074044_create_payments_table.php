@@ -17,6 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('payment_progress')->comment('Tiến độ thanh toán');
             $table->date('payment_date_95')->comment('Ngày thanh toán đủ 95%');
+            $table->tinyInteger('payment_status')->comment('Tình trạng thanh toán')->nullable();
             $table->integer('contract_id')->nullable();
             $table->timestamps();
         });

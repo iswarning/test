@@ -19,6 +19,7 @@ class CreateJuridicalTable extends Migration
             $table->string('status')->comment('Tình trạng sổ');
             $table->date('notarized_date')->comment('Ngày công chứng');
             $table->string('registration_procedures')->comment('Thủ tục đăng bộ');
+            $table->date('delivery_book_date')->comment('Ngày bàn giao sổ');
             $table->tinyInteger('liquidation')->comment('Thanh lý hợp đồng');
             $table->string('bill_profile')->comment('Hồ sơ thu lai của khách hàng');
             $table->string('book_holder')->comment('Bộ phận giữ sổ');

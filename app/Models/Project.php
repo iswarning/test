@@ -20,5 +20,8 @@ class Project extends Model
         'description'
     ];
 
-    
+    public function contract()
+    {
+        return $this->belongsTo('App\Models\Contracts');
+    }
 }

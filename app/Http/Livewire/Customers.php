@@ -12,7 +12,10 @@ use App\Models\Contracts;
 use App\Enums\ContractStatus;
 use App\Models\Project;
 use App\Models\Payment;
+use App\Models\Juridical;
 use App\Enums\ContractStatusCreated;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Customers extends Component
 {
@@ -33,14 +36,20 @@ class Customers extends Component
     protected $paginationTheme = 'bootstrap';
 
     // History
-    public $dataNotUpdate;
-    public $dataUpdated;
+    public $dataNotUpdate = [];
+    public $dataUpdated = [];
 
     // Contract
+    public $selectTimeFrom;
+    public $selectTimeTo;
+    public $selectBill;
+    public $selectStatus;
+
+
     public $projectData = [];
     public $paymentData = [];
     public $modalFormVisible = false;
-    public $contractStatus = [];
+    public $contractStatus = ContractStatus::statusName;
     public $contractStatusCreated = [];
     public $contractData = [
         'signed' => false,
@@ -83,9 +92,9 @@ class Customers extends Component
         ];
     }
 
-    public function updated($propertyName)
+    public function updated()
     {
-        $this->validateOnly($propertyName);
+
     }
 
     public function create()
@@ -105,9 +114,11 @@ class Customers extends Component
         $this->validate();
         ModelsCustomers::find($this->customerId)->update($this->customerData);
         $this->modalFormVisible = false;
-        $this->dataUpdated = ModelsCustomers::find($this->customerId);
+        $this->dataUpdated = ModelsCustomers::find($this->customerId)->toArray();
         Contracts::find($this->contractId)->update($this->contractData);
-        $this->checkUpdate($this->dataNotUpdate, $this->dataUpdated);
+        Payment::where('contract_id',$this->contractId)->update($this->paymentData);
+        $this->checkUpdateCustomer($this->dataNotUpdate, $this->dataUpdated);
+
         session()->flash('message', 'Cập nhật thông tin khách hàng thành công!');
     }
 
@@ -121,42 +132,49 @@ class Customers extends Component
     public function render()
     {
         $searchKey = '%' . $this->keyWord . '%';
+        if($this->selectStatus != null)
+        {
+            return view('livewire.customers', [
+                'customers' => Contracts::join('customers','customers.id','contracts.customer_id')
+                    ->join('payments','payments.contract_id','contracts.id')
+                    ->join('projects','projects.id','contracts.project_id')
+                    ->where('contracts.status','=', $this->selectStatus)
+                    ->select('*',
+                        'projects.name as projectName',
+                        'customers.name as customerName',
+                        'customers.id as customerID',
+                        'contracts.id as contractID',
+                        'contracts.status as contractStatus'
+                    )
+                    ->get() ,
+                'projects' => Project::all() ,
+                'histories' => History::all()
+            ]);
+        }
         return view('livewire.customers', [
-            'customers' => ModelsCustomers::whereHas('contracts',function ($query) use ($searchKey) {
-                $query->where('name', 'like', $searchKey)
-                    ->orWhere('cmnd', 'like', $searchKey)
-                    ->orWhere('phone', 'like', $searchKey);
-            })->with('contracts', function($query) use ($searchKey){
-                $query->where('contract_no','like', $searchKey)
-                    ->orWhere('lot_number','like', $searchKey);
-            })->paginate($this->recordNum) ,
-
-            'histories' => History::orderBy('id', 'desc')->paginate($this->recordNum) ,
-            'projects' => Project::all()
+            'customers' => Contracts::join('customers','customers.id','contracts.customer_id')
+                ->join('payments','payments.contract_id','contracts.id')
+                ->join('projects','projects.id','contracts.project_id')
+                ->where('customers.name','like',$searchKey)
+                ->orWhere('cmnd','like',$searchKey)
+                ->orWhere('phone','like',$searchKey)
+                ->orWhere('lot_number','like',$searchKey)
+                ->orWhere('contract_no','like',$searchKey)
+                ->orWhere('projects.name','like',$searchKey)
+                ->where('contracts.status','=', $this->selectStatus)
+                ->select('*',
+                    'projects.name as projectName',
+                    'customers.name as customerName',
+                    'customers.id as customerID',
+                    'contracts.id as contractID',
+                    'contracts.status as contractStatus' ,
+                    'contracts.created_at as contractCreated'
+                )
+                ->get(),
+            'projects' => Project::all() ,
+            'histories' => History::all()
         ]);
 
-
-
-
-        // $searchKey = '%' . $this->keyWord . '%';
-        // $customers = ModelsCustomers::whereHas('contracts', function ($query) use ($searchKey){
-        //     $query->where('name', 'like', '%'.$searchKey.'%')
-        //         ->orWhere('cmnd', 'like', '%'.$searchKey.'%');
-        // })->with(['contracts' => function($query) use ($searchKey){
-        //     $query->where('project_id', 'like', '%'.$searchKey.'%')
-        //         ->orWhere('lot_number', 'like', '%'.$searchKey.'%')
-        //         ->orWhere('status_created_by', 'like', '%'.$searchKey.'%');
-        // }])->get();
-
-
-        // foreach($customers as $customer)
-        // {
-        //     foreach($customer->contracts as $contract)
-        //     {
-
-        //         echo $contract->project_id;
-        //     }
-        // }
 
     }
 
@@ -173,11 +191,12 @@ class Customers extends Component
         $this->contractStatusCreated = ContractStatusCreated::statusName;
         $this->modalFormContractVisible = false;
         $this->modalFormCustomerVisible = true;
+
     }
 
     public function updateShowModal($customer_id, $contract_id)
     {
-        $this->dataNotUpdate = ModelsCustomers::findOrFail($customer_id);
+        $this->dataNotUpdate = ModelsCustomers::find($customer_id)->toArray();
         $this->resetValidation();
         $this->customerId = $customer_id;
         $this->contractId = $contract_id;
@@ -193,53 +212,48 @@ class Customers extends Component
         $this->modalConfirmDeleteVisible = true;
     }
 
-    public function historyShowModal()
+    public function historyShowList()
     {
         $this->dataTableCustomerVisible = false;
         $this->dataTableHistoryVisible = true;
     }
 
-    public function checkUpdate($a, $b)
+    public function customerShowList()
     {
-        // Check name
-        if($b->name != $a->name)
-        {
-            $this->createHistory(" Name: ".$b->name);
-        }
-
-        // Check cmnd
-        if($b->cmnd != $a->cmnd)
-        {
-            $this->createHistory(" CMND: ".$b->cmnd);
-        }
-
-        // Check address
-        if($b->address != $a->address)
-        {
-            $this->createHistory(" Address: ".$b->address);
-        }
-
-        // Check birthday
-        if($b->birthday != $a->birthday)
-        {
-            $this->createHistory(" Birthday: ".$b->birthday);
-        }
-
-        // Check household
-        if($b->household != $a->household)
-        {
-            $this->createHistory(" HouseHold: ".$b->household);
-        }
-
-        // Check phone
-        if($b->phone != $a->phone)
-        {
-            $this->createHistory(" Phone: ".$b->phone);
-        }
-
+        $this->dataTableCustomerVisible = true;
+        $this->dataTableHistoryVisible = false;
     }
 
-    public function createHistory($target)
+    public function getArrayCustomer($data)
+    {
+        $newData = [];
+        $newData[] = $data['name'];
+        $newData[] = $data['cmnd'];
+        $newData[] = $data['address'];
+        $newData[] = $data['birthday'];
+        $newData[] = $data['household'];
+        $newData[] = $data['phone'];
+        return $newData;
+    }
+
+
+    public function checkUpdateCustomer(array $a, array $b)
+    {
+        $dataNotUpdate = $this->getArrayCustomer($a);
+        $dataUpdated = $this->getArrayCustomer($b);
+        for($i = 0; $i < count($dataNotUpdate); $i++)
+        {
+            for($j = 0; $j < count($dataUpdated); $j++)
+            {
+                if($dataUpdated[$j] != $dataNotUpdate[$i])
+                {
+                    $this->createHistoryCustomer($dataUpdated[$j]);
+                }
+            }
+        }
+    }
+
+    public function createHistoryCustomer($target)
     {
         History::create([
             'title' => Auth::user()->name." has changed ".$target

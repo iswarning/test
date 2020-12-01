@@ -31,6 +31,4 @@ class Customers extends Model
     {
         return $this->hasMany('App\Models\Contracts', 'customer_id');
     }
-
-
 }

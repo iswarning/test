@@ -1,189 +1,209 @@
-<x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Thông tin chi tiết hợp đồng 
-     </h2>
-</x-slot>
-<div>
-    <section>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                        <h3>Thông tin hợp đồng</h3>
-                        </div>
-                        <div class="card-body">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>Mã lô giữ chỗ: </td>
-                                        <td>{{$contract->lot_number}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Trạng thái: </td>
-                                        <td>
-                                            @php 
-                                                $status = App\Models\ContractStatus::find($contract->status);
-                                                if($status == null){$name = "";}else{$name = $status->name;}                                                
-                                            @endphp
-                                            @if($name === "Trả giữ chỗ" or $name === "Bỏ giữ chỗ")
-                                                - {{$contract->status_created_by}}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Đã ký/ chưa ký: </td>
-                                        <td>@if($contract->signed != 0) Đã ký @else Chưa ký @endif</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ngày ký: </td>
-                                        <td>{{$contract->signed_date}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Loại hợp đồng: </td>
-                                        <td>{{$contract->type}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Số hợp đồng: </td>
-                                        <td>{{$contract->contract_no}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Diện tích ký: </td>
-                                        <td>{{$contract->area_signed}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Giá bán: </td>
-                                        <td>{{number_format($contract->value)}}</td>
-                                    </tr>
-                                
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    @if($this->paymentData != null)
-                    <div class="card">
-                        <div class="card-header">
-                        <h3>Thông tin thanh toán</h3>
-                        </div>
-                        <div class="card-body">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>Tiến độ thanh toán: </td>
-                                        <td>{{$this->paymentData->payment_progress}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ngày thanh toán đủ 95%: </td>
-                                        <td>{{$this->paymentData->payment_date_95}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ngày trễ: </td>
-                                        <td>{{$this->paymentData->day_late}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Đợt trễ: </td>
-                                        <td>{{$this->paymentData->batch_late}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Số tiền trễ: </td>
-                                        <td>{{$this->paymentData->money_late}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Lãi phạt: </td>
-                                        <td>{{$this->paymentData->citation_rate}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Số lần đã gửi thông báo: </td>
-                                        <td>{{$this->paymentData->number_notifi}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Văn bản, phương thức: </td>
-                                        <td>{{$this->paymentData->document}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ngày khách nhận thông báo: </td>
-                                        <td>{{$this->paymentData->receipt_date}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    @else
-                        <br>
-                        <x-jet-button wire:click="createShowModalPayment">{{ __('Thêm thông tin thanh toán') }}</x-jet-button>
-                        <x-jet-dialog-modal wire:model="modalFormCustomerVisible">
-                            <x-slot name="title">
-                                {{ __('Thêm thông tin thanh toán') }}
-                            </x-slot>
-
-                            <x-slot name="content">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <x-jet-label for="name" value="{{ __('Họ tên') }}" />
-                                        <x-jet-input id="name" class="block mt-1 w-full" type="text" wire:model.debounce.0ms="customerData.name" />
-                                        @error('customerData.name')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        @endError
-                                    </div>
-                                    <div class="col-md-6">
-                                        <x-jet-label for="cmnd" value="{{ __('Chứng minh nhân dân') }}" />
-                                        <x-jet-input id="cmnd" class="block mt-1 w-full" type="text" wire:model.debounce.0ms="customerData.cmnd" />
-                                        <br>
-                                        @error('customerData.cmnd')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        @endError
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <div class="col-md-6">
-                                        <x-jet-label for="birthday" value="{{ __('Ngày sinh') }}" />
-                                        <x-jet-input id="birthday" type="date" wire:model="customerData.birthday" />
-                                        @error('customerData.birthday')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        @endError
-                                    </div>
-                                    <div class="col-md-6">
-                                        <x-jet-label for="phone" value="{{ __('Số điện thoại') }}" />
-                                        <x-jet-input id="phone" type="text" wire:model="customerData.phone" />
-                                        @error('customerData.phone')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        @endError
-                                    </div>
-                                </div>
-                                <div class="row mt-4">
-                                    <div class="col-md-6">
-                                        <x-jet-label for="household" value="{{ __('Hộ khẩu thường trú') }}" />
-                                        <x-jet-input id="household" type="text" wire:model="customerData.household" />
-                                        <br>
-                                        @error('customerData.household')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        @endError
-                                    </div>
-                                    <div class="col-md-6">
-                                        <x-jet-label for="address" value="{{ __('Địa chỉ liên hệ') }}" />
-                                        <x-jet-input id="address" type="text" wire:model="customerData.address" />
-                                        <br>
-                                        @error('customerData.address')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        @endError
-                                    </div>
-                                </div>
-                            </x-slot>
-                        
-                            <x-slot name="footer">
-                                <x-jet-secondary-button wire:click="$toggle('modalFormCustomerVisible')" wire:loading.attr="disabled">
-                                    {{ __('Hủy') }}
-                                </x-jet-secondary-button>
-
-                                <x-jet-button class="ml-2" wire:click="nextModal" wire:loading.attr="disabled">
-                                    {{ __('Tiếp theo') }}
-                                </x-jet-button>
-                                
-                            </x-slot>
-                        </x-jet-dialog-modal>
-                    @endif
-                </div>
+<div class="row">
+    <div class="col-md-9"></div>
+    <div class="col-md-3"><x-jet-button wire:click="createShowContract"> Tạo hợp đồng </x-jet-button></div>
+</div>
+{{-- Thông tin Hợp đồng --}}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Thông tin hợp đồng</h3>
             </div>
         </div>
-    </section>
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <h5 class="col-md-5"> Mã lô giữ chỗ: </h5>
+            <div class="col-md-1"></div>
+            <label class="col-md-5">{{$contract->lot_number}}</label>
+        </div><hr/>
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <h5 class="col-md-5"> Trạng thái: </h5>
+            <div class="col-md-1"></div>
+            <label class="col-md-5">{{$contract->status}}</label>
+        </div><hr/>
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <h5 class="col-md-5"> Đã ký/ Chưa ký:: </h5>
+            <div class="col-md-1"></div>
+            <label class="col-md-5">@if($contract->signed != 0) Đã ký @else Chưa ký @endif</label>
+        </div><hr/>
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <h5 class="col-md-5"> Ngày ký: </h5>
+            <div class="col-md-1"></div>
+            <label class="col-md-5">{{$contract->signed_date}}</label>
+        </div><hr/>
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <h5 class="col-md-5"> Loại hợp đồng: </h5>
+            <div class="col-md-1"></div>
+            <label class="col-md-5">{{$contract->type}}</label>
+        </div><hr/>
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <h5 class="col-md-5"> Số hợp đồng: </h5>
+            <div class="col-md-1"></div>
+            <label class="col-md-5">{{$contract->contract_no}}</label>
+        </div><hr/>
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <h5 class="col-md-5"> Diện tích ký: </h5>
+            <div class="col-md-1"></div>
+            <label class="col-md-5">{{$contract->area_signed}}</label>
+        </div><hr/>
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <h5 class="col-md-5"> Giá bán: </h5>
+            <div class="col-md-1"></div>
+            <label class="col-md-5">{{number_format($contract->value)}}</label>
+        </div><hr/>
+
+        <div class="row">
+            <div class="col-md-7"></div>
+            <div class="col-md-5"><x-jet-button wire:click="updateShowContract"> Sửa </x-jet-button></div>
+        </div>
+
+    </div>
 </div>
+<p></p>
+
+{{-- Modal thêm + sửa thông tin hợp đồng --}}
+<x-jet-dialog-modal wire:model="modalShowContractVisible">
+    @if($this->contractId)
+        <x-slot name="title">
+            {{ __('Sửa hợp đồng') }}
+        </x-slot>
+    @else
+        <x-slot name="title">
+            {{ __('Thêm hợp đồng') }}
+        </x-slot>
+    @endif
+    <x-slot name="content">
+        <div class="row">
+            <div class="col-md-6">
+                <x-jet-label for="contract_no" value="{{ __('Mã hợp đồng') }}" />
+                <x-jet-input id="contract_no" class="block mt-1 w-full" type="text" wire:model="contractData.contract_no" />
+                @error('contractData.contract_no')
+                <span class="text-danger">{{ $message }}</span>
+                @endError
+            </div>
+            <div class="col-md-6">
+                <x-jet-label for="type" value="{{ __('Loại hợp dồng') }}" />
+                <x-jet-input id="type" class="block mt-1 w-full" type="text" wire:model="contractData.type" />
+                @error('contractData.type')
+                <span class="text-danger">{{ $message }}</span>
+                @endError
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <x-jet-label for="lot_number" value="{{ __('Mã lô') }}" />
+                <x-jet-input id="lot_number" class="block mt-1 w-full" type="text" wire:model="contractData.lot_number" />
+                @error('contractData.lot_number')
+                <span class="text-danger">{{ $message }}</span>
+                @endError
+            </div>
+            <div class="col-md-6">
+                <x-jet-label for="area_signed" value="{{ __('Diện tích ký') }}" />
+                <x-jet-input id="area_signed" class="block mt-1 w-full" type="text" wire:model="contractData.area_signed" />
+                @error('contractData.area_signed')
+                <span class="text-danger">{{ $message }}</span>
+                @endError
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
+                    </div>
+                    <select class="custom-select" wire:model="contractData.status">
+
+                    </select>
+                </div>
+                @error('contractData.status')
+                <span class="text-danger">{{ $message }}</span>
+                @endError
+            </div>
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Dự án</label>
+                    </div>
+                    <select class="custom-select" wire:model="contractData.project_id">
+                        <option value="0" selected>Chọn dự án</option>
+
+                    </select>
+                </div>
+                @error('contractData.project_id')
+                <span class="text-danger">{{ $message }}</span>
+                @endError
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <x-jet-label for="signed_date" value="{{ __('Ngày ký') }}" />
+                <x-jet-input type="date" wire:model="contractData.signed_date" id="signed_date"/>
+                @error('contractData.signed_date')
+                <span class="text-danger">{{ $message }}</span>
+                @endError
+            </div>
+            <div class="col-md-6">
+                <x-jet-label for="signed_date" value="{{ __('Giá bán') }}" />
+                <x-jet-input type="text" wire:model="contractData.value" id="value"/>
+                @error('contractData.value')
+                <span class="text-danger">{{ $message }}</span>
+                @endError
+            </div>
+        </div>
+        @if(!$this->contractId)
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
+                    <x-jet-input type="date" wire:model="paymentData.payment_date_95" id="payment_date_95"/>
+                </div>
+                <div class="col-md-6">
+                    <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
+                    <x-jet-input type="text" wire:model="paymentData.payment_progress" id="payment_progress"/>
+                </div>
+            </div>
+        @endif
+        <div class="row mt-4">
+            <div class="col-md-6 flex">
+                <x-jet-label for="signed" value="{{ __('Đã ký / chưa ký') }}" />
+                <input id="signed" type="checkbox" wire:model="contractData.signed" class="form-checkbox h-5 w-5 text-green-500 ml-2">
+                @error('contractData.signed')
+                <span class="text-danger">{{ $message }}</span>
+                @endError
+            </div>
+        </div>
+    </x-slot>
+
+    <x-slot name="footer">
+        <x-jet-secondary-button wire:click="$toggle('modalShowContractVisible')" wire:loading.attr="disabled">
+            {{ __('Hủy') }}
+        </x-jet-secondary-button>
+
+        @if($this->contractId)
+            <x-jet-button class="ml-2" wire:click="updateContract" wire:loading.attr="disabled">
+                {{ __('Cập nhật') }}
+            </x-jet-button>
+        @else
+            <x-jet-button class="ml-2" wire:click="createContract" wire:loading.attr="disabled">
+                {{ __('Lưu') }}
+            </x-jet-button>
+        @endif
+    </x-slot>
+</x-jet-dialog-modal>
+

@@ -32,6 +32,11 @@ class Contracts extends Model
 
     public function project()
     {
-        return $this->belongsTo('App\Models\Project');
+        return $this->hasOne('App\Models\Project','project_id');
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo('App\Models\Payment');
     }
 }
