@@ -17,15 +17,15 @@ class RoleHasPermissionSeeder extends Seeder
         for($i = 1;$i <= 6;$i++)
         {
             RoleHasPermission::create([
-                'role_id' => 1,
+                'role_id' => 2,
                 'permission_id' => $i
             ]);
         }
-        
+
         for($i = 7;$i <= 8;$i++)
         {
             RoleHasPermission::create([
-                'role_id' => 2,
+                'role_id' => 3,
                 'permission_id' => $i
             ]);
         }

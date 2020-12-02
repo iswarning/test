@@ -34,7 +34,7 @@ Route::group(['middleware' => [
 
 
 Route::get('/', [LoginController::class, 'login'])->name('login');
-Route::post('/login', [LoginController::class, 'postLogin'])->name('postLogin');
+Route::post('/', [LoginController::class, 'postLogin'])->name('postLogin');
 Route::get('/register', [LoginController::class, 'register'])->name('register');
 Route::post('/register', [LoginController::class, 'postRegister'])->name('postRegister');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
