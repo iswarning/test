@@ -17,7 +17,7 @@ class Accounts extends Component
     public $accountId;
     public $keyWord;
     public $recordNum = 20;
-    public $roleId = 1;
+    public $roleId = 5;
     public $permissionId = 1;
     public $modalFormVisible = false;
     public $modalFormDeleteVisible = false;
@@ -112,8 +112,6 @@ class Accounts extends Component
         ]);
     }
 
-    
-
     public function updateShowModal($id)
     {
         $this->dataNotUpdate = ModelsAccount::findOrFail($id);
@@ -148,7 +146,7 @@ class Accounts extends Component
                     ->orWhere('type', 'like', $searchKey)
                     ->orWhere('birthday', 'like', $searchKey);
             })->paginate($this->recordNum) ,
-            
+
             'roles' => Role::all() ,
             'permissions' => Permission::where('role_id',$this->roleId)->get()
         ]);

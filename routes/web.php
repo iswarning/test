@@ -7,7 +7,7 @@ use App\Http\Livewire\AccountDetail;
 use App\Http\Livewire\Projects;
 use App\Http\Livewire\Customers;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,7 +23,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::group(['middleware' => [
-    'auth:sanctum',
     'verified',
 ]], function () {
     Route::get('/customers', Customers::class)->name('customers');
@@ -33,3 +32,9 @@ Route::group(['middleware' => [
     Route::get('/contract/{id}', ContractDetail::class)->name('contractDetail');
     Route::get('/projects', Projects::class)->name('projects');
 });
+
+Route::get('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/login', [LoginController::class, 'postLogin'])->name('postLogin');
+Route::get('/register', [LoginController::class, 'register'])->name('register');
+Route::post('/register', [LoginController::class, 'postRegister'])->name('postRegister');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');

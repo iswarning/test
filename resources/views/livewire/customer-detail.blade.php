@@ -176,7 +176,9 @@
                                 <div class="col-md-8">
                                     <h3>Thông tin cơ bản của khách hàng</h3>
                                 </div>
+                                @if(Auth::user()->roles == 1)
                                 <div class="col-md-2"><x-jet-button wire:click="export"> Xuất File </x-jet-button></div>
+                                @endif
                                 <div class="col-md-2"><x-jet-button wire:click="updateShowModalCustomer({{$customerData['id']}})"> Sửa </x-jet-button></div>
                             </div>
                         </div>

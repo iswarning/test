@@ -4,9 +4,11 @@
             <x-jet-authentication-card-logo />
         </x-slot>
 
-        <x-jet-validation-errors class="mb-4" />
+        @foreach ($errors->all() as $error)
+            <div class="alert alert-danger">{{$error}}</div>
+        @endforeach
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('postRegister') }}">
             @csrf
 
             <div>
