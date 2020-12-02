@@ -15,6 +15,9 @@ use App\Models\Juridical;
 use App\Enums\BookHolder;
 use App\Models\BillLate;
 use App\Enums\ContractStatusCreated;
+use Maatwebsite\Excel\Facades\Excel;
+
+use App\Exports\CustomerExport;
 
 
 class CustomerDetail extends Component
@@ -343,5 +346,12 @@ class CustomerDetail extends Component
         $this->infoBillLate = true;
 
         session()->flash('message', 'Them thanh toan tre han thanh cong');
+    }
+
+
+
+
+    public function export(){
+        return Excel::download(new CustomerExport($this->customerData), 'customers.xlsx');
     }
 }

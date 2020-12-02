@@ -92,11 +92,6 @@ class Customers extends Component
         ];
     }
 
-    public function updated()
-    {
-
-    }
-
     public function create()
     {
         $this->validate();
@@ -124,44 +119,50 @@ class Customers extends Component
 
     public function delete()
     {
-        ModelsCustomers::destroy($this->customerId);
+        Contracts::findOrFail($this->contractId)->delete();
         $this->modalConfirmDeleteVisible = false;
         $this->resetPage();
+        session()->flash('message','Xoa thong tin khach hang thanh cong');
     }
 
+    public function confirmDelete($id)
+    {
+        $this->contractId = $id;
+        $this->modalConfirmDeleteVisible = true;
+    }
     public function render()
     {
         $searchKey = '%' . $this->keyWord . '%';
+        $customers = Contracts::join('customers','customers.id','contracts.customer_id')
+            ->join('payments','payments.contract_id','contracts.id')
+            ->join('projects','projects.id','contracts.project_id')
+            ->where(function ($query) use ($searchKey){
+                $query->where('customers.name','like',$searchKey)
+                    ->orWhere('cmnd','like',$searchKey)
+                    ->orWhere('phone','like',$searchKey)
+                    ->orWhere('lot_number','like',$searchKey)
+                    ->orWhere('contract_no','like',$searchKey)
+                    ->orWhere('projects.name','like',$searchKey);
+            });
         if($this->selectStatus != null)
         {
-            return view('livewire.customers', [
-                'customers' => Contracts::join('customers','customers.id','contracts.customer_id')
-                    ->join('payments','payments.contract_id','contracts.id')
-                    ->join('projects','projects.id','contracts.project_id')
-                    ->where('contracts.status','=', $this->selectStatus)
-                    ->select('*',
-                        'projects.name as projectName',
-                        'customers.name as customerName',
-                        'customers.id as customerID',
-                        'contracts.id as contractID',
-                        'contracts.status as contractStatus'
-                    )
-                    ->get() ,
-                'projects' => Project::all() ,
-                'histories' => History::all()
-            ]);
+            $customers->where('contracts.status','=', $this->selectStatus);
         }
+        if($this->selectBill != null)
+        {
+            $customers->where('payments.payment_status','=', $this->selectBill);
+        }
+        if($this->selectTimeFrom != null)
+        {
+            $customers->where('contracts.created_at','>=', $this->selectTimeFrom);
+        }
+        if($this->selectTimeTo != null)
+        {
+            $customers->where('contracts.created_at','<=', $this->selectTimeTo);
+        }
+
         return view('livewire.customers', [
-            'customers' => Contracts::join('customers','customers.id','contracts.customer_id')
-                ->join('payments','payments.contract_id','contracts.id')
-                ->join('projects','projects.id','contracts.project_id')
-                ->where('customers.name','like',$searchKey)
-                ->orWhere('cmnd','like',$searchKey)
-                ->orWhere('phone','like',$searchKey)
-                ->orWhere('lot_number','like',$searchKey)
-                ->orWhere('contract_no','like',$searchKey)
-                ->orWhere('projects.name','like',$searchKey)
-                ->where('contracts.status','=', $this->selectStatus)
+            'customers' => $customers
                 ->select('*',
                     'projects.name as projectName',
                     'customers.name as customerName',
@@ -174,8 +175,6 @@ class Customers extends Component
             'projects' => Project::all() ,
             'histories' => History::all()
         ]);
-
-
     }
 
     /**
@@ -205,13 +204,6 @@ class Customers extends Component
         $this->customerData = ModelsCustomers::find($this->customerId)->toArray();
         $this->contractData = Contracts::find($this->contractId)->toArray();
     }
-
-    public function deleteShowModal($id)
-    {
-        $this->customerId = $id;
-        $this->modalConfirmDeleteVisible = true;
-    }
-
     public function historyShowList()
     {
         $this->dataTableCustomerVisible = false;
@@ -224,32 +216,36 @@ class Customers extends Component
         $this->dataTableHistoryVisible = false;
     }
 
-    public function getArrayCustomer($data)
+    public function checkUpdateCustomer($a, $b)
     {
-        $newData = [];
-        $newData[] = $data['name'];
-        $newData[] = $data['cmnd'];
-        $newData[] = $data['address'];
-        $newData[] = $data['birthday'];
-        $newData[] = $data['household'];
-        $newData[] = $data['phone'];
-        return $newData;
-    }
-
-
-    public function checkUpdateCustomer(array $a, array $b)
-    {
-        $dataNotUpdate = $this->getArrayCustomer($a);
-        $dataUpdated = $this->getArrayCustomer($b);
-        for($i = 0; $i < count($dataNotUpdate); $i++)
+        // Check Name
+        if($b->name != $a->name)
         {
-            for($j = 0; $j < count($dataUpdated); $j++)
-            {
-                if($dataUpdated[$j] != $dataNotUpdate[$i])
-                {
-                    $this->createHistoryCustomer($dataUpdated[$j]);
-                }
-            }
+            $this->createHistoryCustomer("Name: ".$b->name);
+        }
+        // Check Cmnd
+        if($b->cmnd != $a->cmnd)
+        {
+            $this->createHistoryCustomer("Cmnd: ".$b->cmnd);
+        }
+        // Check Phone
+        if($b->phone != $a->phone)
+        {
+            $this->createHistoryCustomer("Phone: ".$b->phone);
+        }
+        // Check Household
+        if($b->household != $a->household)
+        {
+            $this->createHistoryCustomer("Household: ".$b->household);
+        }
+        // Check Birthday
+        if($b->birthday != $a->birthday)
+        {
+            $this->createHistoryCustomer("Birthday: ".$b->birthday);
+        }
+        if($b->address != $a->address)
+        {
+            $this->createHistoryCustomer("Address: ".$b->address);
         }
     }
 

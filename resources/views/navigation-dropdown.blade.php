@@ -23,6 +23,11 @@
                     </x-jet-nav-link>
                 </div>
                 @endif
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('projects') }}" :active="request()->routeIs('projects')">
+                        {{ __('Project Management') }}
+                    </x-jet-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->

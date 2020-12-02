@@ -4,6 +4,7 @@ use App\Http\Livewire\Accounts;
 use App\Http\Livewire\ContractDetail;
 use App\Http\Livewire\CustomerDetail;
 use App\Http\Livewire\AccountDetail;
+use App\Http\Livewire\Projects;
 use App\Http\Livewire\Customers;
 use Illuminate\Support\Facades\Route;
 
@@ -30,4 +31,5 @@ Route::group(['middleware' => [
     Route::get('/accounts', Accounts::class)->name('accounts');
     Route::get('/account/{id}', AccountDetail::class)->name('accountDetail');
     Route::get('/contract/{id}', ContractDetail::class)->name('contractDetail');
+    Route::get('/projects', Projects::class)->name('projects');
 });

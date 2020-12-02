@@ -173,9 +173,11 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-8">
                                     <h3>Thông tin cơ bản của khách hàng</h3>
                                 </div>
+                                <div class="col-md-2"><x-jet-button wire:click="export"> Xuất File </x-jet-button></div>
+                                <div class="col-md-2"><x-jet-button wire:click="updateShowModalCustomer({{$customerData['id']}})"> Sửa </x-jet-button></div>
                             </div>
                         </div>
                         <div class="card-body">
@@ -221,10 +223,6 @@
                                 <label class="col-md-5">{{$customerData['phone']}}</label>
                             </div><hr/>
 
-                            <div class="row">
-                                <div class="col-md-7"></div>
-                                <div class="col-md-5"><x-jet-button wire:click="updateShowModalCustomer({{$customerData['id']}})"> Sửa </x-jet-button></div>
-                            </div>
                         </div>
                     </div>
 
