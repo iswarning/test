@@ -8,6 +8,7 @@ use App\Http\Livewire\Projects;
 use App\Http\Livewire\Customers;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,7 +32,8 @@ Route::group(['middleware' => [
     Route::get('/projects', Projects::class)->name('projects');
 });
 
-Route::get('/login', [LoginController::class, 'login'])->name('login');
+
+Route::get('/', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'postLogin'])->name('postLogin');
 Route::get('/register', [LoginController::class, 'register'])->name('register');
 Route::post('/register', [LoginController::class, 'postRegister'])->name('postRegister');

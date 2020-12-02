@@ -25,7 +25,7 @@ class LoginController extends Controller
 
     public function logout(){
         Auth::logout();
-        return redirect('/login');
+        return redirect('/');
     }
 
     public function register(){
@@ -52,7 +52,7 @@ class LoginController extends Controller
         $register->save();
 
         if($register){
-            return redirect('/login');
+            return redirect('/');
 
         }else{
             return redirect()->withErrors($validated);
