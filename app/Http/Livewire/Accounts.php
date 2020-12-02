@@ -61,6 +61,7 @@ class Accounts extends Component
     {
         $this->validate();
         $this->setType();
+        $this->accountData['password'] = bcrypt($this->accountData['password']);
         ModelsAccount::create($this->accountData);
         $this->modalFormVisible = false;
         session()->flash('message', 'Tạo tài khoản thành công');

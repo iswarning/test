@@ -16,7 +16,7 @@
                         {{ __('Customers') }}
                     </x-jet-nav-link>
                 </div>
-                @if(Auth::user()->type == 0)
+                @if(Auth::user()->type == 1)
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('accounts') }}" :active="request()->routeIs('accounts')">
                         {{ __('Account Management') }}

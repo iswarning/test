@@ -70,7 +70,8 @@
                                                         <label class="input-group-text" for="inputGroupSelect01">Phòng ban</label>
                                                     </div>
                                                     <select class="custom-select" wire:model="roleId">
-                                                        @foreach ($roles as $role)
+                                                        <option value="0" selected>Chọn phòng ban</option>
+                                                        @foreach (App\Models\Role::all() as $role)
                                                         <option value="{{$role->id}}">{{ $role->name }}</option>
                                                         @endforeach
                                                     </select>

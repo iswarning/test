@@ -19,11 +19,9 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+
 Route::group(['middleware' => [
-    'verified',
+    'guest'
 ]], function () {
     Route::get('/customers', Customers::class)->name('customers');
     Route::get('/customer/{id}', CustomerDetail::class)->name('customerDetail');
@@ -37,4 +35,4 @@ Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login', [LoginController::class, 'postLogin'])->name('postLogin');
 Route::get('/register', [LoginController::class, 'register'])->name('register');
 Route::post('/register', [LoginController::class, 'postRegister'])->name('postRegister');
-Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

@@ -18,7 +18,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-9"></div>
-                    <div class="col-md-3"></div>
+                    <div class="col-md-3"><x-jet-button wire:click="createShowContract">Tạo Hợp Đồng</x-jet-button></div>
                 </div>
                 {{-- Modal thêm + sửa thông tin hợp đồng --}}
                 <x-jet-dialog-modal wire:model="modalShowContractVisible">
@@ -176,10 +176,12 @@
                                 <div class="col-md-8">
                                     <h3>Thông tin cơ bản của khách hàng</h3>
                                 </div>
-                                @if(Auth::user()->roles == 1)
+                                @if(Auth::user()->type == 1)
                                 <div class="col-md-2"><x-jet-button wire:click="export"> Xuất File </x-jet-button></div>
                                 @endif
-                                <div class="col-md-2"><x-jet-button wire:click="updateShowModalCustomer({{$customerData['id']}})"> Sửa </x-jet-button></div>
+                                @if(Auth::user()->type == 1 or Auth::user()->type == 2)
+                                    <div class="col-md-2"><x-jet-button wire:click="updateShowModalCustomer({{$customerData['id']}})"> Sửa </x-jet-button></div>
+                                @endif
                             </div>
                         </div>
                         <div class="card-body">

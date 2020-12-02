@@ -22,14 +22,14 @@
                             </div>
                             <div class="flex items-center justify-between mt-1 w-full">
                                 <x-jet-input id="searchInput" class="block mt-1 w-50" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model="keyWord" autofocus />
-                                @if(Auth::user()->type == 0)
+                                @if(Auth::user()->type == 1)
                                     @if($dataTableCustomerVisible == true)
                                     <x-jet-button wire:click="historyShowList"> {{ __('Lịch sử chỉnh sửa') }} </x-jet-button>
                                     @else
                                     <x-jet-button wire:click="customerShowList"> {{ __('Danh sach khach hang') }} </x-jet-button>
                                     @endif
                                 @endif
-                                @if(Auth::user()->type != 2)
+                                @if(Auth::user()->type == 1 or Auth::user()->type == 2)
                                     <x-jet-button wire:click="createShowModal"> {{ __('Thêm khách hàng') }} </x-jet-button>
                                 @endif
                                 <!-- Create and update customer modal -->
@@ -320,7 +320,11 @@
                                     </thead>
                                     <tbody>
 
+
                                         @foreach ($customers as $customer)
+                                            @if($customer->contractStatus == 2 && Auth::user()->type == 3)
+
+                                                @else
                                             <tr>
                                                 <td>{{$customer->customerID}}</td>
                                                 <td>
@@ -347,6 +351,7 @@
                                                 @endif
                                                 </td>
                                             </tr>
+                                            @endif
 
                                         @endforeach
                                     </tbody>

@@ -173,7 +173,7 @@ class Customers extends Component
                 )
                 ->get(),
             'projects' => Project::all() ,
-            'histories' => History::all()
+            'histories' => History::paginate(20)
         ]);
     }
 
