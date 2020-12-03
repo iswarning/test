@@ -49,7 +49,7 @@
                                     </x-slot>
 
                                     <x-slot name="footer">
-                                        <x-jet-secondary-button wire:click="$toggle('modalFormCustomerVisible')" wire:loading.attr="disabled">
+                                        <x-jet-secondary-button wire:click="$toggle('modalShowProjectVisible')" wire:loading.attr="disabled">
                                             {{ __('Hủy') }}
                                         </x-jet-secondary-button>
 

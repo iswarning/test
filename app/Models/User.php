@@ -29,7 +29,8 @@ class User extends Authenticatable
         'password',
         'address',
         'birthday',
-        'type'
+        'type',
+        'permission_id'
     ];
 
     /**

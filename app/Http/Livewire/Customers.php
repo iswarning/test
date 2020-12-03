@@ -59,6 +59,8 @@ class Customers extends Component
     public function rules()
     {
         return [
+            'paymentData.payment_progress' => 'required',
+            'paymentData.payment_date_95' => 'required' ,
             'customerData.name' => 'required',
             'customerData.cmnd' => ['required', Rule::unique('customers', 'cmnd')->ignore($this->customerId)],
             'customerData.birthday' => 'required',
@@ -69,13 +71,16 @@ class Customers extends Component
             'contractData.type' => 'required',
             'contractData.lot_number' => 'required',
             'contractData.area_signed' => ['required', 'numeric'],
-            'contractData.value' => 'required'
+            'contractData.value' => 'required',
+            
         ];
     }
 
     public function messages()
     {
         return [
+            'paymentData.payment_progress.required' => 'Không thể để trống tiến độ thanh toán' ,
+            'paymentData.payment_date_95.required' => 'Không thể để trống ngày thanh toán đủ' ,
             'customerData.name.required' => 'Không thể để trống họ tên',
             'customerData.cmnd.required' => 'Không thể để trống chứng minh nhân dân',
             'customerData.cmnd.unique' => 'Chứng minh nhân dân đã tồn tại',
@@ -88,7 +93,8 @@ class Customers extends Component
             'contractData.type.required' => 'Không thể để trống loại hợp đồng',
             'contractData.lot_number.required' => 'Không thể để mã lô',
             'contractData.area_signed.required' => 'Không thể để trống diện tích ký',
-            'contractData.value.required' => 'Không thể để trống giá bán'
+            'contractData.value.required' => 'Không thể để trống giá bán',
+            
         ];
     }
 
@@ -99,8 +105,11 @@ class Customers extends Component
         $this->contractData['customer_id'] = $customer->id;
         $contract = Contracts::create($this->contractData);
         $this->paymentData['contract_id'] = $contract->id;
+        $this->paymentData['payment_status'] = 0;
+        // dd($this->paymentData);
         Payment::create($this->paymentData);
-        $this->modalFormVisible = false;
+        $this->modalFormContractVisible = false;
+        $this->modalFormCustomerVisible = false;
         session()->flash('message', 'Lưu thông tin khách hàng thành công!');
     }
 
@@ -108,12 +117,13 @@ class Customers extends Component
     {
         $this->validate();
         ModelsCustomers::find($this->customerId)->update($this->customerData);
-        $this->modalFormVisible = false;
         $this->dataUpdated = ModelsCustomers::find($this->customerId)->toArray();
         Contracts::find($this->contractId)->update($this->contractData);
-        Payment::where('contract_id',$this->contractId)->update($this->paymentData);
+//        Payment::where('contract_id',$this->contractId)->update($this->paymentData);
         $this->checkUpdateCustomer($this->dataNotUpdate, $this->dataUpdated);
-
+//        dd($this->paymentData);
+        $this->modalFormContractVisible = false;
+        $this->modalFormCustomerVisible = false;
         session()->flash('message', 'Cập nhật thông tin khách hàng thành công!');
     }
 
@@ -171,9 +181,9 @@ class Customers extends Component
                     'contracts.status as contractStatus' ,
                     'contracts.created_at as contractCreated'
                 )
-                ->get(),
+                ->paginate($this->recordNum),
             'projects' => Project::all() ,
-            'histories' => History::paginate(20)
+            'histories' => History::orderBy('id','desc')->paginate(20)
         ]);
     }
 
@@ -199,10 +209,11 @@ class Customers extends Component
         $this->resetValidation();
         $this->customerId = $customer_id;
         $this->contractId = $contract_id;
-        $this->modalFormCustomerVisible = true;
-        $this->modalFormContractVisible = false;
         $this->customerData = ModelsCustomers::find($this->customerId)->toArray();
         $this->contractData = Contracts::find($this->contractId)->toArray();
+        $this->paymentData = Payment::where('contract_id', $this->contractId)->first()->toArray();
+        $this->modalFormCustomerVisible = true;
+        $this->modalFormContractVisible = false;
     }
     public function historyShowList()
     {
@@ -219,33 +230,33 @@ class Customers extends Component
     public function checkUpdateCustomer($a, $b)
     {
         // Check Name
-        if($b->name != $a->name)
+        if($b['name'] != $a['name'])
         {
-            $this->createHistoryCustomer("Name: ".$b->name);
+            $this->createHistoryCustomer("Name: ".$b['name']);
         }
         // Check Cmnd
-        if($b->cmnd != $a->cmnd)
+        if($b['cmnd'] != $a['cmnd'])
         {
-            $this->createHistoryCustomer("Cmnd: ".$b->cmnd);
+            $this->createHistoryCustomer("Cmnd: ".$b['cmnd']);
         }
         // Check Phone
-        if($b->phone != $a->phone)
+        if($b['phone'] != $a['phone'])
         {
-            $this->createHistoryCustomer("Phone: ".$b->phone);
+            $this->createHistoryCustomer("Phone: ".$b['phone']);
         }
         // Check Household
-        if($b->household != $a->household)
+        if($b['household'] != $a['household'])
         {
-            $this->createHistoryCustomer("Household: ".$b->household);
+            $this->createHistoryCustomer("Household: ".$b['household']);
         }
         // Check Birthday
-        if($b->birthday != $a->birthday)
+        if($b['birthday'] != $a['birthday'])
         {
-            $this->createHistoryCustomer("Birthday: ".$b->birthday);
+            $this->createHistoryCustomer("Birthday: ".$b['birthday']);
         }
-        if($b->address != $a->address)
+        if($b['address'] != $a['address'])
         {
-            $this->createHistoryCustomer("Address: ".$b->address);
+            $this->createHistoryCustomer("Address: ".$b['address']);
         }
     }
 

@@ -17,15 +17,23 @@ class LoginController extends Controller
             'email'=>$request->email,
             'password'=>$request->password
         ];
+
+        $validator = $request->validate([
+            'email.required' => 'Email khong de trong' ,
+            'password.required' => 'Password khong de trong'
+        ]);
+        
         if(Auth::attempt($log))
         {
             return redirect('/customers');
+        }else{
+            return redirect()->withErrors($validator);
         }
     }
 
     public function logout(){
         Auth::logout();
-        return redirect('/');
+        return back();
     }
 
     public function register(){

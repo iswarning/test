@@ -12,6 +12,7 @@ class Payment extends Model
     protected $fillable = [
         'payment_progress',
         'payment_date_95',
-        'contract_id'
+        'contract_id',
+        'payment_status'
     ];
 }

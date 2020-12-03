@@ -15,6 +15,7 @@ class AddUserTypeToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string("type")->default(0)->comment("0: admin, 1: Kế toán, 2: Pháp lý");
+            $table->integer('permission_id')->comment('Vị trí')->nullable();
         });
     }
 

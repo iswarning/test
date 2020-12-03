@@ -98,22 +98,14 @@
                                                 {{ __('Hủy') }}
                                             </x-jet-secondary-button>
 
-
-
-                                            @if($customerId)
-                                                <x-jet-button class="ml-2" wire:click="update" wire:loading.attr="disabled">
-                                                    {{ __('Cập nhật') }}
-                                                </x-jet-button>
-                                            @else
                                                 <x-jet-button class="ml-2" wire:click="nextModal" wire:loading.attr="disabled">
                                                     {{ __('Tiếp theo') }}
                                                 </x-jet-button>
-                                            @endif
 
                                         </x-slot>
                                 </x-jet-dialog-modal>
 
-                                @if(!$contractId)
+
                                 <x-jet-dialog-modal wire:model="modalFormContractVisible">
                                     <div wire:model="modalFormCustomerVisible">
                                         <x-slot name="title">
@@ -249,7 +241,7 @@
                                     </div>
                                 </x-jet-dialog-modal>
 
-                                    @endif
+
                             </div>
                             <br>
 
@@ -345,7 +337,7 @@
                                                 @endif
 
                                                 <td>
-                                                @if(Auth::user()->type != 2)
+                                                @if(Auth::user()->type != 3)
                                                     <x-jet-button class="ml-2" wire:click="updateShowModal({{ $customer->customerID }},{{$customer->contractID}})"> {{ __('Sửa') }} </x-jet-button>
                                                     <x-jet-button class="ml-2" wire:click="confirmDelete({{$customer->contractID}})"> {{ __('Xóa') }} </x-jet-button>
                                                 @endif
@@ -356,8 +348,8 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                            @if($modalConfirmDeleteVisible == true)
-                            <x-jet-confirmation-modal wire:model="confirmDeleteVisible">
+
+                            <x-jet-confirmation-modal wire:model="modalConfirmDeleteVisible">
                                 <x-slot name="title">
                                     {{ __('Xóa thông tin khách hàng') }}
                                 </x-slot>
@@ -376,8 +368,8 @@
                                     </x-jet-danger-button>
                                 </x-slot>
                             </x-jet-confirmation-modal>
-                                @endif
-{{--                                {{ $customers->links() }}--}}
+
+                               {{ $customers->links() }}
                             @else
 
                             <!-- Data Table History -->

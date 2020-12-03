@@ -39,7 +39,7 @@
                                                 @endError
                                             </div>
                                             <div class="col-md-6">
-                                                <x-jet-label for="email" value="{{ __('Tên Đăng Nhập') }}" />
+                                                <x-jet-label for="email" value="{{ __('Email') }}" />
                                                 <x-jet-input id="email" class="block mt-1 w-full" type="email" wire:model.debounce.0ms="accountData.email" />
                                                 <br>
                                                 @error('accountData.email')
@@ -70,7 +70,7 @@
                                                         <label class="input-group-text" for="inputGroupSelect01">Phòng ban</label>
                                                     </div>
                                                     <select class="custom-select" wire:model="roleId">
-                                                        <option value="0" selected>Chọn phòng ban</option>
+                                                        <option value="0">Chọn phòng ban</option>
                                                         @foreach (App\Models\Role::all() as $role)
                                                         <option value="{{$role->id}}">{{ $role->name }}</option>
                                                         @endforeach
@@ -83,6 +83,7 @@
                                                         <label class="input-group-text" for="inputGroupSelect01">Vị trí</label>
                                                     </div>
                                                     <select class="custom-select" wire:model="permissionId">
+                                                        <option value="0">Chọn vị trín</option>
                                                         @foreach ($permissions as $permission)
                                                         <option value="{{$permission->id}}">{{ $permission->name }}</option>
                                                         @endforeach
@@ -127,16 +128,46 @@
                                         <td>{{$account->id}}</td>
                                         <td>{{$account->name}}</td>
                                         <td>{{$account->email}}</td>
-                                        <td>{{$account->type}}</td>
+                                        <td>
+                                            {{App\Models\Role::find($account->type)->name}}
+                                            @if(App\Models\Permission::find($account->permission_id) != null)
+                                                    - {{App\Models\Permission::find($account->permission_id)->name}}
+                                                @endif
+                                        </td>
                                         <td>{{$account->birthday}}</td>
                                         <td>
+                                           
                                             <x-jet-button class="ml-2" wire:click="updateShowModal({{ $account->id }})"> {{ __('Sửa') }} </x-jet-button>
+                                            
+                                            @if($account->email != "admin@gmail.com" && $account->type != 1)
+                                            <x-jet-button wire:click="deleteShowModal({{$account->id}})">{{ __('Xóa') }}</x-jet-button>
+                                            @endif
+                                            
                                         </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                             {{ $accounts->links() }}
+                            <x-jet-confirmation-modal wire:model="modalFormDeleteVisible">
+                                <x-slot name="title">
+                                    {{ __('Xóa tài khoản') }}
+                                </x-slot>
+
+                                <x-slot name="content">
+                                    {{ __('Bạn có chắc muốn xóa thông tin tài khoản này?') }}
+                                </x-slot>
+
+                                <x-slot name="footer">
+                                    <x-jet-secondary-button wire:click="$toggle('modalFormDeleteVisible')" wire:loading.attr="disabled">
+                                        {{ __('Hủy') }}
+                                    </x-jet-secondary-button>
+
+                                    <x-jet-danger-button class="ml-2" wire:click="delete" wire:loading.attr="disabled">
+                                        {{ __('Xóa') }}
+                                    </x-jet-danger-button>
+                                </x-slot>
+                            </x-jet-confirmation-modal>
                         </div>
                     </div>
                 </div>

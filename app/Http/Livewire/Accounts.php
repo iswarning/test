@@ -17,7 +17,7 @@ class Accounts extends Component
     public $accountId;
     public $keyWord;
     public $recordNum = 20;
-    public $roleId = 5;
+    public $roleId = 0;
     public $permissionId = 1;
     public $modalFormVisible = false;
     public $modalFormDeleteVisible = false;
@@ -31,6 +31,7 @@ class Accounts extends Component
         return [
             'accountData.name' => 'required',
             'accountData.email' => ['required', Rule::unique('users', 'email')->ignore($this->accountId)],
+            'accountData.email' => 'email' ,
             'accountData.password' => 'required|min:6',
             'accountData.birthday' => 'required'
         ];
@@ -41,16 +42,14 @@ class Accounts extends Component
         return [
             'accountData.name.required' => 'Không thể để trống họ tên',
             'accountData.email.required' => 'Không thể để trống tên đăng nhập',
+            'accountData.email.email' => 'Email không hợp lệ',
             'accountData.password.required' => 'Không thể để trống mật khẩu',
             'accountData.password.min' => 'Mật khẩu có ít nhất 6 ký tự',
             'accountData.birthday.required' => 'Không thể để trống ngày sinh',
         ];
     }
 
-    public function setType()
-    {
-        $this->accountData['type'] = $this->roleId;
-    }
+
 
     public function updated($propertyName)
     {
@@ -60,7 +59,8 @@ class Accounts extends Component
     public function create()
     {
         $this->validate();
-        $this->setType();
+        $this->accountData['type'] = $this->roleId;
+        $this->accountData['permission_id'] = $this->permissionId;
         $this->accountData['password'] = bcrypt($this->accountData['password']);
         ModelsAccount::create($this->accountData);
         $this->modalFormVisible = false;
@@ -76,7 +76,9 @@ class Accounts extends Component
     public function update()
     {
         $this->validate();
-        $this->setType();
+        $this->accountData['type'] = $this->roleId;
+        $this->accountData['permission_id'] = $this->permissionId;
+        $this->accountData['password'] = bcrypt($this->accountData['password']);
         ModelsAccount::find($this->accountId)->update($this->accountData);
         $this->modalFormVisible = false;
         $this->dataUpdated = ModelsAccount::find($this->accountId);
@@ -120,11 +122,14 @@ class Accounts extends Component
         $this->accountId = $id;
         $this->modalFormVisible  = true;
         $this->accountData = ModelsAccount::findOrFail($this->accountId)->toArray();
+        $this->roleId = $this->accountData['type'];
+        $this->permissionId = $this->accountData['permission_id'];
     }
 
     public function delete()
     {
-        ModelsAccount::findOrFail($this->accountId)->delete();
+        $user = ModelsAccount::findOrFail($this->accountId);
+        $user->delete();
         $this->modalFormDeleteVisible = false;
         $this->resetPage();
         session()->flash('message', 'Xóa tài khoản thành công');
@@ -138,6 +143,7 @@ class Accounts extends Component
 
     public function render()
     {
+
         $searchKey = '%'. $this->keyWord .'%';
         return view('livewire.accounts', [
             'accounts' => ModelsAccount::where(function ($sub_query) use ($searchKey){

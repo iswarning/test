@@ -16,10 +16,12 @@
             </div>
             <p></p>
             <div class="container">
+                @if(Auth::user()->type != 3)
                 <div class="row">
                     <div class="col-md-9"></div>
                     <div class="col-md-3"><x-jet-button wire:click="createShowContract">Tạo Hợp Đồng</x-jet-button></div>
                 </div>
+                @endif
                 {{-- Modal thêm + sửa thông tin hợp đồng --}}
                 <x-jet-dialog-modal wire:model="modalShowContractVisible">
                     @if($this->contractId)
@@ -177,7 +179,7 @@
                                     <h3>Thông tin cơ bản của khách hàng</h3>
                                 </div>
                                 @if(Auth::user()->type == 1)
-                                <div class="col-md-2"><x-jet-button wire:click="export"> Xuất File </x-jet-button></div>
+                                <a href="{{route('download')}}">Download</a>
                                 @endif
                                 @if(Auth::user()->type == 1 or Auth::user()->type == 2)
                                     <div class="col-md-2"><x-jet-button wire:click="updateShowModalCustomer({{$customerData['id']}})"> Sửa </x-jet-button></div>
@@ -271,7 +273,7 @@
 
                             <div class="row mt-4">
                                 <div class="col-md-6">
-                                    <x-jet-label for="birthday" value="{{ __('Ngày ký') }}" />
+                                    <x-jet-label for="birthday" value="{{ __('Ngày sinh') }}" />
                                     <x-jet-input type="date" class="block mt-1 w-full" wire:model="customerData.birthday" id="birthday"/>
                                     @error('customerData.birthday')
                                     <span class="text-danger">{{ $message }}</span>
@@ -314,8 +316,10 @@
                                     <div class="col-md-8">
                                         <h3>Thông tin hợp đồng</h3>
                                     </div>
+                                    @if(Auth::user()->type != 3)
                                     <div class="col-md-2"></div>
                                     <div class="col-md-2"><x-jet-button wire:click="updateShowContract({{$row->id}})"> Sửa </x-jet-button></div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="card-body">
@@ -331,7 +335,12 @@
                                     <div class="col-md-1"></div>
                                     <h5 class="col-md-5"> Trạng thái: </h5>
                                     <div class="col-md-1"></div>
-                                    <label class="col-md-5">{{$contractStatus[$row->status]}}</label>
+                                    <label class="col-md-5">
+                                        @if(isset($row->status_created_by))
+                                            {{$contractStatusCreated[$row->status_created_by]}} -
+                                        @endif
+                                        {{$contractStatus[$row->status]}}
+                                    </label>
                                 </div><hr/>
 
                                 <div class="row">
@@ -388,7 +397,7 @@
                                     <div class="col-md-8">
                                         <h3>Thông tin thanh toán</h3>
                                     </div>
-                                    @if($billlateId)
+                                    @if($billlateId && Auth::user()->type != 3)
                                     <div class="col-md-2"></div>
                                     <div class="col-md-2"><x-jet-button wire:click="updateShowPaymentAndBill({{$billlateId}})"> Sửa </x-jet-button></div>
                                     @endif
@@ -464,10 +473,12 @@
                                     </div><hr/>
 
                                 @else
+                                @if(Auth::user()->type != 3)
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5"><x-jet-button wire:click="createShowModalBillLate({{$this->paymentId}})"> {{ __('Thêm thanh toán trễ hạn') }} </x-jet-button></div>
                                     </div>
+                                    @endif
                                 @endif
 
                             </div>
@@ -596,7 +607,7 @@
                                     <div class="col-md-8">
                                         <h3>Thông tin pháp lý</h3>
                                     </div>
-                                    @if($this->juridicalId)
+                                    @if($this->juridicalId && Auth::user()->type != 3)
                                     <div class="col-md-2"></div>
                                     <div class="col-md-2"><x-jet-button wire:click="updateShowJuridical({{$this->juridicalId}})"> Sửa </x-jet-button></div>
                                     @endif
@@ -609,7 +620,7 @@
                                         <div class="col-md-1"></div>
                                         <h5 class="col-md-5"> Thông tin hợp đồng: </h5>
                                         <div class="col-md-1"></div>
-                                        <label class="col-md-5">{{$this->juridicalData['contract_info']}}</label>
+                                        <label class="col-md-5">{{$this->contractInfo[$this->juridicalData['contract_info']]}}</label>
                                     </div><hr/>
 
                                     <div class="row">
@@ -637,7 +648,11 @@
                                         <div class="col-md-1"></div>
                                         <h5 class="col-md-5"> Thanh lý hợp đồng: </h5>
                                         <div class="col-md-1"></div>
-                                        <label class="col-md-5">{{$this->juridicalData['liquidation']}}</label>
+                                        <label class="col-md-5">
+                                            @if($this->juridicalData['liquidation'] == true)
+                                                <input type='checkbox' checked disabled/>
+                                            @endif
+                                        </label>
                                     </div><hr/>
 
                                     <div class="row">

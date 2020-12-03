@@ -17,7 +17,11 @@ use App\Models\BillLate;
 use App\Enums\ContractStatusCreated;
 use Maatwebsite\Excel\Facades\Excel;
 
+use PDF;
+
+use App\Exports\CustomerPDF;
 use App\Exports\CustomerExport;
+
 
 
 class CustomerDetail extends Component
@@ -25,7 +29,8 @@ class CustomerDetail extends Component
     use WithPagination;
 
     public $contractId;
-    public $customerId;
+    public  $customerId;
+    public static $customerID;
     public $juridicalId;
     public $paymentId;
     public $billlateId;
@@ -42,14 +47,19 @@ class CustomerDetail extends Component
     public $bookHolder = [];
 
     public $customerData = [];
-    public $paymentData = [];
+    public $paymentData = [
+        'payment_status' => 0
+    ];
     public $projectData = [];
     public $billlateData = [];
     public $juridicalData = [
-        'liquidation' => true
+        'liquidation' => true ,
+        'contract_info' => 0,
+        'book_holder' => 0
     ];
     public $contractData = [
-        'signed' => false
+        'signed' => false ,
+        'status_created_by' => 0
     ];
     protected $paginationTheme = 'bootstrap';
 
@@ -212,9 +222,6 @@ class CustomerDetail extends Component
 
     public function createShowContract()
     {
-        $this->contractData = [
-            'signed' => false
-        ];
         $this->contractId = null;
         $this->contractData = [];
         $this->modalShowContractVisible = true;
@@ -228,6 +235,7 @@ class CustomerDetail extends Component
         $this->contractId = $contracts['id'];
 
         $this->paymentData['contract_id'] = $this->contractId;
+        $this->paymentData['payment_status'] = 0;
         Payment::create($this->paymentData);
 
         $this->modalShowContractVisible = false;
@@ -342,6 +350,9 @@ class CustomerDetail extends Component
         $this->billlateData['payment_id'] = $this->paymentId;
         $this->validate();
         BillLate::create($this->billlateData);
+        Payment::find($this->paymentId)->update([
+            'payment_status' => 1
+        ]);
         $this->modalShowPaymentVisible = false;
         $this->infoBillLate = true;
 
@@ -351,7 +362,13 @@ class CustomerDetail extends Component
 
 
 
-    public function export(){
-        return Excel::download(new CustomerExport($this->customerData), 'customers.xlsx');
-    }
+//    public function export(){
+//        return Excel::download(new CustomerExport($this->customerData), 'customers.xlsx');
+//    }
+//
+   public function downloadPDF()
+   {
+       return PDF::download(new CustomerPDF($this->customerData) ,'customers.pdf');
+    
+   }
 }
