@@ -56,9 +56,9 @@
                                                 @endError
                                             </div>
                                             <div class="col-md-6">
-                                                @if(!isset($accountId))
+                                                @if(!$accountId)
                                                     <x-jet-label for="password" value="{{ __('Mật Khẩu') }}" />
-                                                    <x-jet-input id="password" type="password" wire:model="accountData.password"/>
+                                                    <x-jet-input id="password" class="block mt-1 w-full" type="password" wire:model="accountData.password"/>
                                                     @error('accountData.password')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @endError

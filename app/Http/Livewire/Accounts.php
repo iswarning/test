@@ -30,8 +30,10 @@ class Accounts extends Component
     {
         return [
             'accountData.name' => 'required',
-            'accountData.email' => ['required', Rule::unique('users', 'email')->ignore($this->accountId)],
-            'accountData.email' => 'email' ,
+            'accountData.email' => ['required',
+                Rule::unique('users', 'email')->ignore($this->accountId),
+                'email'] ,
+
             'accountData.password' => 'required|min:6',
             'accountData.birthday' => 'required'
         ];
@@ -43,6 +45,7 @@ class Accounts extends Component
             'accountData.name.required' => 'Không thể để trống họ tên',
             'accountData.email.required' => 'Không thể để trống tên đăng nhập',
             'accountData.email.email' => 'Email không hợp lệ',
+            'accountData.email.unique' => 'Email đã tồn tại',
             'accountData.password.required' => 'Không thể để trống mật khẩu',
             'accountData.password.min' => 'Mật khẩu có ít nhất 6 ký tự',
             'accountData.birthday.required' => 'Không thể để trống ngày sinh',
@@ -78,7 +81,6 @@ class Accounts extends Component
         $this->validate();
         $this->accountData['type'] = $this->roleId;
         $this->accountData['permission_id'] = $this->permissionId;
-        $this->accountData['password'] = bcrypt($this->accountData['password']);
         ModelsAccount::find($this->accountId)->update($this->accountData);
         $this->modalFormVisible = false;
         $this->dataUpdated = ModelsAccount::find($this->accountId);
@@ -104,6 +106,7 @@ class Accounts extends Component
         $user = ModelsAccount::findOrFail($this->accountId);
         $user->delete();
         $this->modalFormDeleteVisible = false;
+        $this->reset();
         session()->flash('message', 'Xóa tài khoản thành công');
     }
 

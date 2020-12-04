@@ -80,6 +80,13 @@ class CustomerDetail extends Component
 
         if($this->modalShowContractVisible == true)
         {
+            if($this->contractId == null)
+            {
+                $rules['paymentData.payment_date_95'] = 'required';
+                $rules['paymentData.payment_progress'] = 'required';
+                $rules['payment_progress'] = 'required';
+                $rules['payment_date_95'] = 'required';
+            }
             $rules = [
                 'contractData.contract_no' => ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)],
                 'contractData.type' => 'required',
@@ -91,13 +98,7 @@ class CustomerDetail extends Component
                 'contractData.signed_date' => 'required',
                 'contractData.signed' => 'required',
             ];
-            if($this->contractId == null)
-            {
-                $rules['paymentData.payment_date_95'] = 'required';
-                $rules['paymentData.payment_progress'] = 'required';
-                $rules['payment_progress'] = 'required';
-                $rules['payment_date_95'] = 'required';
-            }
+
         }
 
         if($this->modalShowPaymentVisible == true)
@@ -237,14 +238,12 @@ class CustomerDetail extends Component
     public function createContract()
     {
         $this->contractData['customer_id'] = $this->customerId;
-//
         $this->paymentData['payment_progress'] = $this->payment_progress;
         $this->paymentData['payment_date_95'] = $this->payment_date_95;
         $this->validate();
-        $contracts = Contracts::create($this->contractData);
-        $this->contractId = $contracts['id'];
-
-        $this->paymentData['contract_id'] = $this->contractId;
+//        dd($this->contractData);
+        $contracts[] = Contracts::create($this->contractData);
+        $this->paymentData['contract_id'] = $contracts[0]['id'];
         $this->paymentData['payment_status'] = 0;
         Payment::create($this->paymentData);
 
