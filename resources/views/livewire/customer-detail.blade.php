@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Quản lý khách hàng
+        Thông tin chi tiết khách hàng {{$customerData['name']}}
     </h2>
 </x-slot>
 <div>
@@ -18,7 +18,12 @@
             <div class="container">
                 @if(Auth::user()->type != 3)
                 <div class="row">
-                    <div class="col-md-9"></div>
+                    <div class="col-md-7"></div>
+                    <div class="col-md-2">
+                        @if(Auth::user()->type == 1)
+                            <x-jet-button wire:click="export">Xuất file</x-jet-button>
+                        @endif
+                    </div>
                     <div class="col-md-3"><x-jet-button wire:click="createShowContract">Tạo Hợp Đồng</x-jet-button></div>
                 </div>
                 @endif
@@ -119,11 +124,17 @@
                             <div class="row mt-4">
                                 <div class="col-md-6">
                                     <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
-                                    <x-jet-input type="date" wire:model="paymentData.payment_date_95" id="payment_date_95"/>
+                                    <x-jet-input type="date" wire:model="payment_date_95" id="payment_date_95"/>
+                                    @error('payment_date_95')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
                                 </div>
                                 <div class="col-md-6">
                                     <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
-                                    <x-jet-input type="text" wire:model="paymentData.payment_progress" id="payment_progress"/>
+                                    <x-jet-input type="text" wire:model="payment_progress" id="payment_progress"/>
+                                    @error('payment_progress')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
                                 </div>
                             </div>
                         @endif
@@ -178,9 +189,7 @@
                                 <div class="col-md-8">
                                     <h3>Thông tin cơ bản của khách hàng</h3>
                                 </div>
-                                @if(Auth::user()->type == 1)
-                                <a href="{{route('download')}}">Download</a>
-                                @endif
+
                                 @if(Auth::user()->type == 1 or Auth::user()->type == 2)
                                     <div class="col-md-2"><x-jet-button wire:click="updateShowModalCustomer({{$customerData['id']}})"> Sửa </x-jet-button></div>
                                 @endif
@@ -410,14 +419,14 @@
                                     <div class="col-md-1"></div>
                                     <h5 class="col-md-5"> Tiến độ thanh toán: </h5>
                                     <div class="col-md-1"></div>
-                                    <label class="col-md-5">{{$this->paymentData['payment_progress']}}</label>
+                                    <label class="col-md-5">{{$paymentData['payment_progress']}}</label>
                                 </div><hr/>
 
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <h5 class="col-md-5"> Ngày thanh toán đủ 95%: </h5>
                                     <div class="col-md-1"></div>
-                                    <label class="col-md-5">{{$this->paymentData['payment_date_95']}}</label>
+                                    <label class="col-md-5">{{$paymentData['payment_date_95']}}</label>
                                 </div><hr/>
 
                                 {{-- Thong tin tre han --}}
@@ -501,14 +510,14 @@
                                         <div class="col-md-6">
                                             <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
                                             <x-jet-input id="payment_progress" class="block mt-1 w-full" type="text" wire:model="paymentData.payment_progress"  />
-                                            @error('paymentData.payment_progress')
+                                            @error('payment_progress')
                                             <span class="text-danger">{{ $message }}</span>
                                             @endError
                                         </div>
                                         <div class="col-md-6">
                                             <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
                                             <x-jet-input id="payment_date_95" class="block mt-1 w-full" type="date" wire:model="paymentData.payment_date_95" />
-                                            @error('paymentData.payment_date_95')
+                                            @error('payment_date_95')
                                             <span class="text-danger">{{ $message }}</span>
                                             @endError
                                         </div>

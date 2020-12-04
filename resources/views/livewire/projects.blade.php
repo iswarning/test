@@ -93,7 +93,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            <x-jet-confirmation-modal wire:model="modalConfirmDeleteVisible">
+                            <x-jet-confirmation-modal wire:model="confirmDeleteVisible">
                                 <x-slot name="title">
                                     {{ __('Xóa thông tin khách hàng') }}
                                 </x-slot>
@@ -103,7 +103,7 @@
                                 </x-slot>
 
                                 <x-slot name="footer">
-                                    <x-jet-secondary-button wire:click="$toggle('modalConfirmDeleteVisible')" wire:loading.attr="disabled">
+                                    <x-jet-secondary-button wire:click="$toggle('confirmDeleteVisible')" wire:loading.attr="disabled">
                                         {{ __('Hủy') }}
                                     </x-jet-secondary-button>
 

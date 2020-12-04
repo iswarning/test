@@ -34,6 +34,8 @@ class CustomerDetail extends Component
     public $juridicalId;
     public $paymentId;
     public $billlateId;
+    public $payment_progress;
+    public $payment_date_95;
 
     public $modalShowCustomerVisible = false;
     public $modalShowContractVisible = false;
@@ -93,6 +95,8 @@ class CustomerDetail extends Component
             {
                 $rules['paymentData.payment_date_95'] = 'required';
                 $rules['paymentData.payment_progress'] = 'required';
+                $rules['payment_progress'] = 'required';
+                $rules['payment_date_95'] = 'required';
             }
         }
 
@@ -214,8 +218,9 @@ class CustomerDetail extends Component
 
     public function render()
     {
+
         return view('livewire.customer-detail', [
-            'contract' =>  Contracts::where('customer_id',$this->customerId)->get()
+            'contract' =>   Contracts::where('customer_id',$this->customerId)->get(),
         ]);
 
     }
@@ -224,6 +229,8 @@ class CustomerDetail extends Component
     {
         $this->contractId = null;
         $this->contractData = [];
+        $this->payment_date_95 = null;
+        $this->payment_progress = null;
         $this->modalShowContractVisible = true;
     }
 
@@ -231,6 +238,8 @@ class CustomerDetail extends Component
     {
         $this->contractData['customer_id'] = $this->customerId;
         $this->validate();
+        $this->paymentData['payment_progress'] = $this->payment_progress;
+        $this->paymentData['payment_date_95'] = $this->payment_date_95;
         $contracts = Contracts::create($this->contractData);
         $this->contractId = $contracts['id'];
 
@@ -359,16 +368,13 @@ class CustomerDetail extends Component
         session()->flash('message', 'Them thanh toan tre han thanh cong');
     }
 
-
-
-
-//    public function export(){
-//        return Excel::download(new CustomerExport($this->customerData), 'customers.xlsx');
-//    }
+    public function export(){
+        return Excel::download(new CustomerExport($this->customerData), 'customers.xlsx');
+    }
 //
-   public function downloadPDF()
-   {
-       return PDF::download(new CustomerPDF($this->customerData) ,'customers.pdf');
-    
-   }
+//   public function downloadPDF()
+//   {
+//       return PDF::download(new CustomerPDF($this->customerData) ,'customers.pdf');
+//
+//   }
 }
