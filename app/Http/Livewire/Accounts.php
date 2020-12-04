@@ -104,7 +104,6 @@ class Accounts extends Component
         $user = ModelsAccount::findOrFail($this->accountId);
         $user->delete();
         $this->modalFormDeleteVisible = false;
-        $this->resetPage();
         session()->flash('message', 'Xóa tài khoản thành công');
     }
 
