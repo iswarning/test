@@ -83,37 +83,10 @@ class Accounts extends Component
         $this->modalFormVisible = false;
         $this->dataUpdated = ModelsAccount::find($this->accountId);
 
-        $this->checkUpdate($this->dataNotUpdate, $this->dataUpdated);
+
         session()->flash('message', 'Cập nhật tài khoản thành công');
     }
 
-    public function checkUpdate($a, $b)
-    {
-        // Check Name
-        if($b->name != $a->name)
-        {
-            $this->createHistory($b->name);
-        }
-
-        // Check email
-        if($b->email != $a->email)
-        {
-            $this->createHistory($b->email);
-        }
-
-        // Check type
-        if($b->type != $a->type)
-        {
-            $this->createHistory($b->type);
-        }
-    }
-
-    public function createHistory($target)
-    {
-        History::create([
-            'title' => Auth::user()->name." has changed ".$target
-        ]);
-    }
 
     public function updateShowModal($id)
     {

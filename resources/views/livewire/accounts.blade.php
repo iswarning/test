@@ -47,20 +47,22 @@
                                                 @endError
                                             </div>
                                         </div>
-                                        <div class="row mt-4">
+                                        <div class="row">
                                             <div class="col-md-6">
                                                 <x-jet-label for="birthday" value="{{ __('Ngày sinh') }}" />
-                                                <x-jet-input id="birthday" type="date" wire:model="accountData.birthday" />
+                                                <x-jet-input id="birthday" class="block mt-1 w-full" type="date" wire:model="accountData.birthday" />
                                                 @error('accountData.birthday')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @endError
                                             </div>
                                             <div class="col-md-6">
-                                                <x-jet-label for="password" value="{{ __('Mật Khẩu') }}" />
-                                                <x-jet-input id="password" type="password" wire:model="accountData.password"/>
-                                                @error('accountData.password')
-                                                <span class="text-danger">{{ $message }}</span>
-                                                @endError
+                                                @if(!isset($accountId))
+                                                    <x-jet-label for="password" value="{{ __('Mật Khẩu') }}" />
+                                                    <x-jet-input id="password" type="password" wire:model="accountData.password"/>
+                                                    @error('accountData.password')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="row mt-4">
@@ -83,7 +85,7 @@
                                                         <label class="input-group-text" for="inputGroupSelect01">Vị trí</label>
                                                     </div>
                                                     <select class="custom-select" wire:model="permissionId">
-                                                        <option value="0">Chọn vị trín</option>
+                                                        <option value="0">Chọn vị trí</option>
                                                         @foreach ($permissions as $permission)
                                                         <option value="{{$permission->id}}">{{ $permission->name }}</option>
                                                         @endforeach
@@ -136,13 +138,13 @@
                                         </td>
                                         <td>{{$account->birthday}}</td>
                                         <td>
-                                           
+
                                             <x-jet-button class="ml-2" wire:click="updateShowModal({{ $account->id }})"> {{ __('Sửa') }} </x-jet-button>
-                                            
+
                                             @if($account->email != "admin@gmail.com" && $account->type != 1)
                                             <x-jet-button wire:click="deleteShowModal({{$account->id}})">{{ __('Xóa') }}</x-jet-button>
                                             @endif
-                                            
+
                                         </td>
                                     </tr>
                                     @endforeach

@@ -170,11 +170,11 @@
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link {{ $tab == 'customer' ? 'active' : '' }}" wire:click="$set('tab', 'customer')" href="#">Thong Tin</a>
+                    <a class="nav-link {{ $tab == 'customer' ? 'active' : '' }}" wire:click="$set('tab', 'customer')" href="#">Thông tin</a>
                 </li>
                 @foreach($contract as $key => $item)
                     <li class="nav-item">
-                        <a class="nav-link {{ $tab == 'contract'.$key.'' ? 'active' : '' }}" wire:click="tabChange('contract{{$key}}', {{$item->id}})" href="#">Hop Dong {{$key}}</a>
+                        <a class="nav-link {{ $tab == 'contract'.$key.'' ? 'active' : '' }}" wire:click="tabChange('contract{{$key}}', {{$item->id}})" href="#">Hợp đồng {{$item->contract_no}}</a>
                     </li>
                 @endforeach
             </ul>

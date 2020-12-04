@@ -276,7 +276,7 @@
                                         </div>
                                         <select class="custom-select" wire:model="selectTimeFrom">
                                             @foreach($contractTime as $time)
-                                                    <option>{{$time->created_at}}</option>
+                                                    <option>{{Carbon\Carbon::parse($time->created_at)->format('d/m/Y')}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -288,7 +288,7 @@
                                         </div>
                                         <select class="custom-select" wire:model="selectTimeTo">
                                             @foreach($contractTime as $time)
-                                                <option>{{$time->created_at}}</option>
+                                                <option>{{Carbon\Carbon::parse($time->created_at)->format('d/m/Y')}}</option>
                                             @endforeach
                                         </select>
                                     </div>
