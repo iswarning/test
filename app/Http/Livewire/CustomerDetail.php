@@ -238,14 +238,22 @@ class CustomerDetail extends Component
     public function createContract()
     {
         $this->contractData['customer_id'] = $this->customerId;
+
         $this->paymentData['payment_progress'] = $this->payment_progress;
         $this->paymentData['payment_date_95'] = $this->payment_date_95;
         $this->validate();
-//        dd($this->contractData);
-        $contracts[] = Contracts::create($this->contractData);
-        $this->paymentData['contract_id'] = $contracts[0]['id'];
-        $this->paymentData['payment_status'] = 0;
-        Payment::create($this->paymentData);
+
+        $contracts = Contracts::create($this->contractData);
+
+        if($contracts){
+            Payment::create([
+                'payment_progress' => $this->payment_progress ,
+                'payment_date_95' => $this->payment_date_95 ,
+                'contract_id' => $contracts->id ,
+                'payment_status' => 0
+            ]);
+        }
+
 
         $this->modalShowContractVisible = false;
         session()->flash('message', 'Tạo hợp đồng thành công!');
@@ -270,6 +278,7 @@ class CustomerDetail extends Component
         }
 
         $this->juridicalData = Juridical::where('contract_id', $this->contractId)->first();
+
         if($this->juridicalData != null) {
             $this->juridicalId = $this->juridicalData->id;
         }else{
