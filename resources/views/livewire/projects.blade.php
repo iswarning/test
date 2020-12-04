@@ -15,7 +15,9 @@
                                     <h3>Danh sách dự án</h3>
                                 </div>
                                 <div class="col-md-2"></div>
+                                @if(Auth::user()->type != 3)
                                 <div class="col-md-2"><x-jet-button wire:click="createShowModal"> {{ __('Thêm dự án') }} </x-jet-button></div>
+                                @endif
                             </div>
 
                         </div>
@@ -85,8 +87,10 @@
                                         <td>{{$project['name']}}</td>
                                         <td>{{$project['description']}}</td>
                                         <td>
+                                            @if(Auth::user()->type != 3)
                                             <x-jet-button class="ml-2" wire:click="updateShowModal({{ $project['id']}})"> {{ __('Sửa') }} </x-jet-button>
                                             <x-jet-button class="ml-2" wire:click="confirmDelete({{$project['id']}})"> {{ __('Xóa') }} </x-jet-button>
+                                            @endif
                                         </td>
                                     </tr>
 
@@ -95,11 +99,11 @@
                             </table>
                             <x-jet-confirmation-modal wire:model="confirmDeleteVisible">
                                 <x-slot name="title">
-                                    {{ __('Xóa thông tin khách hàng') }}
+                                    {{ __('Xóa thông tin dự án') }}
                                 </x-slot>
 
                                 <x-slot name="content">
-                                    {{ __('Bạn có chắc muốn xóa thông tin khách hàng này?') }}
+                                    {{ __('Bạn có chắc muốn xóa thông tindự án này?') }}
                                 </x-slot>
 
                                 <x-slot name="footer">

@@ -22,7 +22,7 @@ class LoginController extends Controller
             'email.required' => 'Email khong de trong' ,
             'password.required' => 'Password khong de trong'
         ]);
-        
+
         if(Auth::attempt($log))
         {
             return redirect('/customers');
@@ -31,9 +31,11 @@ class LoginController extends Controller
         }
     }
 
-    public function logout(){
-        Auth::logout();
-        return back();
+    public function logout(Request $request){
+        Auth::guard()->logout();
+
+        $request->session()->invalidate();
+        return redirect('/');
     }
 
     public function register(){

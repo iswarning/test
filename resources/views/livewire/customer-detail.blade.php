@@ -616,7 +616,7 @@
                                     <div class="col-md-8">
                                         <h3>Thông tin pháp lý</h3>
                                     </div>
-                                    @if($this->juridicalId && Auth::user()->type != 3)
+                                    @if($this->juridicalId)
                                     <div class="col-md-2"></div>
                                     <div class="col-md-2"><x-jet-button wire:click="updateShowJuridical({{$this->juridicalId}})"> Sửa </x-jet-button></div>
                                     @endif
