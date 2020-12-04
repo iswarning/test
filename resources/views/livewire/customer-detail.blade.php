@@ -78,6 +78,7 @@
                                         <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
                                     </div>
                                     <select class="custom-select" wire:model.lazy="contractData.status">
+                                        <option>Chọn trạng thái</option>
                                         @foreach ($this->contractStatus as $status)
                                             <option value="{{$loop->index}}">{{ $status }}</option>
                                         @endforeach
@@ -754,6 +755,7 @@
                                                 <label class="input-group-text" for="inputGroupSelect01">Hợp đồng</label>
                                             </div>
                                             <select class="custom-select" wire:model.lazy="juridicalData.contract_info">
+                                                <option>Chọn hợp đồng</option>
                                                 @foreach ($this->contractInfo as $info)
                                                     <option value="{{$loop->index}}">{{ $info }}</option>
                                                 @endforeach
@@ -766,6 +768,7 @@
                                                 <label class="input-group-text" for="inputGroupSelect01">Bộ phận</label>
                                             </div>
                                             <select class="custom-select" wire:model.lazy="juridicalData.book_holder">
+                                                <option>Chọn bộ phận</option>
                                                 @foreach ($this->bookHolder as $role)
                                                     <option value="{{$loop->index}}">{{ $role }}</option>
                                                 @endforeach

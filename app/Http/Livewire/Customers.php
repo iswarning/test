@@ -53,7 +53,7 @@ class Customers extends Component
     public $contractStatusCreated = [];
     public $contractData = [
         'signed' => false,
-        'status' => 0
+        'status' => null
     ];
 
     public function rules()
@@ -72,7 +72,8 @@ class Customers extends Component
             'contractData.lot_number' => 'required',
             'contractData.area_signed' => ['required', 'numeric'],
             'contractData.value' => 'required',
-
+            'contractData.status' => 'required',
+            'contractData.status_created_by' => 'required',
         ];
     }
 
