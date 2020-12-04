@@ -2,8 +2,10 @@
 
 namespace App\Exports;
 
+use App\Models\BillLate;
 use App\Models\Customers;
 use App\Models\Contracts;
+use App\Models\Payment;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -14,6 +16,7 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use App\Enums\ContractStatus;
 use App\Enums\ContractStatusCreated;
 use App\Models\Project;
+use App\Models\Juridical;
 
 class CustomerExport implements FromQuery, WithColumnFormatting, WithMapping, WithHeadings
 {
@@ -57,7 +60,10 @@ class CustomerExport implements FromQuery, WithColumnFormatting, WithMapping, Wi
     public function query()
     {
         return Contracts::query()->join('customers','customers.id','contracts.customer_id')
-            ->where('contracts.customer_id',$this->customerData['id']);
+            ->where('contracts.customer_id',$this->customerData['id'])
+            ->select('*',
+                'contracts.id as contractID'
+            );
     }
 
     public function map($contractData): array
@@ -75,6 +81,21 @@ class CustomerExport implements FromQuery, WithColumnFormatting, WithMapping, Wi
         }else{
             $contractStatusCreated = "";
         }
+        $payment = Payment::where('contract_id' , $contractData->contractID)->first();
+        $juridical = Juridical::where('contract_id', $contractData->contractID)->first();
+
+        $billate = [];
+        if(BillLate::where('payment_id', $payment->id)->first() == null){
+            $billate['day_late'] = "";
+            $billate['batch_late'] = "";
+            $billate['money_late'] = "";
+            $billate['citation_rate'] = "";
+            $billate['number_notifi'] = "";
+            $billate['document'] = "";
+            $billate['receipt_date'] = "";
+        }else{
+            $billate = BillLate::where('payment_id', $payment->id)->first()->toArray();
+        }
         return [
             $contractData->id,
             $contractData->name,
@@ -83,7 +104,6 @@ class CustomerExport implements FromQuery, WithColumnFormatting, WithMapping, Wi
             $contractData->address,
             $contractData->household,
             $contractData->birthday,
-            '',
             $contractData->contract_no,
             $contractData->area_signed,
             $contractData->type,
@@ -94,6 +114,15 @@ class CustomerExport implements FromQuery, WithColumnFormatting, WithMapping, Wi
             $project->name,
             $this->contractStatus[$contractData->status],
             $contractStatusCreated,
+            $payment->payment_progress,
+            $payment->payment_date_95,
+            $billate['day_late'],
+            $billate['batch_late'] ,
+            $billate['money_late'],
+            $billate['citation_rate'],
+            $billate['number_notifi'],
+            $billate['document'],
+            $billate['receipt_date'],
         ];
     }
 
@@ -107,7 +136,6 @@ class CustomerExport implements FromQuery, WithColumnFormatting, WithMapping, Wi
             'Địa Chỉ',
             'Hộ Khẩu',
             'Ngày Sinh',
-            '',
             'Số hợp đồng',
             'Diện tích kí',
             'Loại hợp đồng',
@@ -118,6 +146,24 @@ class CustomerExport implements FromQuery, WithColumnFormatting, WithMapping, Wi
             'Dự án' ,
             'Trạng thái hợp đồng',
             'Giữ chỗ' ,
+            'Tiến độ thanh toán' ,
+            'Ngày thanh toán đủ 95%' ,
+            'Ngày trễ' ,
+            'Đợt trễ',
+            'Số tiền trễ',
+            'Lãi phạt',
+            'Số lần đã gửi thông báo',
+            'Văn bản, phương thức',
+            'Ngày khách nhận thông báo',
+            'Thông tin hợp đồng',
+            'Tình trạng sổ',
+            'Ngày công chứng' ,
+            'Thủ tục đăng bộ',
+            'Thanh lý hợp đồng',
+            'Bộ phận giữ sổ',
+            'Hồ sơ thu lai của khách hàng',
+            'Ngày bàn giao đất',
+            'Cam kết thỏa thuận',
         ];
     }
 
