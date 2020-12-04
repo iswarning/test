@@ -68,6 +68,13 @@ class CustomerExport implements FromQuery, WithColumnFormatting, WithMapping, Wi
             $contractSigned = "Đã ký";
         }
         $project = Project::find($contractData->project_id);
+
+        if(isset($contractData->status_created_by))
+        {
+            $contractStatusCreated = $this->contractStatusCreated[$contractData['status_created_by']];
+        }else{
+            $contractStatusCreated = "";
+        }
         return [
             $contractData->id,
             $contractData->name,
@@ -85,8 +92,8 @@ class CustomerExport implements FromQuery, WithColumnFormatting, WithMapping, Wi
             $contractData->value,
             $contractData->lot_number,
             $project->name,
-            $contractData->status,
-            $contractData->status_created_by,
+            $this->contractStatus[$contractData->status],
+            $contractStatusCreated,
         ];
     }
 
