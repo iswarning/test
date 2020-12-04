@@ -58,7 +58,7 @@ class Customers extends Component
 
     public function rules()
     {
-        return [
+        $rules = [
             'paymentData.payment_progress' => 'required',
             'paymentData.payment_date_95' => 'required' ,
             'customerData.name' => 'required',
@@ -73,8 +73,11 @@ class Customers extends Component
             'contractData.area_signed' => ['required', 'numeric'],
             'contractData.value' => 'required',
             'contractData.status' => 'required',
-            'contractData.status_created_by' => 'required',
         ];
+        if($this->selectStatus == 3){
+            $rules['contractData.status_created_by'] = 'required';
+        }
+        return $rules;
     }
 
     public function messages()
