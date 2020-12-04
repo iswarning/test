@@ -289,7 +289,8 @@ class CustomerDetail extends Component
         $this->juridicalData['contract_id'] = $this->contractId;
         $this->juridicalData['liquidation'] = true;
         $this->validate();
-        Juridical::create($this->juridicalData);
+        $juridical = Juridical::create($this->juridicalData);
+        $this->juridicalId = $juridical->id;
         $this->modalShowJuridicalVisible = false;
         session()->flash('message', 'Them thong tin phap ly thanh cong');
     }

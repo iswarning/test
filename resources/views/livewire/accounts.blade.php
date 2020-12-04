@@ -21,10 +21,10 @@
                                 @endif
                             </div>
                             <div class="flex items-center justify-between mt-1 w-full">
-                                <x-jet-input id="searchInput" class="block mt-1 w-50" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model="keyWord" autofocus />
+                                <x-jet-input id="searchInput" class="block mt-1 w-50" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model.lazy="keyWord" autofocus />
                                 <x-jet-button wire:click="createShowModal"> {{ __('Thêm tài khoản') }} </x-jet-button>
                                 <!-- Create and update customer modal -->
-                                <x-jet-dialog-modal wire:model="modalFormVisible">
+                                <x-jet-dialog-modal wire:model.lazy="modalFormVisible">
                                     <x-slot name="title">
                                         {{ __('Thêm tài khoản') }}
                                     </x-slot>
@@ -33,14 +33,14 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <x-jet-label for="name" value="{{ __('Họ và tên') }}" />
-                                                <x-jet-input id="name" class="block mt-1 w-full" type="text" wire:model.debounce.0ms="accountData.name" />
+                                                <x-jet-input id="name" class="block mt-1 w-full" type="text" wire:model.lazy.debounce.0ms="accountData.name" />
                                                 @error('accountData.name')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @endError
                                             </div>
                                             <div class="col-md-6">
                                                 <x-jet-label for="email" value="{{ __('Email') }}" />
-                                                <x-jet-input id="email" class="block mt-1 w-full" type="email" wire:model.debounce.0ms="accountData.email" />
+                                                <x-jet-input id="email" class="block mt-1 w-full" type="email" wire:model.lazy.debounce.0ms="accountData.email" />
                                                 <br>
                                                 @error('accountData.email')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -50,7 +50,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <x-jet-label for="birthday" value="{{ __('Ngày sinh') }}" />
-                                                <x-jet-input id="birthday" class="block mt-1 w-full" type="date" wire:model="accountData.birthday" />
+                                                <x-jet-input id="birthday" class="block mt-1 w-full" type="date" wire:model.lazy="accountData.birthday" />
                                                 @error('accountData.birthday')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @endError
@@ -58,7 +58,7 @@
                                             <div class="col-md-6">
                                                 @if(!$accountId)
                                                     <x-jet-label for="password" value="{{ __('Mật Khẩu') }}" />
-                                                    <x-jet-input id="password" class="block mt-1 w-full" type="password" wire:model="accountData.password"/>
+                                                    <x-jet-input id="password" class="block mt-1 w-full" type="password" wire:model.lazy="accountData.password"/>
                                                     @error('accountData.password')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @endError
@@ -71,7 +71,7 @@
                                                     <div class="input-group-prepend">
                                                         <label class="input-group-text" for="inputGroupSelect01">Phòng ban</label>
                                                     </div>
-                                                    <select class="custom-select" wire:model="roleId">
+                                                    <select class="custom-select" wire:model.lazy="roleId">
                                                         <option value="0">Chọn phòng ban</option>
                                                         @foreach (App\Models\Role::all() as $role)
                                                         <option value="{{$role->id}}">{{ $role->name }}</option>
@@ -84,7 +84,7 @@
                                                     <div class="input-group-prepend">
                                                         <label class="input-group-text" for="inputGroupSelect01">Vị trí</label>
                                                     </div>
-                                                    <select class="custom-select" wire:model="permissionId">
+                                                    <select class="custom-select" wire:model.lazy="permissionId">
                                                         <option value="0">Chọn vị trí</option>
                                                         @foreach ($permissions as $permission)
                                                         <option value="{{$permission->id}}">{{ $permission->name }}</option>
@@ -151,7 +151,7 @@
                                 </tbody>
                             </table>
                             {{ $accounts->links() }}
-                            <x-jet-confirmation-modal wire:model="modalFormDeleteVisible">
+                            <x-jet-confirmation-modal wire:model.lazy="modalFormDeleteVisible">
                                 <x-slot name="title">
                                     {{ __('Xóa tài khoản') }}
                                 </x-slot>
@@ -178,7 +178,7 @@
     </section>
 </div>
 <!-- Confirm delete customer modal -->
-<!-- <x-jet-confirmation-modal wire:model="modalConfirmDeleteVisible">
+<!-- <x-jet-confirmation-modal wire:model.lazy="modalConfirmDeleteVisible">
     <x-slot name="title">
         {{ __('Xóa thông tin khách hàng') }}
     </x-slot>
