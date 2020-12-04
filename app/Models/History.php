@@ -10,6 +10,7 @@ class History extends Model
     use HasFactory;
     protected $table = "histories";
     protected $fillable = [
-        'title'
+        'title',
+        'customer_id' ,
     ];
 }

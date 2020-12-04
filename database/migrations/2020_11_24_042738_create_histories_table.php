@@ -16,6 +16,7 @@ class CreateHistoriesTable extends Migration
         Schema::create('histories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
+            $table->integer('customer_id');
             $table->timestamps();
         });
     }

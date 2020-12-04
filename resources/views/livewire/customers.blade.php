@@ -275,8 +275,8 @@
                                             <label class="input-group-text" for="inputGroupSelect01">Từ</label>
                                         </div>
                                         <select class="custom-select" wire:model="selectTimeFrom">
-                                            @foreach($customers as $customer)
-                                                    <option>{{$customer->contractCreated}}</option>
+                                            @foreach($contractTime as $time)
+                                                    <option>{{$time->created_at}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -287,8 +287,8 @@
                                             <label class="input-group-text" for="inputGroupSelect01">Đến</label>
                                         </div>
                                         <select class="custom-select" wire:model="selectTimeTo">
-                                            @foreach($customers as $customer)
-                                                <option>{{$customer->contractCreated}}</option>
+                                            @foreach($contractTime as $time)
+                                                <option>{{$time->created_at}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -378,14 +378,16 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Title</th>
+                                        <th>Tiêu đề</th>
+                                        <th>Thời gian chỉnh sửa</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($histories as $history)
                                     <tr>
-                                        <td>{{$history->id}}</td>
+                                        <td><a href="{{route('customerDetail', $history->customer_id)}}">{{$history->customer_id}}</a></td>
                                         <td>{{$history->title}}</td>
+                                        <td>{{Carbon\Carbon::parse($history->created_at)->format('d/m/Y H:i:s')}}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

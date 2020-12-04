@@ -27,7 +27,7 @@ class LoginController extends Controller
         {
             return redirect('/customers');
         }else{
-            return redirect()->withErrors($validator);
+            return redirect('/')->withErrors($validator);
         }
     }
 

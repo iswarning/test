@@ -237,9 +237,10 @@ class CustomerDetail extends Component
     public function createContract()
     {
         $this->contractData['customer_id'] = $this->customerId;
-        $this->validate();
+//
         $this->paymentData['payment_progress'] = $this->payment_progress;
         $this->paymentData['payment_date_95'] = $this->payment_date_95;
+        $this->validate();
         $contracts = Contracts::create($this->contractData);
         $this->contractId = $contracts['id'];
 

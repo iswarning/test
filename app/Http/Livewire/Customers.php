@@ -72,7 +72,7 @@ class Customers extends Component
             'contractData.lot_number' => 'required',
             'contractData.area_signed' => ['required', 'numeric'],
             'contractData.value' => 'required',
-            
+
         ];
     }
 
@@ -94,7 +94,7 @@ class Customers extends Component
             'contractData.lot_number.required' => 'Không thể để mã lô',
             'contractData.area_signed.required' => 'Không thể để trống diện tích ký',
             'contractData.value.required' => 'Không thể để trống giá bán',
-            
+
         ];
     }
 
@@ -152,7 +152,8 @@ class Customers extends Component
                     ->orWhere('phone','like',$searchKey)
                     ->orWhere('lot_number','like',$searchKey)
                     ->orWhere('contract_no','like',$searchKey)
-                    ->orWhere('projects.name','like',$searchKey);
+                    ->orWhere('projects.name','like',$searchKey)
+                    ->orWhere('customers.id','like',$searchKey);
             });
         if($this->selectStatus != null)
         {
@@ -183,7 +184,8 @@ class Customers extends Component
                 )
                 ->paginate($this->recordNum),
             'projects' => Project::all() ,
-            'histories' => History::orderBy('id','desc')->paginate(20)
+            'histories' => History::orderBy('id','desc')->paginate(20) ,
+            'contractTime' => Contracts::all()
         ]);
     }
 
@@ -232,38 +234,39 @@ class Customers extends Component
         // Check Name
         if($b['name'] != $a['name'])
         {
-            $this->createHistoryCustomer("Name: ".$b['name']);
+            $this->createHistoryCustomer(" Name: ".$b['name'], $b['id']);
         }
         // Check Cmnd
         if($b['cmnd'] != $a['cmnd'])
         {
-            $this->createHistoryCustomer("Cmnd: ".$b['cmnd']);
+            $this->createHistoryCustomer(" Cmnd: ".$b['cmnd'], $b['id']);
         }
         // Check Phone
         if($b['phone'] != $a['phone'])
         {
-            $this->createHistoryCustomer("Phone: ".$b['phone']);
+            $this->createHistoryCustomer(" Phone: ".$b['phone'], $b['id']);
         }
         // Check Household
         if($b['household'] != $a['household'])
         {
-            $this->createHistoryCustomer("Household: ".$b['household']);
+            $this->createHistoryCustomer(" Household: ".$b['household'], $b['id']);
         }
         // Check Birthday
         if($b['birthday'] != $a['birthday'])
         {
-            $this->createHistoryCustomer("Birthday: ".$b['birthday']);
+            $this->createHistoryCustomer(" Birthday: ".$b['birthday'], $b['id']);
         }
         if($b['address'] != $a['address'])
         {
-            $this->createHistoryCustomer("Address: ".$b['address']);
+            $this->createHistoryCustomer('Address: '.$b['address'], $b['id']);
         }
     }
 
-    public function createHistoryCustomer($target)
+    public function createHistoryCustomer($target, $id)
     {
         History::create([
-            'title' => Auth::user()->name." has changed ".$target
+            'title' => Auth::user()->name." has changed ".$target ,
+            'customer_id' => $id
         ]);
     }
 
