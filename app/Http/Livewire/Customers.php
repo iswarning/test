@@ -123,9 +123,10 @@ class Customers extends Component
         ModelsCustomers::find($this->customerId)->update($this->customerData);
         $this->dataUpdated = ModelsCustomers::find($this->customerId)->toArray();
         Contracts::find($this->contractId)->update($this->contractData);
-//        Payment::where('contract_id',$this->contractId)->update($this->paymentData);
+        $payment = Payment::where('contract_id',$this->contractId)->first();
+        Payment::find($payment->id)->update($this->paymentData);
         $this->checkUpdateCustomer($this->dataNotUpdate, $this->dataUpdated);
-//        dd($this->paymentData);
+        // dd($this->paymentData);
         $this->modalFormContractVisible = false;
         $this->modalFormCustomerVisible = false;
         session()->flash('message', 'Cập nhật thông tin khách hàng thành công!');
@@ -215,6 +216,7 @@ class Customers extends Component
         $this->resetValidation();
         $this->customerId = $customer_id;
         $this->contractId = $contract_id;
+        // dd($this->contractId);
         $this->customerData = ModelsCustomers::find($this->customerId)->toArray();
         $this->contractData = Contracts::find($this->contractId)->toArray();
         $this->paymentData = Payment::where('contract_id', $this->contractId)->first()->toArray();
