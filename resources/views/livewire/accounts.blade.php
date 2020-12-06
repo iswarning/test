@@ -113,15 +113,16 @@
                                 </x-jet-dialog-modal>
                             </div>
                             <br>
-                            <table class="table table-striped">
+                            <table class="table table-striped table-responsive">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Họ và Tên</th>
                                         <th>Email</th>
-                                        <th>Vị trí/Phòng Ban</th>
+                                        <th>Phòng Ban - Vị trí</th>
                                         <th>Ngày Sinh</th>
-                                        <th>Actions</th>
+                                        <th class="text-center">Sửa</th>
+                                        <th class="text-center">Xóa</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -138,13 +139,12 @@
                                         </td>
                                         <td>{{$account->birthday}}</td>
                                         <td>
-
-                                            <x-jet-button class="ml-2" wire:click="updateShowModal({{ $account->id }})"> {{ __('Sửa') }} </x-jet-button>
-
+                                            <x-jet-button class="ml-2" wire:click="updateShowModal({{ $account->id }})"> {{ __('Sửa') }} </x-jet-button>                                           
+                                        </td>
+                                        <td>
                                             @if($account->email != "admin@gmail.com" && $account->type != 1)
-                                            <x-jet-button wire:click="deleteShowModal({{$account->id}})">{{ __('Xóa') }}</x-jet-button>
+                                                <x-jet-button wire:click="deleteShowModal({{$account->id}})">{{ __('Xóa') }}</x-jet-button>
                                             @endif
-
                                         </td>
                                     </tr>
                                     @endforeach

@@ -13,19 +13,19 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('customers') }}" :active="request()->routeIs('customers')">
-                        {{ __('Customers') }}
+                        {{ __('Quản lý khách hàng') }}
                     </x-jet-nav-link>
                 </div>
                 @if(Auth::user()->type == 1)
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('accounts') }}" :active="request()->routeIs('accounts')">
-                        {{ __('Account Management') }}
+                        {{ __('Quản lý tài khoản') }}
                     </x-jet-nav-link>
                 </div>
                 @endif
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('projects') }}" :active="request()->routeIs('projects')">
-                        {{ __('Project Management') }}
+                        {{ __('Quản lý dự án') }}
                     </x-jet-nav-link>
                 </div>
             </div>
@@ -54,11 +54,11 @@
                     <x-slot name="content">
                         <!-- Account Management -->
                         <div class="block px-4 py-2 text-xs text-gray-400">
-                            {{ __('Manage Account') }}
+                            {{ __('Quản lý tài khoản') }}
                         </div>
 
                         <x-jet-dropdown-link href="{{ route('profile.show') }}">
-                            {{ __('Profile') }}
+                            {{ __('Hồ sơ') }}
                         </x-jet-dropdown-link>
 
                         @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -107,7 +107,7 @@
                             <x-jet-dropdown-link href="{{ route('logout') }}"
                                                 onclick="event.preventDefault();
                                                             this.closest('form').submit();">
-                                {{ __('Logout') }}
+                                {{ __('Đăng xuất') }}
                             </x-jet-dropdown-link>
                         </form>
                     </x-slot>
@@ -130,7 +130,7 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('customers') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Customers') }}
+                {{ __('Quản lý tài khoản') }}
             </x-jet-responsive-nav-link>
         </div>
 
@@ -150,7 +150,7 @@
             <div class="mt-3 space-y-1">
                 <!-- Account Management -->
                 <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
-                    {{ __('Profile') }}
+                    {{ __('Hồ sơ') }}
                 </x-jet-responsive-nav-link>
 
                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -166,7 +166,7 @@
                     <x-jet-responsive-nav-link href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                        {{ __('Logout') }}
+                        {{ __('Đăng xuất') }}
                     </x-jet-responsive-nav-link>
                 </form>
 

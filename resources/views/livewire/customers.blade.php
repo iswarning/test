@@ -6,6 +6,7 @@
 <div>
     <section>
         <div class="container">
+            
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -122,7 +123,7 @@
                                                     @endError
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <x-jet-label for="type" value="{{ __('Loại hợp dồng') }}" />
+                                                    <x-jet-label for="type" value="{{ __('Loại hợp đồng') }}" />
                                                     <x-jet-input id="type" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.type" />
                                                     @error('contractData.type')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -158,6 +159,9 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
+                                                    @error('contractData.status')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
                                                 </div>
                                                 @if($contractData['status'] != 2)
                                                 <div class="col-md-6">
@@ -172,6 +176,9 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
+                                                    @error('contractData.status_created_by')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
                                                 </div>
                                                 @endif
                                             </div>
@@ -179,10 +186,16 @@
                                                 <div class="col-md-6">
                                                     <x-jet-label for="signed_date" value="{{ __('Ngày ký') }}" />
                                                     <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="contractData.signed_date" id="signed_date"/>
+                                                    @error('contractData.signed_date')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
                                                 </div>
                                                 <div class="col-md-6">
                                                     <x-jet-label for="signed_date" value="{{ __('Giá bán') }}" />
                                                     <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.value" id="value"/>
+                                                    @error('contractData.value')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
                                                 </div>
 
                                             </div>
@@ -190,10 +203,14 @@
                                                 <div class="col-md-6">
                                                     <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
                                                     <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="paymentData.payment_progress" id="payment_progress"/>
+                                                    @error('paymentData.payment_progress')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
                                                 </div>
                                                 <div class="col-md-6">
                                                     <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
                                                     <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="paymentData.payment_date_95" id="payment_date_95"/>
+                                                   
                                                 </div>
 
                                             </div>
@@ -210,11 +227,17 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
+                                                    @error('contractData.project_id')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
                                                 </div>
 
                                                 <div class="col-md-6 flex">
                                                     <x-jet-label for="signed" value="{{ __('Đã ký / chưa ký') }}" />
                                                     <input id="signed" type="checkbox" wire:model.lazy="contractData.signed" class="form-checkbox h-5 w-5 text-green-500 ml-2">
+                                                    @error('contractData.signed')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @endError
                                                 </div>
                                             </div>
                                         </x-slot>
@@ -281,7 +304,7 @@
                                         <select class="custom-select" wire:model.lazy="selectTimeFrom">
                                             <option>Chọn thời gian</option>
                                             @foreach($contractTime as $time)
-                                                    <option>{{Carbon\Carbon::parse($time->created_at)->format('d/m/Y')}}</option>
+                                                    <option>{{$time->created_at}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -294,7 +317,7 @@
                                         <select class="custom-select" wire:model.lazy="selectTimeTo">
                                             <option>Chọn thời gian</option>
                                             @foreach($contractTime as $time)
-                                                <option>{{Carbon\Carbon::parse($time->created_at)->format('d/m/Y')}}</option>
+                                                <option>{{$time->created_at}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -313,7 +336,8 @@
                                             <th>Tình trạng</th>
                                             <th>Tiến độ</th>
                                             <th>Ngày bàn giao</th>
-                                            <th>Actions</th>
+                                            <th class="text-center">Sửa</th>
+                                            <th class="text-center">Xóa</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -342,12 +366,12 @@
                                                     <td></td>
                                                 @endif
 
-                                                <td>
+                                                
                                                 @if(Auth::user()->type != 3)
-                                                    <x-jet-button class="ml-2" wire:click="updateShowModal({{ $customer->customerID }},{{$customer->contractID}})"> {{ __('Sửa') }} </x-jet-button>
-                                                    <x-jet-button class="ml-2" wire:click="confirmDelete({{$customer->contractID}})"> {{ __('Xóa') }} </x-jet-button>
+                                                    <td><x-jet-button class="ml-2" wire:click="updateShowModal({{ $customer->customerID }},{{$customer->contractID}})"> {{ __('Sửa') }} </x-jet-button></td>
+                                                    <td><x-jet-button class="ml-2" wire:click="confirmDelete({{$customer->contractID}})"> {{ __('Xóa') }} </x-jet-button></td>
                                                 @endif
-                                                </td>
+                                                
                                             </tr>
                                             @endif
 

@@ -56,12 +56,11 @@ class CustomerDetail extends Component
     public $billlateData = [];
     public $juridicalData = [
         'liquidation' => true ,
-        'contract_info' => 0,
-        'book_holder' => 0
     ];
     public $contractData = [
         'signed' => false ,
-        'status_created_by' => 0
+        'status_created_by' => null,
+        'status' => null
     ];
     protected $paginationTheme = 'bootstrap';
 
@@ -82,10 +81,9 @@ class CustomerDetail extends Component
         {
             if($this->contractId == null)
             {
-                $rules['paymentData.payment_date_95'] = 'required';
                 $rules['paymentData.payment_progress'] = 'required';
                 $rules['payment_progress'] = 'required';
-                $rules['payment_date_95'] = 'required';
+
             }
             $rules = [
                 'contractData.contract_no' => ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)],
@@ -127,14 +125,8 @@ class CustomerDetail extends Component
             $rules = [
                 'juridicalData.contract_info' => 'required',
                 'juridicalData.status' => 'required',
-                'juridicalData.notarized_date' => 'required',
                 'juridicalData.registration_procedures' => 'required',
-                'juridicalData.liquidation' => 'required',
-                'juridicalData.bill_profile' => 'required',
                 'juridicalData.book_holder' => 'required',
-                'juridicalData.delivery_land_date' => 'required',
-                'juridicalData.delivery_book_date' => 'required',
-                'juridicalData.commitment' => 'required',
                 'juridicalData.contract_id' => 'required',
             ];
         }
@@ -154,15 +146,19 @@ class CustomerDetail extends Component
             'customerData.phone.required' => 'Không thể để trống số điện thoại',
             'customerData.phone.numeric' => 'Số điện thoại phải là số',
 
+            'paymentData.payment_progress.required' => 'Không thể để trống giá bán tiến độ thanh toán',
+            'payment_progress.required' => 'Không thể để trống giá bán tiến độ thanh toán',
+
             'contractData.contract_no.required' => 'Không thể để trống mã hợp đồng',
             'contractData.contract_no.unique' => 'Mã hợp đồng đã tồn tại',
             'contractData.type.required' => 'Không thể để trống loại hợp đồng',
+            'contractData.status.required' => 'Không thể để trống trạng thái',
             'contractData.lot_number.required' => 'Không thể để mã lô',
             'contractData.area_signed.required' => 'Không thể để trống diện tích ký',
             'contractData.value.required' => 'Không thể để trống giá bán',
-
-            'paymentData.payment_date_95.required' => 'Không thể để trống ngày thanh toán đủ 95%',
-            'paymentData.payment_progress.required' => 'Không thể để trống giá bán tiến độ thanh toán',
+            'contractData.project_id.required' => 'Không thể để trống dự án',
+            'contractData.signed_date.required' => 'Không thể để trống ngày ký',
+            'contractData.signed.required' => 'Không thể để trống' ,
 
             'billlateData.day_late.required' => 'Không thể để trống ngày trễ',
             'billlateData.batch_late.required' => 'Không thể để trống đợt trễ',
@@ -173,12 +169,9 @@ class CustomerDetail extends Component
             'billlateData.receipt_date.required' => 'Không thể để trống ngày khách nhận thông báo',
 
             'juridicalData.status.required' => 'Không thể để trống trạng thái',
-            'juridicalData.notarized_date.required' => 'Không thể để trống ngày công chứng',
             'juridicalData.registration_procedures.required' => 'Không thể để trống thủ tục đăng bộ',
-            'juridicalData.liquidation.required' => 'Không thể để trống thanh lý hợp đồng',
-            'juridicalData.bill_profile.required' => 'Không thể để trống hồ sơ thu lai',
-            'juridicalData.delivery_land_date.required' => 'Không thể để trống ngày bàn giao',
-            'juridicalData.commitment.required' => 'Không thể để trống cam kết thỏa thuận',
+            'juridicalData.book_holder.required' => 'Không thể để trống bộ phận' ,
+            'juridicalData.contract_info.required' => 'Không thể để trống hợp đồng' ,
         ];
     }
 
@@ -209,7 +202,7 @@ class CustomerDetail extends Component
         $this->validate();
         Customers::find($this->customerId)->update($this->customerData);
         $this->modalShowCustomerVisible = false;
-        session()->flash('message', 'Cap nhat thong tin khach hang thanh cong');
+        session()->flash('message', 'Cập nhật thông tin khách hàng thành công');
     }
 
     public function updated($propertyName)
@@ -229,7 +222,11 @@ class CustomerDetail extends Component
     public function createShowContract()
     {
         $this->contractId = null;
-        $this->contractData = [];
+        $this->contractData = [
+            'signed' => false ,
+            'status_created_by' => null,
+            'status' => null
+        ];
         $this->payment_date_95 = null;
         $this->payment_progress = null;
         $this->modalShowContractVisible = true;
@@ -301,7 +298,7 @@ class CustomerDetail extends Component
         $juridical = Juridical::create($this->juridicalData);
         $this->juridicalId = $juridical->id;
         $this->modalShowJuridicalVisible = false;
-        session()->flash('message', 'Them thong tin phap ly thanh cong');
+        session()->flash('message', 'Thêm thông tin pháp lý thành công');
     }
 
     public function updateShowContract($id)
@@ -319,7 +316,7 @@ class CustomerDetail extends Component
         $this->validate();
         Contracts::find($this->contractId)->update($this->contractData);
         $this->modalShowContractVisible = false;
-        session()->flash('message', 'Cap nhat thong tin hop dong thanh cong');
+        session()->flash('message', 'Cập nhật thông tin hợp đồng thành công');
     }
 
     public function updateShowPaymentAndBill()
@@ -336,7 +333,7 @@ class CustomerDetail extends Component
         Payment::find($this->paymentId)->update($this->paymentData);
         BillLate::find($this->billlateId)->update($this->billlateData);
         $this->modalShowPaymentVisible = false;
-        session()->flash('message', "Cap nhat thong tin thanh toan thanh cong");
+        session()->flash('message', "Cập nhật thông tin thanh toán thành công");
     }
 
     public function updateShowJuridical($id)
@@ -353,7 +350,7 @@ class CustomerDetail extends Component
         $this->validate();
         Juridical::find($this->juridicalId)->update($this->juridicalData);
         $this->modalShowJuridicalVisible = false;
-        session()->flash('message', 'Cap nhat thong tin phap ly thanh cong');
+        session()->flash('message', 'Cập nhật thông tin pháp lý thành công');
     }
 
     public function createShowModalBillLate($id)
@@ -375,7 +372,7 @@ class CustomerDetail extends Component
         $this->modalShowPaymentVisible = false;
         $this->infoBillLate = true;
 
-        session()->flash('message', 'Them thanh toan tre han thanh cong');
+        session()->flash('message', 'Thêm thanh toán trễ hạn thành công');
     }
 
     public function export(){

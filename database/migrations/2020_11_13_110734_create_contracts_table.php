@@ -22,6 +22,10 @@ class CreateContractsTable extends Migration
             $table->boolean("signed")->comment("Đã kí hay chưa");
             $table->date("signed_date")->comment("Ngày kí");
             $table->string("value")->comment("Giá bán");
+            $table->string("lot_number")->comment("Mã lô");
+            $table->string("status")->comment("Trạng thái hợp đồng");
+            $table->string("project_id")->comment("Mã dự án");
+            $table->string("status_created_by")->comment("Nhân viên hoặc khách nhận giữ chỗ")->nullable();
             $table->timestamps();
         });
     }

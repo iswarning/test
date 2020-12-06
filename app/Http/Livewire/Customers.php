@@ -52,27 +52,32 @@ class Customers extends Component
     public $contractStatus = ContractStatus::statusName;
     public $contractStatusCreated = [];
     public $contractData = [
-        'signed' => false,
+        'signed' => false ,
         'status' => null
     ];
 
     public function rules()
     {
         $rules = [
-            'paymentData.payment_progress' => 'required',
-            'paymentData.payment_date_95' => 'required' ,
+            'paymentData.payment_progress' => 'required' ,
+
+            'contractData.contract_no' => ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)],
+            'contractData.type' => 'required',
+            'contractData.status' => 'required',
+            'contractData.lot_number' => 'required',
+            'contractData.area_signed' => ['required', 'numeric'],
+            'contractData.value' => 'required',
+            'contractData.project_id' => 'required',
+            'contractData.signed_date' => 'required',
+            'contractData.signed' => 'required',
+
             'customerData.name' => 'required',
             'customerData.cmnd' => ['required', Rule::unique('customers', 'cmnd')->ignore($this->customerId)],
             'customerData.birthday' => 'required',
             'customerData.household' => 'required',
             'customerData.address' => 'required',
             'customerData.phone' => 'required',
-            'contractData.contract_no' => ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)],
-            'contractData.type' => 'required',
-            'contractData.lot_number' => 'required',
-            'contractData.area_signed' => ['required', 'numeric'],
-            'contractData.value' => 'required',
-            'contractData.status' => 'required',
+
         ];
         if($this->selectStatus == 3){
             $rules['contractData.status_created_by'] = 'required';
@@ -83,8 +88,18 @@ class Customers extends Component
     public function messages()
     {
         return [
-            'paymentData.payment_progress.required' => 'Không thể để trống tiến độ thanh toán' ,
-            'paymentData.payment_date_95.required' => 'Không thể để trống ngày thanh toán đủ' ,
+            'paymentData.payment_progress.required' => 'Không thể để trống tiến độ' ,
+            'contractData.contract_no.required' => 'Không thể để trống mã hợp đồng',
+            'contractData.contract_no.unique' => 'Mã hợp đồng đã tồn tại',
+            'contractData.type.required' => 'Không thể để trống loại hợp đồng',
+            'contractData.status.required' => 'Không thể để trống trạng thái',
+            'contractData.lot_number.required' => 'Không thể để mã lô',
+            'contractData.area_signed.required' => 'Không thể để trống diện tích ký',
+            'contractData.value.required' => 'Không thể để trống giá bán',
+            'contractData.project_id.required' => 'Không thể để trống dự án',
+            'contractData.signed_date.required' => 'Không thể để trống ngày ký',
+            'contractData.signed.required' => 'Không thể để trống' ,
+
             'customerData.name.required' => 'Không thể để trống họ tên',
             'customerData.cmnd.required' => 'Không thể để trống chứng minh nhân dân',
             'customerData.cmnd.unique' => 'Chứng minh nhân dân đã tồn tại',
@@ -92,13 +107,7 @@ class Customers extends Component
             'customerData.household.required' => 'Không thể để trống hộ khẩu',
             'customerData.address.required' => 'Không thể để trống địa chỉ',
             'customerData.phone.required' => 'Không thể để trống số điện thoại',
-            'contractData.contract_no.required' => 'Không thể để trống mã hợp đồng',
-            'contractData.contract_no.unique' => 'Mã hợp đồng đã tồn tại',
-            'contractData.type.required' => 'Không thể để trống loại hợp đồng',
-            'contractData.lot_number.required' => 'Không thể để mã lô',
-            'contractData.area_signed.required' => 'Không thể để trống diện tích ký',
-            'contractData.value.required' => 'Không thể để trống giá bán',
-
+        
         ];
     }
 

@@ -15,8 +15,8 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('payment_progress')->comment('Tiến độ thanh toán');
-            $table->date('payment_date_95')->comment('Ngày thanh toán đủ 95%');
+            $table->string('payment_progress');
+            $table->date('payment_date_95')->comment('Ngày thanh toán đủ 95%')->nullable();
             $table->tinyInteger('payment_status')->comment('Tình trạng thanh toán')->nullable();
             $table->integer('contract_id')->nullable();
             $table->timestamps();

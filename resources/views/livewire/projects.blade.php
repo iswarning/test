@@ -76,7 +76,10 @@
                                     <th>ID</th>
                                     <th>Tên dự án</th>
                                     <th>Mô tả dự án</th>
-                                    <th>Actions</th>
+                                    @if(Auth::user()->type != 3)
+                                    <th class="text-center">Sửa</th>
+                                    <th class="text-center">Xóa</th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -86,12 +89,10 @@
                                         <td>{{$project['id']}}</td>
                                         <td>{{$project['name']}}</td>
                                         <td>{{$project['description']}}</td>
-                                        <td>
-                                            @if(Auth::user()->type != 3)
-                                            <x-jet-button class="ml-2" wire:click="updateShowModal({{ $project['id']}})"> {{ __('Sửa') }} </x-jet-button>
-                                            <x-jet-button class="ml-2" wire:click="confirmDelete({{$project['id']}})"> {{ __('Xóa') }} </x-jet-button>
-                                            @endif
-                                        </td>
+                                        @if(Auth::user()->type != 3)
+                                        <td class="text-center"><x-jet-button class="ml-2" wire:click="updateShowModal({{ $project['id']}})"> {{ __('Sửa') }} </x-jet-button></td>
+                                        <td class="text-center"><x-jet-button class="ml-2" wire:click="confirmDelete({{$project['id']}})"> {{ __('Xóa') }} </x-jet-button></td>
+                                        @endif
                                     </tr>
 
                                 @endforeach
@@ -103,7 +104,7 @@
                                 </x-slot>
 
                                 <x-slot name="content">
-                                    {{ __('Bạn có chắc muốn xóa thông tindự án này?') }}
+                                    {{ __('Bạn có chắc muốn xóa thông tin dự án này?') }}
                                 </x-slot>
 
                                 <x-slot name="footer">
