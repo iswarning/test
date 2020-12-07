@@ -41,7 +41,7 @@
                     <x-slot name="content">
                         <div class="row">
                             <div class="col-md-6">
-                                <x-jet-label for="contract_no" value="{{ __('Mã hợp đồng') }}" />
+                                <x-jet-label for="contract_no" value="{{ __('Số hợp đồng') }}" />
                                 <x-jet-input id="contract_no" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.contract_no" />
                                 @error('contractData.contract_no')
                                 <span class="text-danger">{{ $message }}</span>
@@ -107,7 +107,7 @@
                             </div>
                             @endif
                         <div></div>
-                            
+
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -130,7 +130,7 @@
                                 <div class="col-md-6">
                                     <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
                                     <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="payment_date_95" id="payment_date_95"/>
-                                    
+
                                 </div>
                                 <div class="col-md-6">
                                     <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
                         @endif
-                        
+
                         <div class="row mt-4">
                             <div class="col-md-6">
                                 <div class="input-group mb-3">
@@ -755,12 +755,12 @@
                                     <div class="col-md-6">
                                         <x-jet-label for="notarized_date" value="{{ __('Ngày công chứng') }}" />
                                         <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="juridicalData.notarized_date" id="notarized_date"/>
-                                
+
                                     </div>
                                     <div class="col-md-6">
                                         <x-jet-label for="delivery_land_date" value="{{ __('Ngày bàn giao đất') }}" />
                                         <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="juridicalData.delivery_land_date" id="delivery_land_date"/>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="row mt-4">
@@ -802,24 +802,24 @@
                                     <div class="col-md-6">
                                         <x-jet-label for="bill_profile" value="{{ __('Hồ sơ thu lai của khách hàng') }}" />
                                         <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.bill_profile" id="bill_profile"/>
-                                        
+
                                     </div>
                                     <div class="col-md-6">
                                         <x-jet-label for="commitment" value="{{ __('Cam kết thỏa thuận khác') }}" />
                                         <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.commitment" id="commitment"/>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="delivery_book_date" value="{{ __('Ngày bàn giao sổ') }}" />
                                         <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="juridicalData.delivery_book_date" id="delivery_book_date"/>
-                                        
+
                                     </div>
                                     <div class="col-md-6 flex">
                                         <x-jet-label for="liquidation" value="{{ __('Thanh lý hợp đồng') }}" />
                                         <x-jet-input id="liquidation" type="checkbox" wire:model.lazy="juridicalData.liquidation" class="form-checkbox h-5 w-5 text-green-500 ml-2"/>
-                                        
+
                                     </div>
                                 </div>
 

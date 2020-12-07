@@ -16,7 +16,8 @@ use App\Enums\BookHolder;
 use App\Models\BillLate;
 use App\Enums\ContractStatusCreated;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\History;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 
 use App\Exports\CustomerPDF;
@@ -36,6 +37,8 @@ class CustomerDetail extends Component
     public $billlateId;
     public $payment_progress;
     public $payment_date_95;
+    public $dataUpdated;
+    public $dataNotUpdate;
 
     public $modalShowCustomerVisible = false;
     public $modalShowContractVisible = false;
@@ -191,6 +194,7 @@ class CustomerDetail extends Component
 
     public function updateShowModalCustomer($id)
     {
+        $this->dataNotUpdate = Customers::find($id)->toArray();
         $this->resetValidation();
         $this->modalShowCustomerVisible = true;
         $this->customerId = $id;
@@ -201,8 +205,51 @@ class CustomerDetail extends Component
     {
         $this->validate();
         Customers::find($this->customerId)->update($this->customerData);
+        $this->dataUpdated = Customers::find($this->customerId)->toArray();
+        $this->checkUpdateCustomer($this->dataNotUpdate, $this->dataUpdated);
         $this->modalShowCustomerVisible = false;
         session()->flash('message', 'Cập nhật thông tin khách hàng thành công');
+    }
+
+    public function checkUpdateCustomer($a, $b)
+    {
+        // Check Name
+        if($b['name'] != $a['name'])
+        {
+            $this->createHistoryCustomer(" Name: ".$b['name'], $b['id']);
+        }
+        // Check Cmnd
+        if($b['cmnd'] != $a['cmnd'])
+        {
+            $this->createHistoryCustomer(" Cmnd: ".$b['cmnd'], $b['id']);
+        }
+        // Check Phone
+        if($b['phone'] != $a['phone'])
+        {
+            $this->createHistoryCustomer(" Phone: ".$b['phone'], $b['id']);
+        }
+        // Check Household
+        if($b['household'] != $a['household'])
+        {
+            $this->createHistoryCustomer(" Household: ".$b['household'], $b['id']);
+        }
+        // Check Birthday
+        if($b['birthday'] != $a['birthday'])
+        {
+            $this->createHistoryCustomer(" Birthday: ".$b['birthday'], $b['id']);
+        }
+        if($b['address'] != $a['address'])
+        {
+            $this->createHistoryCustomer('Address: '.$b['address'], $b['id']);
+        }
+    }
+
+    public function createHistoryCustomer($target, $id)
+    {
+        History::create([
+            'title' => Auth::user()->name." has changed ".$target ,
+            'customer_id' => $id
+        ]);
     }
 
     public function updated($propertyName)

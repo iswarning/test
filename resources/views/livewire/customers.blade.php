@@ -5,8 +5,10 @@
 </x-slot>
 <div>
     <section>
+
+
         <div class="container">
-            
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -22,12 +24,12 @@
                                 @endif
                             </div>
                             <div class="flex items-center justify-between mt-1 w-full">
-                                <x-jet-input id="searchInput" class="block mt-1 w-50" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model.lazy="keyWord" autofocus />
+                                <x-jet-input id="searchInput" class="block mt-1 w-50" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model="keyWord" autofocus />
                                 @if(Auth::user()->type == 1)
                                     @if($dataTableCustomerVisible == true)
                                     <x-jet-button wire:click="historyShowList"> {{ __('Lịch sử chỉnh sửa') }} </x-jet-button>
                                     @else
-                                    <x-jet-button wire:click="customerShowList"> {{ __('Danh sach khach hang') }} </x-jet-button>
+                                    <x-jet-button wire:click="customerShowList"> {{ __('Danh sách khách hàng') }} </x-jet-button>
                                     @endif
                                 @endif
                                 @if(Auth::user()->type == 1 or Auth::user()->type == 2)
@@ -61,7 +63,7 @@
                                             <div class="row mt-4">
                                                 <div class="col-md-6">
                                                     <x-jet-label for="birthday" value="{{ __('Ngày sinh') }}" />
-                                                    <x-jet-input id="birthday" class="block mt-1 w-full" type="date" wire:model.lazy="customerData.birthday" />
+                                                    <x-jet-input type="text" id="birthday" class="block mt-1 w-full datepicker" placeholder="Chọn ngày sinh.." wire:model="customerData.birthday" />
                                                     @error('customerData.birthday')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @endError
@@ -116,7 +118,7 @@
                                         <x-slot name="content">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <x-jet-label for="contract_no" value="{{ __('Mã hợp đồng') }}" />
+                                                    <x-jet-label for="contract_no" value="{{ __('Số hợp đồng') }}" />
                                                     <x-jet-input id="contract_no" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.contract_no" />
                                                     @error('contractData.contract_no')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -185,13 +187,13 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <x-jet-label for="signed_date" value="{{ __('Ngày ký') }}" />
-                                                    <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="contractData.signed_date" id="signed_date"/>
+                                                    <x-jet-input type="text" id="signed_date" class="block mt-1 w-full" wire:model="contractData.signed_date" placeholder="Chọn ngày ký.."/>
                                                     @error('contractData.signed_date')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @endError
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <x-jet-label for="signed_date" value="{{ __('Giá bán') }}" />
+                                                    <x-jet-label for="value" value="{{ __('Giá bán') }}" />
                                                     <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.value" id="value"/>
                                                     @error('contractData.value')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -209,8 +211,8 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
-                                                    <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="paymentData.payment_date_95" id="payment_date_95"/>
-                                                   
+                                                    <x-jet-input type="text" id="payment_date_95" class="block mt-1 w-full datepicker" placeholder="Chọn ngày thanh toán.."/>
+
                                                 </div>
 
                                             </div>
@@ -366,12 +368,12 @@
                                                     <td></td>
                                                 @endif
 
-                                                
+
                                                 @if(Auth::user()->type != 3)
                                                     <td><x-jet-button class="ml-2" wire:click="updateShowModal({{ $customer->customerID }},{{$customer->contractID}})"> {{ __('Sửa') }} </x-jet-button></td>
                                                     <td><x-jet-button class="ml-2" wire:click="confirmDelete({{$customer->contractID}})"> {{ __('Xóa') }} </x-jet-button></td>
                                                 @endif
-                                                
+
                                             </tr>
                                             @endif
 
@@ -432,5 +434,27 @@
     </section>
 </div>
 
+<script>
+
+        $('#birthday').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        $('#birthday').on('change',function(e){
+           @this.set('customerData.birthday', e.target.value);
+        });
+        $('#signed_date').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        $('#signed_date').on('change',function(e){
+            @this.set('contractData.signed_date', e.target.value);
+        });
+        $('#payment_date_95').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        $('#payment_date_95').on('change',function(e){
+        @this.set('paymentData.payment_date_95', e.target.value);
+        });
+
+</script>
 <!-- Confirm delete customer modal -->
 

@@ -107,13 +107,14 @@ class Customers extends Component
             'customerData.household.required' => 'Không thể để trống hộ khẩu',
             'customerData.address.required' => 'Không thể để trống địa chỉ',
             'customerData.phone.required' => 'Không thể để trống số điện thoại',
-        
+
         ];
     }
 
     public function create()
     {
         $this->validate();
+
         $customer = ModelsCustomers::create($this->customerData);
         $this->contractData['customer_id'] = $customer->id;
         $contract = Contracts::create($this->contractData);

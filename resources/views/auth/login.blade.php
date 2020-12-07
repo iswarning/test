@@ -21,30 +21,30 @@
             </div>
 
             <div class="mt-4">
-                <x-jet-label for="password" value="{{ __('Password') }}" />
+                <x-jet-label for="password" value="{{ __('Mật khẩu') }}" />
                 <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required/>
             </div>
 
             <div class="flex items-center mt-4 justify-between">
                 <label for="remember_me" class="flex items-center">
                     <input id="remember_me" type="checkbox" class="form-checkbox" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                    <span class="ml-2 text-sm text-gray-600">{{ __('Nhớ mật khẩu') }}</span>
                 </label>
             </div>
 
             <div class="flex items-center mt-4 justify-end">
                 <x-jet-button class="ml-4">
-                    {{ __('Login') }}
+                    {{ __('Đăng nhập') }}
                 </x-jet-button>
             </div>
 
             <div class="flex items-center justify-between mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('register') }}">
-                    {{ __('Register') }}
+                    {{ __('Đăng ký') }}
                 </a>
                 @if (Route::has('password.request'))
                     <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
+                        {{ __('Quên mật khẩu?') }}
                     </a>
                 @endif
             </div>
