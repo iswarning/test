@@ -117,7 +117,6 @@ class CustomerDetail extends Component
 
             if($this->billlateId != null)
             {
-                $rules['paymentData.payment_date_95'] = 'required';
                 $rules['paymentData.payment_progress'] = 'required';
                 $rules['paymentData.contract_id'] = 'required';
             }
