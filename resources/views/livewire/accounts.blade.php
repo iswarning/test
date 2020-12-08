@@ -122,7 +122,9 @@
                                         <th>Phòng Ban - Vị trí</th>
                                         <th>Ngày Sinh</th>
                                         <th class="text-center">Sửa</th>
+                                        
                                         <th class="text-center">Xóa</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
