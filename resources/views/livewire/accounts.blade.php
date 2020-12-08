@@ -21,7 +21,7 @@
                                 @endif
                             </div>
                             <div class="flex items-center justify-between mt-1 w-full">
-                                <x-jet-input id="searchInput" class="block mt-1 w-50" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model.lazy="keyWord" autofocus />
+                                <x-jet-input id="searchInput" class="block mt-1 w-50" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model.lazy="keyWord" autofocus/>
                                 <x-jet-button wire:click="createShowModal"> {{ __('Thêm tài khoản') }} </x-jet-button>
                                 <!-- Create and update customer modal -->
                                 <x-jet-dialog-modal wire:model.lazy="modalFormVisible">
@@ -33,14 +33,14 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <x-jet-label for="name" value="{{ __('Họ và tên') }}" />
-                                                <x-jet-input id="name" class="block mt-1 w-full" type="text" wire:model.lazy.debounce.0ms="accountData.name" />
+                                                <x-jet-input id="name" class="block mt-1 w-full" type="text" wire:model.lazy.debounce.0ms="accountData.name" autocomplete="off"/>
                                                 @error('accountData.name')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @endError
                                             </div>
                                             <div class="col-md-6">
                                                 <x-jet-label for="email" value="{{ __('Email') }}" />
-                                                <x-jet-input id="email" class="block mt-1 w-full" type="email" wire:model.lazy.debounce.0ms="accountData.email" />
+                                                <x-jet-input id="email" class="block mt-1 w-full" type="email" wire:model.lazy.debounce.0ms="accountData.email" autocomplete="off"/>
                                                 <br>
                                                 @error('accountData.email')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -50,19 +50,22 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <x-jet-label for="birthday" value="{{ __('Ngày sinh') }}" />
-                                                <x-jet-input id="birthday" class="block mt-1 w-full" type="text" wire:model.lazy="accountData.birthday" />
+                                                <x-jet-input id="birthday" class="block mt-1 w-full" type="text" wire:model.lazy="accountData.birthday" autocomplete="off"/>
                                                 @error('accountData.birthday')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @endError
                                             </div>
                                             <div class="col-md-6">
-                                                @if(!$accountId)
+                                                    @if(!$accountId)
                                                     <x-jet-label for="password" value="{{ __('Mật Khẩu') }}" />
-                                                    <x-jet-input id="password" class="block mt-1 w-full" type="password" wire:model.lazy="accountData.password"/>
+                                                    @else
+                                                    <x-jet-label for="password" value="{{ __('Mật Khẩu Mới') }}" />
+                                                    @endif
+                                                    <x-jet-input id="password" class="block mt-1 w-full" type="password" wire:model.lazy="accountData.password" autocomplete="off"/>
                                                     @error('accountData.password')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @endError
-                                                @endif
+                                                
                                             </div>
                                         </div>
                                         <div class="row mt-4">

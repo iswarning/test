@@ -18,25 +18,30 @@ class Accounts extends Component
     public $keyWord;
     public $recordNum = 20;
     public $roleId = 0;
-    public $permissionId = 1;
+    public $permissionId = null;
     public $modalFormVisible = false;
     public $modalFormDeleteVisible = false;
     public $accountData = [];
     protected $paginationTheme = 'bootstrap';
     public $dataNotUpdate;
     public $dataUpdated;
+    public $passwordNotUpdate;
 
     public function rules()
     {
-        return [
+        if(!isset($accountId)){
+            $rules['accountData.password'] = 'required|min:8';
+        }
+        $rules = [
             'accountData.name' => 'required',
             'accountData.email' => ['required',
                 Rule::unique('users', 'email')->ignore($this->accountId),
                 'email'] ,
-
-            'accountData.password' => 'required|min:6',
             'accountData.birthday' => 'required'
         ];
+        
+
+        return $rules;
     }
 
     public function messages()
@@ -47,7 +52,7 @@ class Accounts extends Component
             'accountData.email.email' => 'Email không hợp lệ',
             'accountData.email.unique' => 'Email đã tồn tại',
             'accountData.password.required' => 'Không thể để trống mật khẩu',
-            'accountData.password.min' => 'Mật khẩu có ít nhất 6 ký tự',
+            'accountData.password.min' => 'Mật khẩu có ít nhất 8 ký tự',
             'accountData.birthday.required' => 'Không thể để trống ngày sinh',
         ];
     }
@@ -65,6 +70,7 @@ class Accounts extends Component
         $this->accountData['type'] = $this->roleId;
         $this->accountData['permission_id'] = $this->permissionId;
         $this->accountData['password'] = bcrypt($this->accountData['password']);
+        // dd($this->permissionId);
         ModelsAccount::create($this->accountData);
         $this->modalFormVisible = false;
         session()->flash('message', 'Tạo tài khoản thành công');
@@ -78,14 +84,25 @@ class Accounts extends Component
 
     public function update()
     {
-        $this->validate();
+        
         $this->accountData['type'] = $this->roleId;
         $this->accountData['permission_id'] = $this->permissionId;
-        ModelsAccount::find($this->accountId)->update($this->accountData);
+        
+        
+        $this->validate();
+        $user = ModelsAccount::find($this->accountId);
+        $arrayUser = [];
+        $arrayUser['name'] = $this->accountData['name'];
+        $arrayUser['email'] = $this->accountData['email'];
+        $arrayUser['birthday'] = $this->accountData['birthday'];
+        if($this->accountData['password'] != null){
+            $arrayUser['password'] = bcrypt($this->accountData['password']);
+        }
+        $arrayUser['type'] = $this->accountData['type'];
+        $arrayUser['permission_id'] = $this->accountData['permission_id'];
+        $user->update($arrayUser);
         $this->modalFormVisible = false;
         $this->dataUpdated = ModelsAccount::find($this->accountId);
-
-
         session()->flash('message', 'Cập nhật tài khoản thành công');
     }
 
@@ -99,6 +116,7 @@ class Accounts extends Component
         $this->accountData = ModelsAccount::findOrFail($this->accountId)->toArray();
         $this->roleId = $this->accountData['type'];
         $this->permissionId = $this->accountData['permission_id'];
+        $this->accountData['password'] = null;
     }
 
     public function delete()

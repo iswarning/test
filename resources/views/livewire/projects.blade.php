@@ -33,14 +33,14 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <x-jet-label for="name" value="{{ __('Tên dự án') }}" />
-                                                <x-jet-input id="name" class="block mt-1 w-full" type="text" wire:model.debounce.0ms="projectData.name" />
+                                                <x-jet-input autocomplete="off" id="name" class="block mt-1 w-full" type="text" wire:model.debounce.0ms="projectData.name" />
                                                 @error('projectData.name')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @endError
                                             </div>
                                             <div class="col-md-6">
                                                 <x-jet-label for="description" value="{{ __('Mô tả dự án') }}" />
-                                                <x-jet-input id="description" class="block mt-1 w-full" type="text" wire:model.debounce.0ms="projectData.description" />
+                                                <x-jet-input autocomplete="off" id="description" class="block mt-1 w-full" type="text" wire:model.debounce.0ms="projectData.description" />
                                                 <br>
                                                 @error('projectData.description')
                                                 <span class="text-danger">{{ $message }}</span>

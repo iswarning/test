@@ -42,14 +42,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <x-jet-label for="contract_no" value="{{ __('Số hợp đồng') }}" />
-                                <x-jet-input id="contract_no" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.contract_no" />
+                                <x-jet-input id="contract_no" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.contract_no" autocomplete="off"/>
                                 @error('contractData.contract_no')
                                 <span class="text-danger">{{ $message }}</span>
                                 @endError
                             </div>
                             <div class="col-md-6">
                                 <x-jet-label for="type" value="{{ __('Loại hợp đồng') }}" />
-                                <x-jet-input id="type" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.type" />
+                                <x-jet-input id="type" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.type" autocomplete="off"/>
                                 @error('contractData.type')
                                 <span class="text-danger">{{ $message }}</span>
                                 @endError
@@ -58,14 +58,14 @@
                         <div class="row mt-4">
                             <div class="col-md-6">
                                 <x-jet-label for="lot_number" value="{{ __('Mã lô') }}" />
-                                <x-jet-input id="lot_number" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.lot_number" />
+                                <x-jet-input id="lot_number" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.lot_number" autocomplete="off"/>
                                 @error('contractData.lot_number')
                                 <span class="text-danger">{{ $message }}</span>
                                 @endError
                             </div>
                             <div class="col-md-6">
                                 <x-jet-label for="area_signed" value="{{ __('Diện tích ký') }}" />
-                                <x-jet-input id="area_signed" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.area_signed" />
+                                <x-jet-input id="area_signed" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.area_signed" autocomplete="off"/>
                                 @error('contractData.area_signed')
                                 <span class="text-danger">{{ $message }}</span>
                                 @endError
@@ -112,14 +112,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <x-jet-label for="signed_date" value="{{ __('Ngày ký') }}" />
-                                <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.signed_date" id="signed_date" placeholder="Chọn ngày ký..."/>
+                                <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.signed_date" id="signed_date" placeholder="Chọn ngày ký..." autocomplete="off"/>
                                 @error('contractData.signed_date')
                                 <span class="text-danger">{{ $message }}</span>
                                 @endError
                             </div>
                             <div class="col-md-6">
                                 <x-jet-label for="signed_date" value="{{ __('Giá bán') }}" />
-                                <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.value" id="value"/>
+                                <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.value" id="value" autocomplete="off"/>
                                 @error('contractData.value')
                                 <span class="text-danger">{{ $message }}</span>
                                 @endError
@@ -129,12 +129,12 @@
                             <div class="row mt-4">
                                 <div class="col-md-6">
                                     <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
-                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="payment_date_95" id="payment_date_95" placeholder="Chọn ngày thanh toán..."/>
+                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="payment_date_95" id="payment_date_95" placeholder="Chọn ngày thanh toán..." autocomplete="off"/>
 
                                 </div>
                                 <div class="col-md-6">
-                                    <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
-                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="payment_progress" id="payment_progress"/>
+                                    <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" /> 
+                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="payment_progress" id="payment_progress" autocomplete="off"/>
                                     @error('payment_progress')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
@@ -161,7 +161,7 @@
                             </div>
                             <div class="col-md-6 flex">
                                 <x-jet-label for="signed" value="{{ __('Đã ký / chưa ký') }}" />
-                                <input id="signed" type="checkbox" wire:model.lazy="contractData.signed" class="form-checkbox h-5 w-5 text-green-500 ml-2 ">
+                                <input id="signed" type="checkbox" wire:model.lazy="contractData.signed" class="form-checkbox h-5 w-5 text-green-500 ml-2 " autocomplete="off">
                                 @error('contractData.signed')
                                 <span class="text-danger">{{ $message }}</span>
                                 @endError
@@ -270,14 +270,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <x-jet-label for="name" value="{{ __('Ho ten khach hang') }}" />
-                                    <x-jet-input id="name" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.name" />
+                                    <x-jet-input id="name" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.name" autocomplete="off"/>
                                     @error('customerData.name')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                 </div>
                                 <div class="col-md-6">
                                     <x-jet-label for="cmnd" value="{{ __('Cmnd') }}" />
-                                    <x-jet-input id="cmnd" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.cmnd" />
+                                    <x-jet-input id="cmnd" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.cmnd" autocomplete="off"/>
                                     @error('customerData.cmnd')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
@@ -286,14 +286,14 @@
                             <div class="row mt-4">
                                 <div class="col-md-6">
                                     <x-jet-label for="address" value="{{ __('Dia chi') }}" />
-                                    <x-jet-input id="address" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.address" />
+                                    <x-jet-input id="address" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.address" autocomplete="off" />
                                     @error('customerData.address')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                 </div>
                                 <div class="col-md-6">
                                     <x-jet-label for="household" value="{{ __('Ho khau') }}" />
-                                    <x-jet-input id="household" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.household" />
+                                    <x-jet-input id="household" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.household" autocomplete="off"/>
                                     @error('customerData.household')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
@@ -303,14 +303,14 @@
                             <div class="row mt-4">
                                 <div class="col-md-6">
                                     <x-jet-label for="birthday" value="{{ __('Ngày sinh') }}" />
-                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="customerData.birthday" id="birthday" placeholder="Chọn ngày sinh..."/>
+                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="customerData.birthday" id="birthday" placeholder="Chọn ngày sinh..." autocomplete="off"/>
                                     @error('customerData.birthday')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                 </div>
                                 <div class="col-md-6">
                                     <x-jet-label for="phone" value="{{ __('Số điện thoại') }}" />
-                                    <x-jet-input type="number" class="block mt-1 w-full" wire:model.lazy="customerData.phone" id="phone"/>
+                                    <x-jet-input type="number" class="block mt-1 w-full" wire:model.lazy="customerData.phone" id="phone" autocomplete="off"/>
                                     @error('customerData.phone')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
@@ -536,14 +536,14 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
-                                            <x-jet-input id="payment_progress" class="block mt-1 w-full" type="text" wire:model.lazy="paymentData.payment_progress"  />
+                                            <x-jet-input id="payment_progress" class="block mt-1 w-full" type="text" wire:model.lazy="paymentData.payment_progress"  autocomplete="off"/>
                                             @error('payment_progress')
                                             <span class="text-danger">{{ $message }}</span>
                                             @endError
                                         </div>
                                         <div class="col-md-6">
                                             <x-jet-label for="payment_date_95_2" value="{{ __('Ngày thanh toán đủ 95%') }}" />
-                                            <x-jet-input id="payment_date_95_2" class="block mt-1 w-full" type="text" wire:model="paymentData.payment_date_95" placeholder="Chọn ngày thanh toán..."/>
+                                            <x-jet-input id="payment_date_95_2" class="block mt-1 w-full" type="text" wire:model="paymentData.payment_date_95" placeholder="Chọn ngày thanh toán..." autocomplete="off"/>
                                             @error('paymentData.payment_date_95')
                                             <span class="text-danger">{{ $message }}</span>
                                             @endError
@@ -555,14 +555,14 @@
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="day_late" value="{{ __('Ngày trễ') }}" />
-                                        <x-jet-input type="text" id="day_late"  class="block mt-1 w-full"  wire:model="billlateData.day_late" placeholder="Chọn ngày trễ..."/>
+                                        <x-jet-input type="text" id="day_late"  class="block mt-1 w-full"  wire:model="billlateData.day_late" placeholder="Chọn ngày trễ..." autocomplete="off"/>
                                         @error('billlateData.day_late')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
                                     </div>
                                     <div class="col-md-6">
                                         <x-jet-label for="batch_late" value="{{ __('Đợt trễ') }}" />
-                                        <x-jet-input id="batch_late" class="block mt-1 w-full" type="text" wire:model.lazy="billlateData.batch_late" />
+                                        <x-jet-input id="batch_late" class="block mt-1 w-full" type="text" wire:model.lazy="billlateData.batch_late" autocomplete="off" />
                                         @error('billlateData.batch_late')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
@@ -572,14 +572,14 @@
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="money_late" value="{{ __('Số tiền trễ') }}" />
-                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="billlateData.money_late" id="money_late"/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="billlateData.money_late" id="money_late" autocomplete="off"/>
                                         @error('billlateData.money_late')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
                                     </div>
                                     <div class="col-md-6">
                                         <x-jet-label for="citation_rate" value="{{ __('Lãi phạt') }}" />
-                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="billlateData.citation_rate" id="citation_rate"/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="billlateData.citation_rate" id="citation_rate" autocomplete="off"/>
                                         @error('billlateData.citation_rate')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
@@ -589,14 +589,14 @@
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="number_notifi" value="{{ __('Số lần đã gửi thông báo') }}" />
-                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="billlateData.number_notifi" id="number_notifi"/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="billlateData.number_notifi" id="number_notifi" autocomplete="off"/>
                                         @error('billlateData.number_notifi')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
                                     </div>
                                     <div class="col-md-6">
                                         <x-jet-label for="receipt_date" value="{{ __('Ngày khách nhận thông báo') }}" />
-                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model="billlateData.receipt_date" id="receipt_date" placeholder="Chọn ngày nhận thông báo..."/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model="billlateData.receipt_date" id="receipt_date" placeholder="Chọn ngày nhận thông báo..." autocomplete="off"/>
                                         @error('billlateData.receipt_date')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
@@ -606,7 +606,7 @@
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="document" value="{{ __('Văn bản, phương thức') }}" />
-                                        <x-jet-input type="text" wire:model.lazy="billlateData.document" id="document" class="block mt-1 w-full"/>
+                                        <x-jet-input type="text" wire:model.lazy="billlateData.document" id="document" class="block mt-1 w-full" autocomplete="off"/>
                                         @error('billlateData.document')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
@@ -781,14 +781,14 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <x-jet-label for="status" value="{{ __('Tình trạng sổ') }}" />
-                                        <x-jet-input id="status" class="block mt-1 w-full" type="text" wire:model.lazy="juridicalData.status"/>
+                                        <x-jet-input id="status" class="block mt-1 w-full" type="text" wire:model.lazy="juridicalData.status" autocomplete="off"/>
                                         @error('juridicalData.status')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
                                     </div>
                                     <div class="col-md-6">
                                         <x-jet-label for="registration_procedures" value="{{ __('Thủ tục đăng bộ') }}" />
-                                        <x-jet-input id="registration_procedures" class="block mt-1 w-full" type="text" wire:model.lazy="juridicalData.registration_procedures" />
+                                        <x-jet-input id="registration_procedures" class="block mt-1 w-full" type="text" wire:model.lazy="juridicalData.registration_procedures" autocomplete="off"/>
                                         @error('juridicalData.registration_procedures')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
@@ -798,12 +798,12 @@
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="notarized_date" value="{{ __('Ngày công chứng') }}" />
-                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.notarized_date" id="notarized_date" placeholder="Chọn ngày công chứng..."/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.notarized_date" id="notarized_date" placeholder="Chọn ngày công chứng..." autocomplete="off"/>
 
                                     </div>
                                     <div class="col-md-6">
                                         <x-jet-label for="delivery_land_date" value="{{ __('Ngày bàn giao đất') }}" />
-                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.delivery_land_date" id="delivery_land_date" placeholder="Chọn ngày bàn giao đất..."/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.delivery_land_date" id="delivery_land_date" placeholder="Chọn ngày bàn giao đất..." autocomplete="off"/>
 
                                     </div>
                                 </div>
@@ -845,24 +845,24 @@
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="bill_profile" value="{{ __('Hồ sơ thu lai của khách hàng') }}" />
-                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.bill_profile" id="bill_profile"/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.bill_profile" id="bill_profile" autocomplete="off"/>
 
                                     </div>
                                     <div class="col-md-6">
                                         <x-jet-label for="commitment" value="{{ __('Cam kết thỏa thuận khác') }}" />
-                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.commitment" id="commitment"/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.commitment" id="commitment" autocomplete="off"/>
 
                                     </div>
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="delivery_book_date" value="{{ __('Ngày bàn giao sổ') }}" />
-                                        <x-jet-input type="text" class="block mt-1 w-full" id="delivery_book_date" wire:model="juridicalData.delivery_book_date"  placeholder="Chọn ngày bàn giao sổ..."/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" id="delivery_book_date" wire:model="juridicalData.delivery_book_date"  placeholder="Chọn ngày bàn giao sổ..." autocomplete="off"/>
 
                                     </div>
                                     <div class="col-md-6 flex">
                                         <x-jet-label for="liquidation" value="{{ __('Thanh lý hợp đồng') }}" />
-                                        <x-jet-input id="liquidation" type="checkbox" wire:model.lazy="juridicalData.liquidation" class="form-checkbox h-5 w-5 text-green-500 ml-2"/>
+                                        <x-jet-input id="liquidation" type="checkbox" wire:model.lazy="juridicalData.liquidation" class="form-checkbox h-5 w-5 text-green-500 ml-2" autocomplete="off"/>
 
                                     </div>
                                 </div>
