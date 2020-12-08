@@ -76,7 +76,7 @@ class Customers extends Component
             'customerData.birthday' => 'required',
             'customerData.household' => 'required',
             'customerData.address' => 'required',
-            'customerData.phone' => 'required',
+            'customerData.phone' => ['required','max:11'],
 
         ];
         if($this->selectStatus == 3){
@@ -107,7 +107,7 @@ class Customers extends Component
             'customerData.household.required' => 'Không thể để trống hộ khẩu',
             'customerData.address.required' => 'Không thể để trống địa chỉ',
             'customerData.phone.required' => 'Không thể để trống số điện thoại',
-
+            'customerData.phone.max' => 'Số điện thoại quá dài',
         ];
     }
 
@@ -147,7 +147,7 @@ class Customers extends Component
         Contracts::findOrFail($this->contractId)->delete();
         $this->modalConfirmDeleteVisible = false;
         $this->resetPage();
-        session()->flash('message','Xoa thong tin khach hang thanh cong');
+        session()->flash('message','Xóa thông tin khách hàng thành công');
     }
 
     public function confirmDelete($id)
@@ -170,6 +170,8 @@ class Customers extends Component
                     ->orWhere('projects.name','like',$searchKey)
                     ->orWhere('customers.id','like',$searchKey);
             });
+
+
         if($this->selectStatus != null)
         {
             $customers->where('contracts.status','=', $this->selectStatus);
@@ -200,7 +202,6 @@ class Customers extends Component
                 ->paginate($this->recordNum),
             'projects' => Project::all() ,
             'histories' => History::orderBy('id','desc')->paginate(20) ,
-            'contractTime' => Contracts::all()
         ]);
     }
 

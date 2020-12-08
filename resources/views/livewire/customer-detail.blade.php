@@ -112,7 +112,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <x-jet-label for="signed_date" value="{{ __('Ngày ký') }}" />
-                                <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="contractData.signed_date" id="signed_date"/>
+                                <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.signed_date" id="signed_date" placeholder="Chọn ngày ký..."/>
                                 @error('contractData.signed_date')
                                 <span class="text-danger">{{ $message }}</span>
                                 @endError
@@ -129,7 +129,7 @@
                             <div class="row mt-4">
                                 <div class="col-md-6">
                                     <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
-                                    <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="payment_date_95" id="payment_date_95"/>
+                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="payment_date_95" id="payment_date_95" placeholder="Chọn ngày thanh toán..."/>
 
                                 </div>
                                 <div class="col-md-6">
@@ -303,7 +303,7 @@
                             <div class="row mt-4">
                                 <div class="col-md-6">
                                     <x-jet-label for="birthday" value="{{ __('Ngày sinh') }}" />
-                                    <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="customerData.birthday" id="birthday"/>
+                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="customerData.birthday" id="birthday" placeholder="Chọn ngày sinh..."/>
                                     @error('customerData.birthday')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
@@ -535,9 +535,9 @@
                                             @endError
                                         </div>
                                         <div class="col-md-6">
-                                            <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
-                                            <x-jet-input id="payment_date_95" class="block mt-1 w-full" type="date" wire:model.lazy="paymentData.payment_date_95" />
-                                            @error('payment_date_95')
+                                            <x-jet-label for="payment_date_95_2" value="{{ __('Ngày thanh toán đủ 95%') }}" />
+                                            <x-jet-input id="payment_date_95_2" class="block mt-1 w-full" type="text" wire:model="paymentData.payment_date_95" placeholder="Chọn ngày thanh toán..."/>
+                                            @error('paymentData.payment_date_95')
                                             <span class="text-danger">{{ $message }}</span>
                                             @endError
                                         </div>
@@ -548,7 +548,7 @@
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="day_late" value="{{ __('Ngày trễ') }}" />
-                                        <x-jet-input id="day_late" class="block mt-1 w-full" type="date" wire:model.lazy="billlateData.day_late" />
+                                        <x-jet-input type="text" id="day_late"  class="block mt-1 w-full"  wire:model="billlateData.day_late" placeholder="Chọn ngày trễ..."/>
                                         @error('billlateData.day_late')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
@@ -589,7 +589,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <x-jet-label for="receipt_date" value="{{ __('Ngày khách nhận thông báo') }}" />
-                                        <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="billlateData.receipt_date" id="receipt_date"/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model="billlateData.receipt_date" id="receipt_date" placeholder="Chọn ngày nhận thông báo..."/>
                                         @error('billlateData.receipt_date')
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
@@ -754,12 +754,12 @@
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="notarized_date" value="{{ __('Ngày công chứng') }}" />
-                                        <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="juridicalData.notarized_date" id="notarized_date"/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.notarized_date" id="notarized_date" placeholder="Chọn ngày công chứng..."/>
 
                                     </div>
                                     <div class="col-md-6">
                                         <x-jet-label for="delivery_land_date" value="{{ __('Ngày bàn giao đất') }}" />
-                                        <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="juridicalData.delivery_land_date" id="delivery_land_date"/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.delivery_land_date" id="delivery_land_date" placeholder="Chọn ngày bàn giao đất..."/>
 
                                     </div>
                                 </div>
@@ -813,7 +813,7 @@
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <x-jet-label for="delivery_book_date" value="{{ __('Ngày bàn giao sổ') }}" />
-                                        <x-jet-input type="date" class="block mt-1 w-full" wire:model.lazy="juridicalData.delivery_book_date" id="delivery_book_date"/>
+                                        <x-jet-input type="text" class="block mt-1 w-full" id="delivery_book_date" wire:model="juridicalData.delivery_book_date"  placeholder="Chọn ngày bàn giao sổ..."/>
 
                                     </div>
                                     <div class="col-md-6 flex">
@@ -844,6 +844,55 @@
                         </x-jet-dialog-modal>
 
                     </div>
+
+                    <script>
+                        $('#day_late').datepicker({
+                            changeYear: true,
+                            changeMonth: true,
+                            dateFormat: 'yy-mm-dd',
+                        });
+                        $('#day_late').on('change',function(e){
+                        @this.set('billlateData.day_late', e.target.value);
+                        });
+
+
+                        $('#receipt_date').datepicker({
+                            changeYear: true,
+                            changeMonth: true,
+                            dateFormat: 'yy-mm-dd',
+                        });
+                        $('#receipt_date').on('change',function(e){
+                        @this.set('billlateData.receipt_date', e.target.value);
+                        });
+
+
+                        $('#notarized_date').datepicker({
+                            changeYear: true,
+                            changeMonth: true,
+                            dateFormat: 'yy-mm-dd',
+                        });
+                        $('#notarized_date').on('change',function(e){
+                        @this.set('juridicalData.notarized_date', e.target.value);
+                        });
+
+                        $('#delivery_land_date').datepicker({
+                            changeYear: true,
+                            changeMonth: true,
+                            dateFormat: 'yy-mm-dd',
+                        });
+                        $('#delivery_land_date').on('change',function(e){
+                        @this.set('juridicalData.delivery_land_date', e.target.value);
+                        });
+
+                        $('#delivery_book_date').datepicker({
+                            changeYear: true,
+                            changeMonth: true,
+                            dateFormat: 'yy-mm-dd',
+                        });
+                        $('#delivery_book_date').on('change',function(e){
+                        @this.set('juridicalData.delivery_book_date', e.target.value);
+                        });
+                    </script>
                 @endif
             @endforeach
 
@@ -853,3 +902,87 @@
         var picker = new Pikaday({ field: $('#datepicker')[0] });
     </script> -->
 </div>
+<script>
+
+    $('#birthday').datepicker({
+        changeYear: true,
+        changeMonth: true,
+        dateFormat: 'yy-mm-dd',
+    });
+    $('#birthday').on('change',function(e){
+        @this.set('customerData.birthday', e.target.value);
+    });
+
+    $('#signed_date').datepicker({
+        changeYear: true,
+        changeMonth: true,
+        dateFormat: 'yy-mm-dd',
+    });
+    $('#signed_date').on('change',function(e){
+        @this.set('contractData.signed_date', e.target.value);
+    });
+
+    $('#payment_date_95').datepicker({
+        changeYear: true,
+        changeMonth: true,
+        dateFormat: 'yy-mm-dd',
+    });
+    $('#payment_date_95').on('change',function(e){
+        @this.set('payment_date_95', e.target.value);
+    });
+
+    $('#payment_date_95_2').datepicker({
+        changeYear: true,
+        changeMonth: true,
+        dateFormat: 'yy-mm-dd',
+    });
+    $('#payment_date_95_2').on('change',function(e){
+        @this.set('paymentData.payment_date_95', e.target.value);
+    });
+
+    ( function( factory ) {
+            if ( typeof define === "function" && define.amd ) {
+
+                // AMD. Register as an anonymous module.
+                define( [ "../widgets/datepicker" ], factory );
+            } else {
+
+                // Browser globals
+                factory( jQuery.datepicker );
+            }
+        }( function( datepicker ) {
+
+            datepicker.regional.vi = {
+                changeYear: true,
+                changeMonth: true,
+                closeText: "Đóng",
+                prevText: "&#x3C;Trước",
+                nextText: "Tiếp&#x3E;",
+                currentText: "Hôm nay",
+                monthNames: [ "Tháng Một", "Tháng Hai", "Tháng Ba", "Tháng Tư", "Tháng Năm", "Tháng Sáu",
+                "Tháng Bảy", "Tháng Tám", "Tháng Chín", "Tháng Mười", "Tháng Mười Một", "Tháng Mười Hai" ],
+                monthNamesShort: [ "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12" ],
+                dayNames: [ "Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy" ],
+                dayNamesShort: [ "CN", "T2", "T3", "T4", "T5", "T6", "T7" ],
+                dayNamesMin: [ "CN", "T2", "T3", "T4", "T5", "T6", "T7" ],
+                weekHeader: "Tu",
+                dateFormat: "yy-mm-dd",
+                firstDay: 0,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: "" ,
+                // showOn: "both",
+                // buttonImageOnly: true,
+                // buttonImage: "calendar.gif",
+                // buttonText: "Calendar"
+            };
+            datepicker.setDefaults( datepicker.regional.vi );
+
+            return datepicker.regional.vi;
+
+        } ) );
+
+
+
+</script>

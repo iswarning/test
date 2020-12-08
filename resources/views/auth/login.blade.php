@@ -4,12 +4,16 @@
             <x-jet-authentication-card-logo />
         </x-slot>
 
-        <x-jet-validation-errors class="mb-4" />
+
 
         @if (session('status'))
             <div class="mb-4 font-medium text-sm text-green-600">
                 {{ session('status') }}
             </div>
+        @endif
+
+        @if(session('error'))
+            <div class='text-red-600'>{{ session('error') }}</div>
         @endif
 
         <form method="POST" action="{{ route('login') }}">
@@ -38,16 +42,7 @@
                 </x-jet-button>
             </div>
 
-            <div class="flex items-center justify-between mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('register') }}">
-                    {{ __('Đăng ký') }}
-                </a>
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Quên mật khẩu?') }}
-                    </a>
-                @endif
-            </div>
+
         </form>
     </x-jet-authentication-card>
 </x-guest-layout>

@@ -70,7 +70,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <x-jet-label for="phone" value="{{ __('Số điện thoại') }}" />
-                                                    <x-jet-input id="phone" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.phone" />
+                                                    <x-jet-input id="phone" class="block mt-1 w-full" type="number" wire:model.lazy="customerData.phone" />
                                                     @error('customerData.phone')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @endError
@@ -302,26 +302,17 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Từ</label>
+                                            <x-jet-input type="text" id="selectTimeFrom" placeholder="Chọn ngày..." wire:model="selectTimeFrom"/>
                                         </div>
-                                        <select class="custom-select" wire:model.lazy="selectTimeFrom">
-                                            <option>Chọn thời gian</option>
-                                            @foreach($contractTime as $time)
-                                                    <option>{{$time->created_at}}</option>
-                                            @endforeach
-                                        </select>
+
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Đến</label>
+                                            <x-jet-input type="text" id="selectTimeTo" placeholder="Chọn ngày..." wire:model="selectTimeTo"/>
                                         </div>
-                                        <select class="custom-select" wire:model.lazy="selectTimeTo">
-                                            <option>Chọn thời gian</option>
-                                            @foreach($contractTime as $time)
-                                                <option>{{$time->created_at}}</option>
-                                            @endforeach
-                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -436,25 +427,74 @@
 
 <script>
 
-        $('#birthday').datepicker({
-            dateFormat: 'yy-mm-dd'
-        });
+        $('#birthday').datepicker();
         $('#birthday').on('change',function(e){
            @this.set('customerData.birthday', e.target.value);
         });
-        $('#signed_date').datepicker({
-            dateFormat: 'yy-mm-dd'
-        });
+
+        $('#signed_date').datepicker();
         $('#signed_date').on('change',function(e){
             @this.set('contractData.signed_date', e.target.value);
         });
-        $('#payment_date_95').datepicker({
-            dateFormat: 'yy-mm-dd'
-        });
+
+        $('#payment_date_95').datepicker();
         $('#payment_date_95').on('change',function(e){
-        @this.set('paymentData.payment_date_95', e.target.value);
+            @this.set('paymentData.payment_date_95', e.target.value);
         });
 
+        $('#selectTimeFrom').datepicker();
+        $('#selectTimeFrom').on('change',function(e){
+           @this.set('selectTimeFrom', e.target.value);
+        });
+
+        $('#selectTimeTo').datepicker();
+        $('#selectTimeTo').on('change',function(e){
+        @this.set('selectTimeTo', e.target.value);
+        });
+
+
+    ( function( factory ) {
+            if ( typeof define === "function" && define.amd ) {
+
+                // AMD. Register as an anonymous module.
+                define( [ "../widgets/datepicker" ], factory );
+            } else {
+
+                // Browser globals
+                factory( jQuery.datepicker );
+            }
+        }( function( datepicker ) {
+
+            datepicker.regional.vi = {
+                changeYear: true,
+                changeMonth: true,
+                closeText: "Đóng",
+                prevText: "&#x3C;Trước",
+                nextText: "Tiếp&#x3E;",
+                currentText: "Hôm nay",
+                monthNames: [ "Tháng Một", "Tháng Hai", "Tháng Ba", "Tháng Tư", "Tháng Năm", "Tháng Sáu",
+                "Tháng Bảy", "Tháng Tám", "Tháng Chín", "Tháng Mười", "Tháng Mười Một", "Tháng Mười Hai" ],
+                monthNamesShort: [ "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12" ],
+                dayNames: [ "Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy" ],
+                dayNamesShort: [ "CN", "T2", "T3", "T4", "T5", "T6", "T7" ],
+                dayNamesMin: [ "CN", "T2", "T3", "T4", "T5", "T6", "T7" ],
+                weekHeader: "Tu",
+                dateFormat: "yy-mm-dd",
+                firstDay: 0,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: "" ,
+                // showOn: "both",
+                // buttonImageOnly: true,
+                // buttonImage: "calendar.gif",
+                // buttonText: "Calendar"
+            };
+            datepicker.setDefaults( datepicker.regional.vi );
+
+            return datepicker.regional.vi;
+
+        } ) );
 </script>
 <!-- Confirm delete customer modal -->
 

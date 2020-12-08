@@ -8,6 +8,7 @@ use App\Models\User;
 
 class LoginController extends Controller
 {
+
     public function login(){
         return view('auth.login');
     }
@@ -18,16 +19,14 @@ class LoginController extends Controller
             'password'=>$request->password
         ];
 
-        $validator = $request->validate([
-            'email.required' => 'Email khong de trong' ,
-            'password.required' => 'Password khong de trong'
-        ]);
-
         if(Auth::attempt($log))
         {
             return redirect('/customers');
-        }else{
-            return redirect('/')->withErrors($validator);
+        }
+        else
+        {
+           session()->flash('error', "Email hoặc mật khẩu không hợp lệ");
+           return redirect('/');
         }
     }
 
