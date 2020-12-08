@@ -302,7 +302,7 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Từ</label>
-                                            <x-jet-input type="text" id="selectTimeFrom" placeholder="Chọn ngày..." wire:model="selectTimeFrom"/>
+                                            <x-jet-input type="text" id="selectTimeFrom" class='w-52' placeholder="Chọn ngày..." wire:model="selectTimeFrom"/>
                                         </div>
 
                                     </div>
@@ -311,7 +311,7 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Đến</label>
-                                            <x-jet-input type="text" id="selectTimeTo" placeholder="Chọn ngày..." wire:model="selectTimeTo"/>
+                                            <x-jet-input type="text" id="selectTimeTo" class='w-52' placeholder="Chọn ngày..." wire:model="selectTimeTo"/>
                                         </div>
                                     </div>
                                 </div>
@@ -400,7 +400,6 @@
                             <table class="table table-striped" wire:model.lazy="dataTableHistoryVisible">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Tiêu đề</th>
                                         <th>Thời gian chỉnh sửa</th>
                                     </tr>
@@ -408,8 +407,7 @@
                                 <tbody>
                                     @foreach ($histories as $history)
                                     <tr>
-                                        <td><a href="{{route('customerDetail', $history->customer_id)}}">{{$history->customer_id}}</a></td>
-                                        <td>{{$history->title}}</td>
+                                        <td>{{$history->title}} của <a href="{{route('customerDetail', $history->customer_id)}}"> khách hàng {{$history->customer_id}}</a> </td>
                                         <td>{{Carbon\Carbon::parse($history->created_at)->format('d/m/Y H:i:s')}}</td>
                                     </tr>
                                     @endforeach
@@ -468,6 +466,7 @@
             datepicker.regional.vi = {
                 changeYear: true,
                 changeMonth: true,
+                yearRange: '1920:2020',
                 closeText: "Đóng",
                 prevText: "&#x3C;Trước",
                 nextText: "Tiếp&#x3E;",

@@ -251,7 +251,7 @@ class Customers extends Component
         // Check Name
         if($b['name'] != $a['name'])
         {
-            $this->createHistoryCustomer(" Name: ".$b['name'], $b['id']);
+            $this->createHistoryCustomer(" Họ tên: ".$b['name'], $b['id']);
         }
         // Check Cmnd
         if($b['cmnd'] != $a['cmnd'])
@@ -261,28 +261,28 @@ class Customers extends Component
         // Check Phone
         if($b['phone'] != $a['phone'])
         {
-            $this->createHistoryCustomer(" Phone: ".$b['phone'], $b['id']);
+            $this->createHistoryCustomer(" Số điện thoại: ".$b['phone'], $b['id']);
         }
         // Check Household
         if($b['household'] != $a['household'])
         {
-            $this->createHistoryCustomer(" Household: ".$b['household'], $b['id']);
+            $this->createHistoryCustomer(" Hộ khẩu: ".$b['household'], $b['id']);
         }
         // Check Birthday
         if($b['birthday'] != $a['birthday'])
         {
-            $this->createHistoryCustomer(" Birthday: ".$b['birthday'], $b['id']);
+            $this->createHistoryCustomer(" Ngày sinh: ".$b['birthday'], $b['id']);
         }
         if($b['address'] != $a['address'])
         {
-            $this->createHistoryCustomer('Address: '.$b['address'], $b['id']);
+            $this->createHistoryCustomer(' Địa chỉ: '.$b['address'], $b['id']);
         }
     }
 
     public function createHistoryCustomer($target, $id)
     {
         History::create([
-            'title' => Auth::user()->name." has changed ".$target ,
+            'title' => Auth::user()->name." đã thay đổi ".$target ,
             'customer_id' => $id
         ]);
     }

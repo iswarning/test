@@ -644,7 +644,7 @@
                             </div>
                             <div class="card-body">
 
-                                @if($this->juridicalId)
+                                @if($juridicalId)
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <h5 class="col-md-5"> Thông tin hợp đồng: </h5>
@@ -663,7 +663,13 @@
                                         <div class="col-md-1"></div>
                                         <h5 class="col-md-5"> Ngày công chứng: </h5>
                                         <div class="col-md-1"></div>
-                                        <label class="col-md-5">{{$this->juridicalData['notarized_date']}}</label>
+                                        <label class="col-md-5">
+                                            @if(!isset($juridicalData['notarized_date']))
+                                                
+                                            @else
+                                                {{ $juridicalData['notarized_date'] }}
+                                            @endif
+                                        </label>
                                     </div><hr/>
 
                                     <div class="row">
@@ -695,21 +701,39 @@
                                         <div class="col-md-1"></div>
                                         <h5 class="col-md-5"> Hồ sơ thu lai của khách hàng: </h5>
                                         <div class="col-md-1"></div>
-                                        <label class="col-md-5">{{$this->juridicalData['bill_profile']}}</label>
+                                        <label class="col-md-5">
+                                            @if(!isset($juridicalData['bill_profile']))
+                                                
+                                            @else
+                                                {{ $juridicalData['bill_profile'] }}
+                                            @endif
+                                        </label>
                                     </div><hr/>
 
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <h5 class="col-md-5"> Ngày bàn giao đất: </h5>
                                         <div class="col-md-1"></div>
-                                        <label class="col-md-5">{{$this->juridicalData['delivery_land_date']}}</label>
+                                        <label class="col-md-5">
+                                            @if(!isset($juridicalData['delivery_land_date']))
+                                                
+                                            @else
+                                                {{ $juridicalData['delivery_land_date'] }}
+                                            @endif
+                                        </label>
                                     </div><hr/>
 
                                     <div class="row">
                                         <div class="col-md-1"></div>
                                         <h5 class="col-md-5"> Cam kết thỏa thuận: </h5>
                                         <div class="col-md-1"></div>
-                                        <label class="col-md-5">{{$this->juridicalData['commitment']}}</label>
+                                        <label class="col-md-5">
+                                            @if(!isset($juridicalData['commitment']))
+                                                
+                                            @else
+                                                {{ $juridicalData['commitment'] }}
+                                            @endif
+                                        </label>
                                     </div><hr/>
 
 
@@ -846,49 +870,29 @@
                     </div>
 
                     <script>
-                        $('#day_late').datepicker({
-                            changeYear: true,
-                            changeMonth: true,
-                            dateFormat: 'yy-mm-dd',
-                        });
+                        $('#day_late').datepicker();
                         $('#day_late').on('change',function(e){
                         @this.set('billlateData.day_late', e.target.value);
                         });
 
 
-                        $('#receipt_date').datepicker({
-                            changeYear: true,
-                            changeMonth: true,
-                            dateFormat: 'yy-mm-dd',
-                        });
+                        $('#receipt_date').datepicker();
                         $('#receipt_date').on('change',function(e){
                         @this.set('billlateData.receipt_date', e.target.value);
                         });
 
 
-                        $('#notarized_date').datepicker({
-                            changeYear: true,
-                            changeMonth: true,
-                            dateFormat: 'yy-mm-dd',
-                        });
+                        $('#notarized_date').datepicker();
                         $('#notarized_date').on('change',function(e){
                         @this.set('juridicalData.notarized_date', e.target.value);
                         });
 
-                        $('#delivery_land_date').datepicker({
-                            changeYear: true,
-                            changeMonth: true,
-                            dateFormat: 'yy-mm-dd',
-                        });
+                        $('#delivery_land_date').datepicker();
                         $('#delivery_land_date').on('change',function(e){
                         @this.set('juridicalData.delivery_land_date', e.target.value);
                         });
 
-                        $('#delivery_book_date').datepicker({
-                            changeYear: true,
-                            changeMonth: true,
-                            dateFormat: 'yy-mm-dd',
-                        });
+                        $('#delivery_book_date').datepicker();
                         $('#delivery_book_date').on('change',function(e){
                         @this.set('juridicalData.delivery_book_date', e.target.value);
                         });
@@ -904,38 +908,22 @@
 </div>
 <script>
 
-    $('#birthday').datepicker({
-        changeYear: true,
-        changeMonth: true,
-        dateFormat: 'yy-mm-dd',
-    });
+    $('#birthday').datepicker();
     $('#birthday').on('change',function(e){
         @this.set('customerData.birthday', e.target.value);
     });
 
-    $('#signed_date').datepicker({
-        changeYear: true,
-        changeMonth: true,
-        dateFormat: 'yy-mm-dd',
-    });
+    $('#signed_date').datepicker();
     $('#signed_date').on('change',function(e){
         @this.set('contractData.signed_date', e.target.value);
     });
 
-    $('#payment_date_95').datepicker({
-        changeYear: true,
-        changeMonth: true,
-        dateFormat: 'yy-mm-dd',
-    });
+    $('#payment_date_95').datepicker();
     $('#payment_date_95').on('change',function(e){
         @this.set('payment_date_95', e.target.value);
     });
 
-    $('#payment_date_95_2').datepicker({
-        changeYear: true,
-        changeMonth: true,
-        dateFormat: 'yy-mm-dd',
-    });
+    $('#payment_date_95_2').datepicker();
     $('#payment_date_95_2').on('change',function(e){
         @this.set('paymentData.payment_date_95', e.target.value);
     });
@@ -955,6 +943,7 @@
             datepicker.regional.vi = {
                 changeYear: true,
                 changeMonth: true,
+                yearRange: '1920:2020',
                 closeText: "Đóng",
                 prevText: "&#x3C;Trước",
                 nextText: "Tiếp&#x3E;",
