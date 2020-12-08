@@ -171,14 +171,23 @@ class Customers extends Component
                     ->orWhere('customers.id','like',$searchKey);
             });
 
-
+        if($this->selectStatus != null && $this->selectStatus === "Chọn trạng thái"){
+            $this->selectStatus = null;
+        }
         if($this->selectStatus != null)
         {
             $customers->where('contracts.status','=', $this->selectStatus);
         }
+        
+
+        if($this->selectBill != null && $this->selectBill === "Chọn thanh toán"){
+            $this->selectBill = null;
+        }
         if($this->selectBill != null)
         {
             $customers->where('payments.payment_status','=', $this->selectBill);
+        }else{
+            $this->selectBill = null;
         }
         if($this->selectTimeFrom != null)
         {

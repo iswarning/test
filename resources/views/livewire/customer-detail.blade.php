@@ -446,7 +446,14 @@
                                     <div class="col-md-1"></div>
                                     <h5 class="col-md-5"> Ngày thanh toán đủ 95%: </h5>
                                     <div class="col-md-1"></div>
-                                    <label class="col-md-5">{{$paymentData['payment_date_95']}}</label>
+                                    <label class="col-md-5">
+                                        @if(!isset($paymentData['payment_date_95']))
+
+                                        @else
+                                            {{$paymentData['payment_date_95']}}
+                                        @endif
+                                        
+                                    </label>
                                 </div><hr/>
 
                                 {{-- Thong tin tre han --}}
@@ -735,6 +742,19 @@
                                             @endif
                                         </label>
                                     </div><hr/>
+
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <h5 class="col-md-5"> Ngày bàn giao sổ: </h5>
+                                        <div class="col-md-1"></div>
+                                        <label class="col-md-5">
+                                            @if(!isset($juridicalData['delivery_book_date']))
+                                                
+                                            @else
+                                                {{ $juridicalData['delivery_book_date'] }}
+                                            @endif
+                                        </label>
+                                    </div>
 
 
                                 @else

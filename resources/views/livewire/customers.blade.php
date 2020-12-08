@@ -354,7 +354,7 @@
                                                 <td>{{$customer->payment_progress}}</td>
 
                                                 @if(App\Models\Juridical::where('contract_id', $customer->contractID)->first() != null)
-                                                    <td>{{Carbon\Carbon::parse((App\Models\Juridical::where('contract_id', $customer->contractID)->firstOrFail())->delivery_book_date)->format('d/m/Y')}}</td>
+                                                    <td>{{(App\Models\Juridical::where('contract_id', $customer->contractID)->first())->delivery_book_date}}</td>
                                                 @else
                                                     <td></td>
                                                 @endif
