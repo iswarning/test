@@ -298,6 +298,10 @@
                                         </select>
                                     </div>
                                 </div>
+                                {{-- <div class="col-md-6">
+                                    <x-jet-input autocomplete="off" type="text" id="daterangepicker" class='w-full' placeholder="Chọn ngày..."/>
+                                    
+                                </div> --}}
                                 <div class="col-md-3">
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
@@ -422,7 +426,11 @@
         </div>
     </section>
 </div>
-
+<style>
+    .ui-datepicker select.ui-datepicker-month{
+        width: 50%;
+    }
+</style>
 <script>
 
         $('#birthday').datepicker({ 
@@ -442,6 +450,22 @@
             @this.set('paymentData.payment_date_95', e.target.value);
         });
 
+        // $('#daterangepicker').val() = '';
+        // $(function() {
+        //     $('#daterangepicker').daterangepicker({
+        //         timePicker: true,
+        //         locale: {
+        //             format: 'YYYY-MM-DD HH:mm:ss'
+        //         },
+        //     });
+        // });
+        // $('#daterangepicker').on('apply.daterangepicker', function(ev, picker) {
+        //     console.log(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+        //     console.log(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+        //     // @this.set('selectTimeFrom', picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+        //     // @this.set('selectTimeTo', picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+        // });
+        
         $('#selectTimeFrom').datepicker();
         $('#selectTimeFrom').on('change',function(e){
            @this.set('selectTimeFrom', e.target.value);
@@ -449,7 +473,7 @@
 
         $('#selectTimeTo').datepicker();
         $('#selectTimeTo').on('change',function(e){
-        @this.set('selectTimeTo', e.target.value);
+            @this.set('selectTimeTo', e.target.value);
         });
 
 

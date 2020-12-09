@@ -189,14 +189,25 @@ class Customers extends Component
         }else{
             $this->selectBill = null;
         }
+       
         if($this->selectTimeFrom != null)
         {
-            $customers->where('contracts.created_at','>=', $this->selectTimeFrom);
+            $customers->where('contracts.created_at','>=', $this->selectTimeFrom . " 00:00:00");
+            // dd($this->selectTimeFrom);
+            // dd($this->selectTimeFrom);
         }
         if($this->selectTimeTo != null)
         {
-            $customers->where('contracts.created_at','<=', $this->selectTimeTo);
+            $customers->where('contracts.created_at','<=', $this->selectTimeTo . " 23:59:59");
+            // dd($this->selectTimeTo);
         }
+
+        // if($this->selectTimeFrom != null && $this->selectTimeTo != null && $this->selectTimeFrom == $this->selectTimeTo)
+        // {
+        //     $customers->where('contracts.created_at','>', $this->selectTimeTo);
+        // }
+        
+        
 
         return view('livewire.customers', [
             'customers' => $customers
