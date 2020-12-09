@@ -104,7 +104,8 @@
                                 </x-slot>
 
                                 <x-slot name="content">
-                                    {{ __('Bạn có chắc muốn xóa thông tin dự án này?') }}
+                                    {{ __('Bạn có chắc muốn xóa thông tin dự án này?') }}<br>
+                                    <span class='text-red-600'>{{ __('Nếu xóa thông tin dự án thì tất cả thông tin hợp đồng liên quan đến dự án sẽ bị xóa sạch !!!') }}</span>
                                 </x-slot>
 
                                 <x-slot name="footer">
