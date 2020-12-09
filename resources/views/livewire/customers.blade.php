@@ -425,7 +425,9 @@
 
 <script>
 
-        $('#birthday').datepicker();
+        $('#birthday').datepicker({ 
+            yearRange: "-100:+0" ,
+        });
         $('#birthday').on('change',function(e){
            @this.set('customerData.birthday', e.target.value);
         });
@@ -462,11 +464,12 @@
                 factory( jQuery.datepicker );
             }
         }( function( datepicker ) {
+            // var d = new Date().getFullYear();
 
             datepicker.regional.vi = {
                 changeYear: true,
                 changeMonth: true,
-                yearRange: '1920:2020',
+                yearRange: '+0:+2',
                 closeText: "Đóng",
                 prevText: "&#x3C;Trước",
                 nextText: "Tiếp&#x3E;",

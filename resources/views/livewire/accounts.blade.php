@@ -183,7 +183,9 @@
     </section>
 </div>
 <script>
-    $('#birthday').datepicker();
+    $('#birthday').datepicker({ 
+            yearRange: "-100:+0" ,
+        });
     $('#birthday').on('change',function(e){
         @this.set('accountData.birthday', e.target.value);
     });
@@ -203,7 +205,7 @@
             datepicker.regional.vi = {
                 changeYear: true,
                 changeMonth: true,
-                yearRange: '1920:2020',
+                yearRange: '+0:+2',
                 closeText: "Đóng",
                 prevText: "&#x3C;Trước",
                 nextText: "Tiếp&#x3E;",

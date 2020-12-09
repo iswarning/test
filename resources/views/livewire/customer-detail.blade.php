@@ -134,7 +134,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" /> 
-                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="payment_progress" id="payment_progress" autocomplete="off"/>
+                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="payment_progress" id="payment_progress" autocomplete="off"/>
                                     @error('payment_progress')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
@@ -928,7 +928,9 @@
 </div>
 <script>
 
-    $('#birthday').datepicker();
+    $('#birthday').datepicker({ 
+            yearRange: "-100:+0" ,
+        });
     $('#birthday').on('change',function(e){
         @this.set('customerData.birthday', e.target.value);
     });
@@ -963,7 +965,8 @@
             datepicker.regional.vi = {
                 changeYear: true,
                 changeMonth: true,
-                yearRange: '1920:2020',
+                
+                yearRange: '+0:+2',
                 closeText: "Đóng",
                 prevText: "&#x3C;Trước",
                 nextText: "Tiếp&#x3E;",
@@ -986,6 +989,8 @@
                 // buttonImage: "calendar.gif",
                 // buttonText: "Calendar"
             };
+            
+            
             datepicker.setDefaults( datepicker.regional.vi );
 
             return datepicker.regional.vi;

@@ -84,21 +84,30 @@ class CustomerDetail extends Component
         {
             if($this->contractId == null)
             {
-                $rules['paymentData.payment_progress'] = 'required';
-                $rules['payment_progress'] = 'required';
-
+                $rules = [
+                    'payment_progress' => 'required' ,
+                     'paymentData.payment_progress' => 'required', 
+                ];
             }
-            $rules = [
-                'contractData.contract_no' => ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)],
-                'contractData.type' => 'required',
-                'contractData.status' => 'required',
-                'contractData.lot_number' => 'required',
-                'contractData.area_signed' => ['required', 'numeric'],
-                'contractData.value' => 'required',
-                'contractData.project_id' => 'required',
-                'contractData.signed_date' => 'required',
-                'contractData.signed' => 'required',
-            ];
+            $rules['contractData.contract_no'] = ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)];
+            $rules['contractData.type'] = ['required',];
+            $rules['contractData.status'] = ['required',];
+            $rules['contractData.lot_number'] = ['required',];
+            $rules['contractData.area_signed'] = ['required',];
+            $rules['contractData.value'] = ['required', ];
+            $rules['contractData.project_id'] = ['required',];
+            $rules['contractData.signed_date'] = ['required',];
+            // $rules = [
+            //     'contractData.contract_no' => ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)],
+            //     'contractData.type' => 'required',
+            //     'contractData.status' => 'required',
+            //     'contractData.lot_number' => 'required',
+            //     'contractData.area_signed' => ['required', 'numeric'],
+            //     'contractData.value' => 'required',
+            //     'contractData.project_id' => 'required',
+            //     'contractData.signed_date' => 'required',
+            //     'contractData.signed' => 'required',
+            // ];
 
         }
 
@@ -117,6 +126,7 @@ class CustomerDetail extends Component
 
             if($this->billlateId != null)
             {
+                $rules['payment_progress'] = 'required';
                 $rules['paymentData.payment_progress'] = 'required';
                 $rules['paymentData.contract_id'] = 'required';
             }
@@ -148,8 +158,8 @@ class CustomerDetail extends Component
             'customerData.phone.required' => 'Không thể để trống số điện thoại',
             'customerData.phone.numeric' => 'Số điện thoại phải là số',
 
-            'paymentData.payment_progress.required' => 'Không thể để trống giá bán tiến độ thanh toán',
-            'payment_progress.required' => 'Không thể để trống giá bán tiến độ thanh toán',
+            'paymentData.payment_progress.required' => 'Không thể để trống tiến độ thanh toán',
+            'payment_progress.required' => 'Không thể để trống tiến độ thanh toán',
 
             'contractData.contract_no.required' => 'Không thể để trống mã hợp đồng',
             'contractData.contract_no.unique' => 'Mã hợp đồng đã tồn tại',
@@ -267,6 +277,7 @@ class CustomerDetail extends Component
 
     public function createShowContract()
     {
+        
         $this->contractId = null;
         $this->contractData = [
             'signed' => false ,
@@ -274,20 +285,15 @@ class CustomerDetail extends Component
             'status' => null
         ];
         $this->payment_date_95 = null;
-        $this->payment_progress = null;
+        // $this->payment_progress = null;
         $this->modalShowContractVisible = true;
     }
 
     public function createContract()
     {
         $this->contractData['customer_id'] = $this->customerId;
-
-        $this->paymentData['payment_progress'] = $this->payment_progress;
-        $this->paymentData['payment_date_95'] = $this->payment_date_95;
         $this->validate();
-
         $contracts = Contracts::create($this->contractData);
-
         if($contracts){
             Payment::create([
                 'payment_progress' => $this->payment_progress ,
@@ -296,8 +302,6 @@ class CustomerDetail extends Component
                 'payment_status' => 0
             ]);
         }
-
-
         $this->modalShowContractVisible = false;
         session()->flash('message', 'Tạo hợp đồng thành công!');
     }
