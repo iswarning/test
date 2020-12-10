@@ -273,16 +273,23 @@ class CustomerDetail extends Component
             'status_created_by' => null,
             'status' => null
         ];
-        $this->payment_date_95 = null;
+        // $this->payment_date_95 = null;
         // $this->payment_progress = null;
         $this->modalShowContractVisible = true;
     }
 
     public function createContract()
     {
+        if($this->payment_date_95 == ""){
+            $this->payment_date_95 = null;
+        }
+        if($this->contractData['project_id'] == 0){
+            $this->contractData['project_id'] == null;
+        }
         $this->contractData['customer_id'] = $this->customerId;
         $this->validate();
         $contracts = Contracts::create($this->contractData);
+        
         if($contracts){
             Payment::create([
                 'payment_progress' => $this->payment_progress ,

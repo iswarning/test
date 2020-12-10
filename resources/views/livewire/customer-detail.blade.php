@@ -64,7 +64,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <x-jet-label for="area_signed" value="{{ __('Diện tích ký') }}" />
-                                            <x-jet-input id="area_signed" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.area_signed" autocomplete="off"/>
+                                            <x-jet-input id="area_signed" class="block mt-1 w-full" type="number" wire:model.lazy="contractData.area_signed" autocomplete="off"/>
                                             @error('contractData.area_signed')
                                             <span class="text-danger">{{ $message }}</span>
                                             @endError
@@ -77,7 +77,7 @@
                                                     <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
                                                 </div>
                                                 <select class="custom-select" wire:model.lazy="contractData.status">
-                                                    <option>Chọn trạng thái</option>
+                                                    <option value="0">Chọn trạng thái</option>
                                                     @foreach ($this->contractStatus as $status)
                                                         <option value="{{$loop->index}}">{{ $status }}</option>
                                                     @endforeach
@@ -94,7 +94,7 @@
                                                     <label class="input-group-text" for="inputGroupSelect01">Giữ chỗ</label>
                                                 </div>
                                                 <select class="custom-select" wire:model.lazy="contractData.status_created_by">
-                                                    <option>Chọn giữ chỗ</option>
+                                                    <option value="0">Chọn giữ chỗ</option>
                                                     @foreach($this->contractStatusCreated as $item)
                                                         <option value="{{$loop->index}}">{{$item}}</option>
                                                     @endforeach
@@ -154,7 +154,7 @@
                                                     <label class="input-group-text" for="inputGroupSelect01">Dự án</label>
                                                 </div>
                                                 <select class="custom-select" wire:model.lazy="contractData.project_id">
-                                                    <option value="0" selected>Chọn dự án</option>
+                                                    <option value="0">Chọn dự án</option>
                                                     @foreach($this->projectData as $project)
                                                         <option value="{{$project->id}}">{{$project->name}}</option>
                                                     @endforeach

@@ -223,7 +223,7 @@
                                                             <label class="input-group-text" for="inputGroupSelect01">Dự án</label>
                                                         </div>
                                                         <select class="custom-select" wire:model.lazy="contractData.project_id">
-                                                            <option value="0" selected>Chọn dự án</option>
+                                                            <option value="0">Chọn dự án</option>
                                                             @foreach($projects as $project)
                                                                 <option value="{{$project->id}}">{{$project->name}}</option>
                                                             @endforeach

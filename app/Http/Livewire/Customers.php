@@ -70,6 +70,7 @@ class Customers extends Component
             'contractData.project_id' => 'required',
             'contractData.signed_date' => 'required',
             'contractData.signed' => 'required',
+            'contractData.project_id' => 'required' ,
 
             'customerData.name' => 'required',
             'customerData.cmnd' => ['required', Rule::unique('customers', 'cmnd')->ignore($this->customerId)],
