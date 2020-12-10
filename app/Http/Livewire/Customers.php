@@ -76,7 +76,7 @@ class Customers extends Component
             'customerData.birthday' => 'required',
             'customerData.household' => 'required',
             'customerData.address' => 'required',
-            'customerData.phone' => ['required','max:11'],
+            'customerData.phone' => ['required','min:10','max:11'],
 
         ];
         if($this->selectStatus == 3){
@@ -107,6 +107,7 @@ class Customers extends Component
             'customerData.household.required' => 'Không thể để trống hộ khẩu',
             'customerData.address.required' => 'Không thể để trống địa chỉ',
             'customerData.phone.required' => 'Không thể để trống số điện thoại',
+            'customerData.phone.min' => 'Số điện thoại ít nhất 10 số',
             'customerData.phone.max' => 'Số điện thoại quá dài',
         ];
     }

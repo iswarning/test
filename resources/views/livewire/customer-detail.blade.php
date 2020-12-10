@@ -24,167 +24,178 @@
                             <x-jet-button wire:click="export">Xuất file</x-jet-button>
                         @endif
                     </div>
-                    <div class="col-md-3"><x-jet-button wire:click="createShowContract">Tạo Hợp Đồng</x-jet-button></div>
+                    <div class="col-md-3">
+                        {{-- <livewire:contract-create :customerId="$customerId"> --}}
+                            <x-jet-button wire:click="createShowContract">Tạo Hợp Đồng</x-jet-button>
+                            <x-jet-dialog-modal wire:model.lazy="modalShowContractVisible">
+                                @if($contractId)
+                                    <x-slot name="title">
+                                        {{ __('Sửa hợp đồng') }}
+                                    </x-slot>
+                                @else
+                                    <x-slot name="title">
+                                        {{ __('Thêm hợp đồng') }}
+                                    </x-slot>
+                                @endif
+                                <x-slot name="content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <x-jet-label for="contract_no" value="{{ __('Số hợp đồng') }}" />
+                                            <x-jet-input id="contract_no" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.contract_no" autocomplete="off"/>
+                                            @error('contractData.contract_no')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @endError
+                                        </div>
+                                        <div class="col-md-6">
+                                            <x-jet-label for="type" value="{{ __('Loại hợp đồng') }}" />
+                                            <x-jet-input id="type" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.type" autocomplete="off"/>
+                                            @error('contractData.type')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @endError
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <x-jet-label for="lot_number" value="{{ __('Mã lô') }}" />
+                                            <x-jet-input id="lot_number" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.lot_number" autocomplete="off"/>
+                                            @error('contractData.lot_number')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @endError
+                                        </div>
+                                        <div class="col-md-6">
+                                            <x-jet-label for="area_signed" value="{{ __('Diện tích ký') }}" />
+                                            <x-jet-input id="area_signed" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.area_signed" autocomplete="off"/>
+                                            @error('contractData.area_signed')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @endError
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
+                                                </div>
+                                                <select class="custom-select" wire:model.lazy="contractData.status">
+                                                    <option>Chọn trạng thái</option>
+                                                    @foreach ($this->contractStatus as $status)
+                                                        <option value="{{$loop->index}}">{{ $status }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            @error('contractData.status')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @endError
+                                        </div>
+                                        @if($this->contractData['status'] != 2)
+                                        <div class="col-md-6">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Giữ chỗ</label>
+                                                </div>
+                                                <select class="custom-select" wire:model.lazy="contractData.status_created_by">
+                                                    <option>Chọn giữ chỗ</option>
+                                                    @foreach($this->contractStatusCreated as $item)
+                                                        <option value="{{$loop->index}}">{{$item}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            @error('contractData.status_created_by')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @endError
+                                        </div>
+                                        @endif
+                                    <div></div>
+            
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <x-jet-label for="signed_date" value="{{ __('Ngày ký') }}" />
+                                            <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.signed_date" id="signed_date" placeholder="Chọn ngày ký..." autocomplete="off"/>
+                                            @error('contractData.signed_date')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @endError
+                                        </div>
+                                        <div class="col-md-6">
+                                            <x-jet-label for="signed_date" value="{{ __('Giá bán') }}" />
+                                            <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.value" id="value" autocomplete="off"/>
+                                            @error('contractData.value')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @endError
+                                        </div>
+                                    </div>
+                                    @if(!$this->contractId)
+                                        <div class="row mt-4">
+                                            <div class="col-md-6">
+                                                <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
+                                                <x-jet-input type="text" class="block mt-1 w-full" wire:model="payment_date_95" id="payment_date_95" placeholder="Chọn ngày thanh toán..." autocomplete="off"/>
+            
+                                            </div>
+                                            <div class="col-md-6">
+                                                <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" /> 
+                                                <x-jet-input type="text" class="block mt-1 w-full" wire:model="payment_progress" id="payment_progress" autocomplete="off"/>
+                                                @error('payment_progress')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @endError
+                                            </div>
+                                        </div>
+                                        <script>
+                                            $('#payment_date_95').datepicker();
+                                            $('#payment_date_95').on('change',function(e){
+                                                @this.set('payment_date_95', e.target.value);
+                                            });
+                                        </script>
+                                    @endif
+            
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Dự án</label>
+                                                </div>
+                                                <select class="custom-select" wire:model.lazy="contractData.project_id">
+                                                    <option value="0" selected>Chọn dự án</option>
+                                                    @foreach($this->projectData as $project)
+                                                        <option value="{{$project->id}}">{{$project->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            @error('contractData.project_id')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @endError
+                                        </div>
+                                        <div class="col-md-6 flex">
+                                            <x-jet-label for="signed" value="{{ __('Đã ký / chưa ký') }}" />
+                                            <input id="signed" type="checkbox" wire:model.lazy="contractData.signed" class="form-checkbox h-5 w-5 text-green-500 ml-2 " autocomplete="off">
+                                            @error('contractData.signed')
+                                            <span class="text-danger">{{ $message }}</span>
+                                            @endError
+                                        </div>
+                                    </div>
+                                </x-slot>
+            
+                                <x-slot name="footer">
+                                    <x-jet-secondary-button wire:click="$toggle('modalShowContractVisible')" wire:loading.attr="disabled">
+                                        {{ __('Hủy') }}
+                                    </x-jet-secondary-button>
+            
+                                    @if($this->contractId)
+                                        <x-jet-button class="ml-2" wire:click="updateContract" wire:loading.attr="disabled">
+                                            {{ __('Cập nhật') }}
+                                        </x-jet-button>
+                                    @else
+                                        <x-jet-button class="ml-2" wire:click="createContract" wire:loading.attr="disabled">
+                                            {{ __('Lưu') }}
+                                        </x-jet-button>
+                                    @endif
+                                </x-slot>
+                            </x-jet-dialog-modal>
+                    </div>
                 </div>
                 @endif
                 {{-- Modal thêm + sửa thông tin hợp đồng --}}
-                <x-jet-dialog-modal wire:model.lazy="modalShowContractVisible">
-                    @if($contractId)
-                        <x-slot name="title">
-                            {{ __('Sửa hợp đồng') }}
-                        </x-slot>
-                    @else
-                        <x-slot name="title">
-                            {{ __('Thêm hợp đồng') }}
-                        </x-slot>
-                    @endif
-                    <x-slot name="content">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <x-jet-label for="contract_no" value="{{ __('Số hợp đồng') }}" />
-                                <x-jet-input id="contract_no" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.contract_no" autocomplete="off"/>
-                                @error('contractData.contract_no')
-                                <span class="text-danger">{{ $message }}</span>
-                                @endError
-                            </div>
-                            <div class="col-md-6">
-                                <x-jet-label for="type" value="{{ __('Loại hợp đồng') }}" />
-                                <x-jet-input id="type" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.type" autocomplete="off"/>
-                                @error('contractData.type')
-                                <span class="text-danger">{{ $message }}</span>
-                                @endError
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <x-jet-label for="lot_number" value="{{ __('Mã lô') }}" />
-                                <x-jet-input id="lot_number" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.lot_number" autocomplete="off"/>
-                                @error('contractData.lot_number')
-                                <span class="text-danger">{{ $message }}</span>
-                                @endError
-                            </div>
-                            <div class="col-md-6">
-                                <x-jet-label for="area_signed" value="{{ __('Diện tích ký') }}" />
-                                <x-jet-input id="area_signed" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.area_signed" autocomplete="off"/>
-                                @error('contractData.area_signed')
-                                <span class="text-danger">{{ $message }}</span>
-                                @endError
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
-                                    </div>
-                                    <select class="custom-select" wire:model.lazy="contractData.status">
-                                        <option>Chọn trạng thái</option>
-                                        @foreach ($this->contractStatus as $status)
-                                            <option value="{{$loop->index}}">{{ $status }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('contractData.status')
-                                <span class="text-danger">{{ $message }}</span>
-                                @endError
-                            </div>
-                            @if($this->contractData['status'] != 2)
-                            <div class="col-md-6">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text" for="inputGroupSelect01">Giữ chỗ</label>
-                                    </div>
-                                    <select class="custom-select" wire:model.lazy="contractData.status_created_by">
-                                        <option>Chọn giữ chỗ</option>
-                                        @foreach($this->contractStatusCreated as $item)
-                                            <option value="{{$loop->index}}">{{$item}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('contractData.status_created_by')
-                                <span class="text-danger">{{ $message }}</span>
-                                @endError
-                            </div>
-                            @endif
-                        <div></div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <x-jet-label for="signed_date" value="{{ __('Ngày ký') }}" />
-                                <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.signed_date" id="signed_date" placeholder="Chọn ngày ký..." autocomplete="off"/>
-                                @error('contractData.signed_date')
-                                <span class="text-danger">{{ $message }}</span>
-                                @endError
-                            </div>
-                            <div class="col-md-6">
-                                <x-jet-label for="signed_date" value="{{ __('Giá bán') }}" />
-                                <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.value" id="value" autocomplete="off"/>
-                                @error('contractData.value')
-                                <span class="text-danger">{{ $message }}</span>
-                                @endError
-                            </div>
-                        </div>
-                        @if(!$this->contractId)
-                            <div class="row mt-4">
-                                <div class="col-md-6">
-                                    <x-jet-label for="payment_date_95" value="{{ __('Ngày thanh toán đủ 95%') }}" />
-                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="payment_date_95" id="payment_date_95" placeholder="Chọn ngày thanh toán..." autocomplete="off"/>
-
-                                </div>
-                                <div class="col-md-6">
-                                    <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" /> 
-                                    <x-jet-input type="text" class="block mt-1 w-full" wire:model="payment_progress" id="payment_progress" autocomplete="off"/>
-                                    @error('payment_progress')
-                                    <span class="text-danger">{{ $message }}</span>
-                                    @endError
-                                </div>
-                            </div>
-                        @endif
-
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text" for="inputGroupSelect01">Dự án</label>
-                                    </div>
-                                    <select class="custom-select" wire:model.lazy="contractData.project_id">
-                                        <option value="0" selected>Chọn dự án</option>
-                                        @foreach($this->projectData as $project)
-                                            <option value="{{$project->id}}">{{$project->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('contractData.project_id')
-                                <span class="text-danger">{{ $message }}</span>
-                                @endError
-                            </div>
-                            <div class="col-md-6 flex">
-                                <x-jet-label for="signed" value="{{ __('Đã ký / chưa ký') }}" />
-                                <input id="signed" type="checkbox" wire:model.lazy="contractData.signed" class="form-checkbox h-5 w-5 text-green-500 ml-2 " autocomplete="off">
-                                @error('contractData.signed')
-                                <span class="text-danger">{{ $message }}</span>
-                                @endError
-                            </div>
-                        </div>
-                    </x-slot>
-
-                    <x-slot name="footer">
-                        <x-jet-secondary-button wire:click="$toggle('modalShowContractVisible')" wire:loading.attr="disabled">
-                            {{ __('Hủy') }}
-                        </x-jet-secondary-button>
-
-                        @if($this->contractId)
-                            <x-jet-button class="ml-2" wire:click="updateContract" wire:loading.attr="disabled">
-                                {{ __('Cập nhật') }}
-                            </x-jet-button>
-                        @else
-                            <x-jet-button class="ml-2" wire:click="createContract" wire:loading.attr="disabled">
-                                {{ __('Lưu') }}
-                            </x-jet-button>
-                        @endif
-                    </x-slot>
-                </x-jet-dialog-modal>
+                
+                
             </div>
 
             <!-- Nav tabs -->
@@ -261,15 +272,15 @@
                         </div>
                     </div>
 
-                    <x-jet-dialog-modal wire:model.lazy="modalShowCustomerVisible">
+                    <x-jet-dialog-modal wire:model="modalShowCustomerVisible">
                         <x-slot name="title">
-                            {{ __('Sửa thong tin khach hang') }}
+                            {{ __('Sửa thông tin khách hàng') }}
                         </x-slot>
 
                         <x-slot name="content">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <x-jet-label for="name" value="{{ __('Ho ten khach hang') }}" />
+                                    <x-jet-label for="name" value="{{ __('Họ tên khách hàng') }}" />
                                     <x-jet-input id="name" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.name" autocomplete="off"/>
                                     @error('customerData.name')
                                     <span class="text-danger">{{ $message }}</span>
@@ -277,7 +288,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <x-jet-label for="cmnd" value="{{ __('Cmnd') }}" />
-                                    <x-jet-input id="cmnd" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.cmnd" autocomplete="off"/>
+                                    <x-jet-input id="cmnd" class="block mt-1 w-full" type="number" wire:model.lazy="customerData.cmnd" autocomplete="off"/>
                                     @error('customerData.cmnd')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
@@ -285,14 +296,14 @@
                             </div>
                             <div class="row mt-4">
                                 <div class="col-md-6">
-                                    <x-jet-label for="address" value="{{ __('Dia chi') }}" />
+                                    <x-jet-label for="address" value="{{ __('Địa chỉ') }}" />
                                     <x-jet-input id="address" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.address" autocomplete="off" />
                                     @error('customerData.address')
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                 </div>
                                 <div class="col-md-6">
-                                    <x-jet-label for="household" value="{{ __('Ho khau') }}" />
+                                    <x-jet-label for="household" value="{{ __('Hộ khẩu') }}" />
                                     <x-jet-input id="household" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.household" autocomplete="off"/>
                                     @error('customerData.household')
                                     <span class="text-danger">{{ $message }}</span>
@@ -308,6 +319,14 @@
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                 </div>
+                                <script>
+                                    $('#birthday').datepicker({ 
+                                        yearRange: "-100:+0" ,
+                                    });
+                                    $('#birthday').on('change',function(e){
+                                        @this.set('customerData.birthday', e.target.value);
+                                    });
+                                </script>
                                 <div class="col-md-6">
                                     <x-jet-label for="phone" value="{{ __('Số điện thoại') }}" />
                                     <x-jet-input type="number" class="block mt-1 w-full" wire:model.lazy="customerData.phone" id="phone" autocomplete="off"/>
@@ -331,6 +350,7 @@
                         </x-slot>
                     </x-jet-dialog-modal>
                 </div>
+                
             @endif
 
             <p></p>
@@ -418,6 +438,8 @@
                         </div>
                         <p></p>
 
+                        
+
                         {{-- Thông tin thanh toán và khách hàng trễ hạn --}}
 
                         <div class="card">
@@ -426,7 +448,7 @@
                                     <div class="col-md-8">
                                         <h3>Thông tin thanh toán</h3>
                                     </div>
-                                    @if($billlateId && Auth::user()->type != 3)
+                                    @if($infoBillLate == true && Auth::user()->type != 3)
                                     <div class="col-md-2"></div>
                                     <div class="col-md-2"><x-jet-button wire:click="updateShowPaymentAndBill({{$billlateId}})"> Sửa </x-jet-button></div>
                                     @endif
@@ -522,7 +544,7 @@
                         <p></p>
 
                         {{-- Modal thêm + sửa thông tin thanh toán và khách hàng trễ hạn --}}
-                        <x-jet-dialog-modal wire:model.lazy="modalShowPaymentVisible">
+                        <x-jet-dialog-modal wire:model="modalShowPaymentVisible">
                             <x-slot name="title">
                                 @if($billlateId)
                                     {{ __('Sửa  thông tin thanh toán') }}
@@ -537,7 +559,7 @@
                                         <div class="col-md-6">
                                             <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
                                             <x-jet-input id="payment_progress" class="block mt-1 w-full" type="text" wire:model.lazy="paymentData.payment_progress"  autocomplete="off"/>
-                                            @error('payment_progress')
+                                            @error('paymentData.payment_progress')
                                             <span class="text-danger">{{ $message }}</span>
                                             @endError
                                         </div>
@@ -769,7 +791,7 @@
                         <p></p>
 
                         {{-- Modal thêm + sửa thông tin pháp lý --}}
-                        <x-jet-dialog-modal wire:model.lazy="modalShowJuridicalVisible">
+                        <x-jet-dialog-modal wire:model="modalShowJuridicalVisible">
                             <x-slot name="title">
 
                                 {{ __('Thêm thông tin pháp lý') }}
@@ -892,29 +914,38 @@
                     <script>
                         $('#day_late').datepicker();
                         $('#day_late').on('change',function(e){
-                        @this.set('billlateData.day_late', e.target.value);
+                            @this.set('billlateData.day_late', e.target.value);
                         });
 
 
                         $('#receipt_date').datepicker();
                         $('#receipt_date').on('change',function(e){
-                        @this.set('billlateData.receipt_date', e.target.value);
+                            @this.set('billlateData.receipt_date', e.target.value);
                         });
 
 
                         $('#notarized_date').datepicker();
                         $('#notarized_date').on('change',function(e){
-                        @this.set('juridicalData.notarized_date', e.target.value);
+                            @this.set('juridicalData.notarized_date', e.target.value);
                         });
 
                         $('#delivery_land_date').datepicker();
                         $('#delivery_land_date').on('change',function(e){
-                        @this.set('juridicalData.delivery_land_date', e.target.value);
+                            @this.set('juridicalData.delivery_land_date', e.target.value);
                         });
 
                         $('#delivery_book_date').datepicker();
                         $('#delivery_book_date').on('change',function(e){
-                        @this.set('juridicalData.delivery_book_date', e.target.value);
+                            @this.set('juridicalData.delivery_book_date', e.target.value);
+                        });
+                        $('#payment_date_95').datepicker();
+                        $('#payment_date_95').on('change',function(e){
+                            @this.set('payment_date_95', e.target.value);
+                        });
+
+                        $('#payment_date_95_2').datepicker();
+                        $('#payment_date_95_2').on('change',function(e){
+                            @this.set('paymentData.payment_date_95', e.target.value);
                         });
                     </script>
                 @endif
@@ -928,27 +959,15 @@
 </div>
 <script>
 
-    $('#birthday').datepicker({ 
-            yearRange: "-100:+0" ,
-        });
-    $('#birthday').on('change',function(e){
-        @this.set('customerData.birthday', e.target.value);
-    });
+    
 
     $('#signed_date').datepicker();
     $('#signed_date').on('change',function(e){
         @this.set('contractData.signed_date', e.target.value);
     });
 
-    $('#payment_date_95').datepicker();
-    $('#payment_date_95').on('change',function(e){
-        @this.set('payment_date_95', e.target.value);
-    });
 
-    $('#payment_date_95_2').datepicker();
-    $('#payment_date_95_2').on('change',function(e){
-        @this.set('paymentData.payment_date_95', e.target.value);
-    });
+    
 
     ( function( factory ) {
             if ( typeof define === "function" && define.amd ) {

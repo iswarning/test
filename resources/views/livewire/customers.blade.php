@@ -53,7 +53,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <x-jet-label for="cmnd" value="{{ __('Chứng minh nhân dân') }}" />
-                                                    <x-jet-input autocomplete="off" id="cmnd" class="block mt-1 w-full" type="text" wire:model.lazy="customerData.cmnd" />
+                                                    <x-jet-input autocomplete="off" id="cmnd" class="block mt-1 w-full" type="number" wire:model.lazy="customerData.cmnd" />
                                                     <br>
                                                     @error('customerData.cmnd')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -426,11 +426,7 @@
         </div>
     </section>
 </div>
-<style>
-    .ui-datepicker select.ui-datepicker-month{
-        width: 50%;
-    }
-</style>
+
 <script>
 
         $('#birthday').datepicker({ 

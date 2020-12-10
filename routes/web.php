@@ -28,7 +28,6 @@ Route::group(['middleware' =>
     Route::get('/customer/{id}', CustomerDetail::class)->name('customerDetail');
     Route::get('/accounts', Accounts::class)->name('accounts');
     Route::get('/account/{id}', AccountDetail::class)->name('accountDetail');
-    Route::get('/contract/{id}', ContractDetail::class)->name('contractDetail');
     Route::get('/projects', Projects::class)->name('projects');
     Route::get('/download', [CustomerDetail::class , 'downloadPDF'])->name('download');
 });

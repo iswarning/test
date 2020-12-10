@@ -77,7 +77,7 @@ class CustomerDetail extends Component
             'customerData.address' => 'required',
             'customerData.household' => 'required',
             'customerData.birthday' => 'required',
-            'customerData.phone' => ['required', 'numeric'],
+            'customerData.phone' => 'required|min:9|max:10',
         ];
 
         if($this->modalShowContractVisible == true)
@@ -86,50 +86,36 @@ class CustomerDetail extends Component
             {
                 $rules = [
                     'payment_progress' => 'required' ,
-                     'paymentData.payment_progress' => 'required', 
                 ];
             }
             $rules['contractData.contract_no'] = ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)];
             $rules['contractData.type'] = ['required',];
             $rules['contractData.status'] = ['required',];
             $rules['contractData.lot_number'] = ['required',];
-            $rules['contractData.area_signed'] = ['required',];
+            $rules['contractData.area_signed'] = 'required|max:4';
+
             $rules['contractData.value'] = ['required', ];
             $rules['contractData.project_id'] = ['required',];
             $rules['contractData.signed_date'] = ['required',];
-            // $rules = [
-            //     'contractData.contract_no' => ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)],
-            //     'contractData.type' => 'required',
-            //     'contractData.status' => 'required',
-            //     'contractData.lot_number' => 'required',
-            //     'contractData.area_signed' => ['required', 'numeric'],
-            //     'contractData.value' => 'required',
-            //     'contractData.project_id' => 'required',
-            //     'contractData.signed_date' => 'required',
-            //     'contractData.signed' => 'required',
-            // ];
 
         }
 
         if($this->modalShowPaymentVisible == true)
         {
-            $rules = [
-                'billlateData.day_late' => 'required',
-                'billlateData.batch_late' => 'required',
-                'billlateData.money_late' => 'required',
-                'billlateData.citation_rate' => 'required',
-                'billlateData.number_notifi' => 'required',
-                'billlateData.document' => 'required',
-                'billlateData.receipt_date' => 'required',
-                'billlateData.payment_id' => 'required',
-            ];
-
             if($this->billlateId != null)
             {
-                $rules['payment_progress'] = 'required';
-                $rules['paymentData.payment_progress'] = 'required';
-                $rules['paymentData.contract_id'] = 'required';
+                $rules = [
+                    'paymentData.payment_progress' => 'required',
+                    'paymentData.contract_id' => 'required' ,
+                ];
             }
+            $rules['billlateData.day_late'] = 'required';
+            $rules['billlateData.batch_late'] = 'required';
+            $rules['billlateData.money_late'] = 'required';
+            $rules['billlateData.citation_rate'] = 'required';
+            $rules['billlateData.number_notifi'] = 'required';
+            $rules['billlateData.document'] = 'required';
+            $rules['billlateData.receipt_date'] = 'required';
         }
 
         if($this->modalShowJuridicalVisible == true)
@@ -156,7 +142,8 @@ class CustomerDetail extends Component
             'customerData.household.required' => 'Không thể để trống hộ khẩu',
             'customerData.birthday.required' => 'Không thể để trống ngày sinh',
             'customerData.phone.required' => 'Không thể để trống số điện thoại',
-            'customerData.phone.numeric' => 'Số điện thoại phải là số',
+            'customerData.phone.min' => 'Số điện thoại ít nhất 9 số',
+            'customerData.phone.max' => 'Số điện thoại quá dài',
 
             'paymentData.payment_progress.required' => 'Không thể để trống tiến độ thanh toán',
             'payment_progress.required' => 'Không thể để trống tiến độ thanh toán',
@@ -167,6 +154,7 @@ class CustomerDetail extends Component
             'contractData.status.required' => 'Không thể để trống trạng thái',
             'contractData.lot_number.required' => 'Không thể để mã lô',
             'contractData.area_signed.required' => 'Không thể để trống diện tích ký',
+            'contractData.area_signed.max' => 'Diện tích ký quá lớn',
             'contractData.value.required' => 'Không thể để trống giá bán',
             'contractData.project_id.required' => 'Không thể để trống dự án',
             'contractData.signed_date.required' => 'Không thể để trống ngày ký',
@@ -204,7 +192,7 @@ class CustomerDetail extends Component
     public function updateShowModalCustomer($id)
     {
         $this->dataNotUpdate = Customers::find($id)->toArray();
-        $this->resetValidation();
+        // $this->resetValidation();
         $this->modalShowCustomerVisible = true;
         $this->customerId = $id;
         $this->customerData = Customers::find($this->customerId)->toArray();
@@ -212,6 +200,7 @@ class CustomerDetail extends Component
 
     public function updateCustomer()
     {
+        // dd($this->customerData);
         $this->validate();
         Customers::find($this->customerId)->update($this->customerData);
         $this->dataUpdated = Customers::find($this->customerId)->toArray();
@@ -305,6 +294,7 @@ class CustomerDetail extends Component
         $this->modalShowContractVisible = false;
         session()->flash('message', 'Tạo hợp đồng thành công!');
     }
+    
 
     public function tabChange($tab, $id)
     {
@@ -369,12 +359,15 @@ class CustomerDetail extends Component
         session()->flash('message', 'Cập nhật thông tin hợp đồng thành công');
     }
 
-    public function updateShowPaymentAndBill()
+    public function updateShowPaymentAndBill($id)
     {
-        $this->resetValidation();
+        $this->resetValidation(); 
+        // $this->billlateId = $id;
         $this->paymentData = Payment::find($this->paymentId)->toArray();
-        $this->billlateData = BillLate::find($this->billlateId)->toArray();
+        $this->billlateData = BillLate::where('payment_id',$this->paymentId)->first()->toArray();
+       
         $this->modalShowPaymentVisible = true;
+        // dd();
     }
 
     public function updatePaymentAndBill()
@@ -382,6 +375,7 @@ class CustomerDetail extends Component
         $this->validate();
         Payment::find($this->paymentId)->update($this->paymentData);
         BillLate::find($this->billlateId)->update($this->billlateData);
+        
         $this->modalShowPaymentVisible = false;
         session()->flash('message', "Cập nhật thông tin thanh toán thành công");
     }
@@ -406,15 +400,25 @@ class CustomerDetail extends Component
     public function createShowModalBillLate($id)
     {
         $this->resetValidation();
-        $this->paymentId = $id;
+        // dd($this->paymentId);
         $this->modalShowPaymentVisible = true;
+        $this->billlateId = null;
         $this->infoBillLate = false;
     }
 
     public function createBillLate()
     {
         $this->billlateData['payment_id'] = $this->paymentId;
-        $this->validate();
+        // dd($this->billlateData);
+        $this->validate([
+            'billlateData.day_late' => 'required' ,
+            'billlateData.batch_late' => 'required' ,
+            'billlateData.money_late' => 'required' ,
+            'billlateData.citation_rate' => 'required',
+            'billlateData.number_notifi' => 'required',
+            'billlateData.document' => 'required', 
+            'billlateData.receipt_date' => 'required' ,
+        ]);
         BillLate::create($this->billlateData);
         Payment::find($this->paymentId)->update([
             'payment_status' => 1
