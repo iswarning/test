@@ -140,7 +140,7 @@
                                         <td>{{$account->name}}</td>
                                         <td>{{$account->email}}</td>
                                         <td>
-                                            @if($account->type != null)
+                                            @if(isset($account->type))
                                             {{App\Models\Role::find($account->type)->name}}
                                             @endif
                                             @if(App\Models\Permission::find($account->permission_id) !== null)
