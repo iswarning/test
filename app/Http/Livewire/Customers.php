@@ -77,7 +77,7 @@ class Customers extends Component
             'customerData.birthday' => 'required',
             'customerData.household' => 'required',
             'customerData.address' => 'required',
-            'customerData.phone' => ['required','min:10','max:11'],
+            'customerData.phone' => ['required','min:10','max:12'],
 
         ];
         if($this->selectStatus == 3){
@@ -99,12 +99,14 @@ class Customers extends Component
             'contractData.value.required' => 'Không thể để trống giá bán',
             'contractData.project_id.required' => 'Không thể để trống dự án',
             'contractData.signed_date.required' => 'Không thể để trống ngày ký',
+            // 'contractData.signed_date.date_format' => 'Ngày ký không hợp lệ',
             'contractData.signed.required' => 'Không thể để trống' ,
 
             'customerData.name.required' => 'Không thể để trống họ tên',
             'customerData.cmnd.required' => 'Không thể để trống chứng minh nhân dân',
             'customerData.cmnd.unique' => 'Chứng minh nhân dân đã tồn tại',
             'customerData.birthday.required' => 'Không thể để trống ngày sinh',
+            // 'customerData.birthday.date_format' => 'Ngày sinh không hợp lệ',
             'customerData.household.required' => 'Không thể để trống hộ khẩu',
             'customerData.address.required' => 'Không thể để trống địa chỉ',
             'customerData.phone.required' => 'Không thể để trống số điện thoại',
@@ -113,13 +115,18 @@ class Customers extends Component
         ];
     }
 
+
     public function create()
     {
         $this->validate();
 
         $customer = ModelsCustomers::create($this->customerData);
         $this->contractData['customer_id'] = $customer->id;
+        
         $contract = Contracts::create($this->contractData);
+        if($this->paymentData['payment_date_95'] == ""){
+            $this->paymentData['payment_date_95'] = null;
+        }
         $this->paymentData['contract_id'] = $contract->id;
         $this->paymentData['payment_status'] = 0;
         // dd($this->paymentData);

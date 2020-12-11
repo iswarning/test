@@ -38,7 +38,7 @@
 </style>
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased" x-data x-on:keydown.escape="window.livewire.emit('closeModals')">
     <div class="min-h-screen bg-gray-100">
         @livewire('navigation-dropdown')
 
@@ -58,6 +58,8 @@
     @stack('modals')
 
     @livewireScripts
+    
+    
 
 </body>
 
