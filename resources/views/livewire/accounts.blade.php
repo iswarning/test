@@ -81,6 +81,9 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
+                                                @error('roleId')
+                                                <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="input-group mb-3">
@@ -137,8 +140,10 @@
                                         <td>{{$account->name}}</td>
                                         <td>{{$account->email}}</td>
                                         <td>
+                                            @if($account->type != null)
                                             {{App\Models\Role::find($account->type)->name}}
-                                            @if(App\Models\Permission::find($account->permission_id) != null)
+                                            @endif
+                                            @if(App\Models\Permission::find($account->permission_id) !== null)
                                                     - {{App\Models\Permission::find($account->permission_id)->name}}
                                                 @endif
                                         </td>

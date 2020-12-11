@@ -19,6 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\History;
 use Illuminate\Support\Facades\Auth;
 use PDF;
+use Illuminate\Validation\Rules\RequiredIf;
 
 use App\Exports\CustomerPDF;
 use App\Exports\CustomerExport;
@@ -91,7 +92,8 @@ class CustomerDetail extends Component
             }
             $rules['contractData.contract_no'] = ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)];
             $rules['contractData.type'] = ['required',];
-            $rules['contractData.status'] = ['required',];
+            $rules['contractData.status'] = 'required';
+            $rules['contractData.status_created_by'] = new RequiredIf($this->contractData['status'] != 2);
             $rules['contractData.lot_number'] = ['required',];
             $rules['contractData.area_signed'] = 'required|max:4';
 
@@ -126,6 +128,7 @@ class CustomerDetail extends Component
                 'juridicalData.status' => 'required',
                 'juridicalData.registration_procedures' => 'required',
                 'juridicalData.book_holder' => 'required',
+                // 'juridicalData.book_holder' => new RequiredIf(isset($this->juridicalData['book_holder']) && $this->juridicalData['book_holder'] == "Chọn bộ phận"),
                 'juridicalData.contract_id' => 'required',
                 'juridicalData.notarized_date' => 'nullable'
             ];
@@ -286,12 +289,9 @@ class CustomerDetail extends Component
 
     public function createContract()
     {
-        if($this->payment_date_95 == ""){
-            $this->payment_date_95 = null;
-        }
-        if($this->contractData['project_id'] == 0){
-            $this->contractData['project_id'] = null;
-        }
+        
+        $this->ifSelectedDefault();
+        $this->ifDatedDefault();
         $this->contractData['customer_id'] = $this->customerId;
         $this->validate();
         $contracts = Contracts::create($this->contractData);
@@ -343,17 +343,53 @@ class CustomerDetail extends Component
         $this->modalShowJuridicalVisible = true;
     }
 
-    public function createJuridical()
+    public function ifSelectedDefault()
     {
-        if($this->juridicalData['notarized_date'] == ""){
+        if(isset($this->contractData['status']) && $this->contractData['status'] == "Chọn trạng thái"){
+            $this->contractData['status'] = null;
+        }
+        if(isset($this->contractData['status_created_by']) && $this->contractData['status_created_by'] == "Chọn giữ chỗ"){
+            $this->contractData['status_created_by'] = null;
+        }
+        if(isset($this->contractData['project_id']) && $this->contractData['project_id'] == 0){
+            $this->contractData['project_id'] = null;
+        }
+        
+        if(isset($this->juridicalData['book_holder']) && $this->juridicalData['book_holder'] == "Chọn bộ phận"){
+            $this->juridicalData['book_holder'] = null;
+        }
+        if(isset($this->juridicalData['contract_info']) && $this->juridicalData['contract_info'] == "Chọn hợp đồng"){
+            $this->juridicalData['contract_info'] = null;
+        }
+    }
+
+    public function ifDatedDefault()
+    {
+        if(isset($this->paymentData['payment_date_95']) && $this->paymentData['payment_date_95'] == ""){
+            $this->paymentData['payment_date_95'] = null;
+        }
+        if(isset($this->payment_date_95) && $this->payment_date_95 == ""){
+            $this->payment_date_95 = null;
+        }
+        if(isset($this->contractData['signed_date']) && $this->juridicalData['signed_date'] == ""){
+            $this->contractData['signed_date'] = null;
+        }
+        if(isset($this->juridicalData['notarized_date']) && $this->juridicalData['notarized_date'] == ""){
             $this->juridicalData['notarized_date'] = null;
         }
-        if($this->juridicalData['delivery_book_date'] == ""){
+        if(isset($this->juridicalData['delivery_book_date']) && $this->juridicalData['delivery_book_date'] == ""){
             $this->juridicalData['delivery_book_date'] = null;
         }
-        if($this->juridicalData['delivery_land_date'] == ""){
+        if(isset($this->juridicalData['delivery_land_date']) && $this->juridicalData['delivery_land_date'] == ""){
             $this->juridicalData['delivery_land_date'] = null;
         }
+    }
+
+    public function createJuridical()
+    {
+        
+        $this->ifDatedDefault();
+        $this->ifSelectedDefault();
         
         $this->juridicalData['contract_id'] = $this->contractId;
         $this->juridicalData['liquidation'] = true;
@@ -375,6 +411,8 @@ class CustomerDetail extends Component
 
     public function updateContract()
     {
+        $this->ifDatedDefault();
+        $this->ifSelectedDefault();
         $this->contractData['id'] = $this->contractId;
         $this->validate();
         Contracts::find($this->contractId)->update($this->contractData);
@@ -402,6 +440,8 @@ class CustomerDetail extends Component
 
     public function updatePaymentAndBill()
     {
+        $this->ifDatedDefault();
+        // $this->ifSelectedDefault();
         $this->validate([
             'paymentData.payment_progress' => 'required',
             'paymentData.payment_date_95' => 'date_format:yy-m-d|nullable'
@@ -426,6 +466,8 @@ class CustomerDetail extends Component
 
     public function updateJuridical()
     {
+        $this->ifDatedDefault();
+        $this->ifSelectedDefault();
         $this->juridicalData['contract_id'] = $this->contractId;
         $this->validate();
         Juridical::find($this->juridicalId)->update($this->juridicalData);

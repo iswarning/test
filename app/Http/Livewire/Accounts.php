@@ -37,7 +37,8 @@ class Accounts extends Component
             'accountData.email' => ['required',
                 Rule::unique('users', 'email')->ignore($this->accountId),
                 'email'] ,
-            'accountData.birthday' => 'required'
+            'accountData.birthday' => 'required',
+            'roleId' => 'required'
         ];
         
 
@@ -64,8 +65,17 @@ class Accounts extends Component
         $this->validateOnly($propertyName);
     }
 
+    public function ifSelectedDefault()
+    {
+        if($this->roleId == 0){
+            $this->roleId = null;
+        }
+    }
+
     public function create()
     {
+        $this->ifSelectedDefault();
+        // if($this->accountData['type'])
         $this->validate();
         $this->accountData['type'] = $this->roleId;
         $this->accountData['permission_id'] = $this->permissionId;

@@ -78,7 +78,7 @@
                                                     <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
                                                 </div>
                                                 <select class="custom-select" wire:model.lazy="contractData.status">
-                                                    <option value="0">Chọn trạng thái</option>
+                                                    <option>Chọn trạng thái</option>
                                                     @foreach ($this->contractStatus as $status)
                                                         <option value="{{$loop->index}}">{{ $status }}</option>
                                                     @endforeach
@@ -95,7 +95,7 @@
                                                     <label class="input-group-text" for="inputGroupSelect01">Giữ chỗ</label>
                                                 </div>
                                                 <select class="custom-select" wire:model.lazy="contractData.status_created_by">
-                                                    <option value="0">Chọn giữ chỗ</option>
+                                                    <option>Chọn giữ chỗ</option>
                                                     @foreach($this->contractStatusCreated as $item)
                                                         <option value="{{$loop->index}}">{{$item}}</option>
                                                     @endforeach
@@ -976,7 +976,7 @@
                                             <div class="input-group-prepend">
                                                 <label class="input-group-text" for="inputGroupSelect01">Bộ phận</label>
                                             </div>
-                                            <select class="custom-select" wire:model.lazy="juridicalData.book_holder">
+                                            <select class="custom-select" wire:model="juridicalData.book_holder">
                                                 <option>Chọn bộ phận</option>
                                                 @foreach ($this->bookHolder as $role)
                                                     <option value="{{$loop->index}}">{{ $role }}</option>

@@ -16,6 +16,7 @@ use App\Models\Juridical;
 use App\Enums\ContractStatusCreated;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\RequiredIf;
 
 class Customers extends Component
 {
@@ -64,6 +65,7 @@ class Customers extends Component
             'contractData.contract_no' => ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)],
             'contractData.type' => 'required',
             'contractData.status' => 'required',
+            'contractData.status_created_by' => new RequiredIf($this->contractData['status'] != 2) ,
             'contractData.lot_number' => 'required',
             'contractData.area_signed' => 'required|max:4',
             'contractData.value' => 'required',
@@ -80,9 +82,7 @@ class Customers extends Component
             'customerData.phone' => ['required','min:10','max:12'],
 
         ];
-        if($this->selectStatus == 3){
-            $rules['contractData.status_created_by'] = 'required';
-        }
+        
         return $rules;
     }
 
@@ -94,6 +94,7 @@ class Customers extends Component
             'contractData.contract_no.unique' => 'Mã hợp đồng đã tồn tại',
             'contractData.type.required' => 'Không thể để trống loại hợp đồng',
             'contractData.status.required' => 'Không thể để trống trạng thái',
+            'contractData.status_created_by.required' => 'Không thể để trống giữ chỗ',
             'contractData.lot_number.required' => 'Không thể để mã lô',
             'contractData.area_signed.required' => 'Không thể để trống diện tích ký',
             'contractData.area_signed.max' => 'Diện tích ký quá lớn',
@@ -116,10 +117,33 @@ class Customers extends Component
         ];
     }
 
+    public function ifSelectedDefault()
+    {
+        if(isset($this->contractData['status']) && $this->contractData['status'] == "Chọn trạng thái"){
+            $this->contractData['status'] = null;
+        }
+        if(isset($this->contractData['status_created_by']) && $this->contractData['status_created_by'] == "Chọn giữ chỗ"){
+            $this->contractData['status_created_by'] = null;
+        }
+        if(isset($this->contractData['project_id']) && $this->contractData['project_id'] == 0){
+            $this->contractData['project_id'] = null;
+        }
+    }
+
+    public function ifDatedDefault()
+    {
+        if(isset($this->paymentData['payment_date_95']) && $this->paymentData['payment_date_95'] == ""){
+            $this->paymentData['payment_date_95'] = null;
+        }
+        if(isset($this->contractData['signed_date']) && $this->contractData['signed_date'] == ""){
+            $this->contractData['signed_date'] = null;
+        }
+    }
 
     public function create()
     {
-        
+        $this->ifSelectedDefault();
+        $this->ifDatedDefault();
         $this->validate();
 
         $customer = ModelsCustomers::create($this->customerData);
@@ -140,6 +164,8 @@ class Customers extends Component
 
     public function update()
     {
+        $this->ifDatedDefault();
+        $this->ifSelectedDefault();
         $this->validate();
         ModelsCustomers::find($this->customerId)->update($this->customerData);
         $this->dataUpdated = ModelsCustomers::find($this->customerId)->toArray();
