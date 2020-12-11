@@ -94,7 +94,7 @@ class Accounts extends Component
 
     public function update()
     {
-        
+        $this->ifSelectedDefault();
         $this->accountData['type'] = $this->roleId;
         $this->accountData['permission_id'] = $this->permissionId;
         

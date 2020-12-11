@@ -141,7 +141,11 @@
                                         <td>{{$account->email}}</td>
                                         <td>
                                             @if(isset($account->type))
-                                            {{App\Models\Role::find($account->type)->name}}
+                                            @if($account->type != 0)
+                                            {{(App\Models\Role::find($account->type))->name}}
+                                            @else
+                                            <span class='text-danger'>Trống phòng ban</span>
+                                            @endif
                                             @endif
                                             @if(App\Models\Permission::find($account->permission_id) !== null)
                                                     - {{App\Models\Permission::find($account->permission_id)->name}}
