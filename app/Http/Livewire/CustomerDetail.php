@@ -77,7 +77,7 @@ class CustomerDetail extends Component
             'customerData.cmnd' => ['required', Rule::unique('customers', 'cmnd')->ignore($this->customerId)],
             'customerData.address' => 'required',
             'customerData.household' => 'required',
-            'customerData.birthday' => 'required',
+            'customerData.birthday' => 'required|date_format:yy-m-d',
             'customerData.phone' => 'required|min:10|max:12',
         ];
 
@@ -89,15 +89,15 @@ class CustomerDetail extends Component
                     'payment_progress' => 'required' ,
                 ];
             }
-            // $rules['contractData.contract_no'] = ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)];
-            // $rules['contractData.type'] = ['required',];
-            // $rules['contractData.status'] = ['required',];
-            // $rules['contractData.lot_number'] = ['required',];
-            // $rules['contractData.area_signed'] = 'required|max:4';
+            $rules['contractData.contract_no'] = ['required', Rule::unique('contracts', 'contract_no')->ignore($this->contractId)];
+            $rules['contractData.type'] = ['required',];
+            $rules['contractData.status'] = ['required',];
+            $rules['contractData.lot_number'] = ['required',];
+            $rules['contractData.area_signed'] = 'required|max:4';
 
-            // $rules['contractData.value'] = ['required', ];
-            // $rules['contractData.project_id'] = ['required',];
-            // $rules['contractData.signed_date'] = 'required|date_format:yy-m-d';
+            $rules['contractData.value'] = 'required';
+            $rules['contractData.project_id'] = 'required';
+            $rules['contractData.signed_date'] = 'required|date_format:yy-m-d';
 
         }
 
@@ -116,7 +116,7 @@ class CustomerDetail extends Component
             $rules['billlateData.citation_rate'] = 'required';
             $rules['billlateData.number_notifi'] = 'required';
             $rules['billlateData.document'] = 'required';
-            $rules['billlateData.receipt_date'] = 'required';
+            $rules['billlateData.receipt_date'] = 'required|date_format:yy-m-d';
         }
 
         if($this->modalShowJuridicalVisible == true)
@@ -127,6 +127,7 @@ class CustomerDetail extends Component
                 'juridicalData.registration_procedures' => 'required',
                 'juridicalData.book_holder' => 'required',
                 'juridicalData.contract_id' => 'required',
+                'juridicalData.notarized_date' => 'nullable'
             ];
         }
 
@@ -275,7 +276,8 @@ class CustomerDetail extends Component
         $this->contractData = [
             'signed' => false ,
             'status_created_by' => null,
-            'status' => null
+            'status' => null,
+            'project_id' => 0
         ];
         // $this->payment_date_95 = null;
         // $this->payment_progress = null;
@@ -288,7 +290,7 @@ class CustomerDetail extends Component
             $this->payment_date_95 = null;
         }
         if($this->contractData['project_id'] == 0){
-            $this->contractData['project_id'] == null;
+            $this->contractData['project_id'] = null;
         }
         $this->contractData['customer_id'] = $this->customerId;
         $this->validate();
@@ -343,6 +345,16 @@ class CustomerDetail extends Component
 
     public function createJuridical()
     {
+        if($this->juridicalData['notarized_date'] == ""){
+            $this->juridicalData['notarized_date'] = null;
+        }
+        if($this->juridicalData['delivery_book_date'] == ""){
+            $this->juridicalData['delivery_book_date'] = null;
+        }
+        if($this->juridicalData['delivery_land_date'] == ""){
+            $this->juridicalData['delivery_land_date'] = null;
+        }
+        
         $this->juridicalData['contract_id'] = $this->contractId;
         $this->juridicalData['liquidation'] = true;
         $this->validate();
@@ -392,7 +404,7 @@ class CustomerDetail extends Component
     {
         $this->validate([
             'paymentData.payment_progress' => 'required',
-            'paymentData.payment_date_95' => 'date_format:yy-m-d|nullable' ,
+            'paymentData.payment_date_95' => 'date_format:yy-m-d|nullable'
         ]);
         Payment::find($this->paymentId)->update($this->paymentData);
         if($this->billlateId != null){

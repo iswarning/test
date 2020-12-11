@@ -5,6 +5,7 @@
 </x-slot>
 <div>
     <section>
+        
         <div class="container">
             <p></p>
             <div>
@@ -152,7 +153,7 @@
                                                 <div class="input-group-prepend">
                                                     <label class="input-group-text" for="inputGroupSelect01">Dự án</label>
                                                 </div>
-                                                <select class="custom-select" wire:model.lazy="contractData.project_id">
+                                                <select class="custom-select" wire:model="contractData.project_id">
                                                     <option value="0">Chọn dự án</option>
                                                     @foreach($this->projectData as $project)
                                                         <option value="{{$project->id}}">{{$project->name}}</option>

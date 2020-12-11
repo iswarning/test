@@ -6,7 +6,6 @@
 <div>
     <section>
 
-
         <div class="container">
 
             <div class="row">
@@ -142,7 +141,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <x-jet-label for="area_signed" value="{{ __('Diện tích ký') }}" />
-                                                    <x-jet-input autocomplete="off" id="area_signed" class="block mt-1 w-full" type="text" wire:model.lazy="contractData.area_signed" />
+                                                    <x-jet-input autocomplete="off" id="area_signed" class="block mt-1 w-full" type="number" wire:model.lazy="contractData.area_signed" />
                                                     @error('contractData.area_signed')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @endError

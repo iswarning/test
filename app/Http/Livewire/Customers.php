@@ -65,7 +65,7 @@ class Customers extends Component
             'contractData.type' => 'required',
             'contractData.status' => 'required',
             'contractData.lot_number' => 'required',
-            'contractData.area_signed' => ['required', 'numeric'],
+            'contractData.area_signed' => 'required|max:4',
             'contractData.value' => 'required',
             'contractData.project_id' => 'required',
             'contractData.signed_date' => 'required',
@@ -96,6 +96,7 @@ class Customers extends Component
             'contractData.status.required' => 'Không thể để trống trạng thái',
             'contractData.lot_number.required' => 'Không thể để mã lô',
             'contractData.area_signed.required' => 'Không thể để trống diện tích ký',
+            'contractData.area_signed.max' => 'Diện tích ký quá lớn',
             'contractData.value.required' => 'Không thể để trống giá bán',
             'contractData.project_id.required' => 'Không thể để trống dự án',
             'contractData.signed_date.required' => 'Không thể để trống ngày ký',
@@ -118,6 +119,7 @@ class Customers extends Component
 
     public function create()
     {
+        
         $this->validate();
 
         $customer = ModelsCustomers::create($this->customerData);
