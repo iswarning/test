@@ -14,10 +14,7 @@ class LoginController extends Controller
     }
 
     public function postLogin(Request $request){
-        $log = [
-            'email'=>$request->email,
-            'password'=>$request->password
-        ];
+        $log = $request->only(['email','password']);
 
         if(Auth::attempt($log))
         {

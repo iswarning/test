@@ -12,6 +12,7 @@ class Projects extends Component
     public $modalShowProjectVisible = false;
     public $confirmDeleteVisible = false;
     public $projectData = [];
+    
 
     public function rules()
     {

@@ -55,6 +55,7 @@ class Accounts extends Component
             'accountData.password.required' => 'Không thể để trống mật khẩu',
             'accountData.password.min' => 'Mật khẩu có ít nhất 8 ký tự',
             'accountData.birthday.required' => 'Không thể để trống ngày sinh',
+            'roleId.required' => 'Không thể để trống phòng ban'
         ];
     }
 

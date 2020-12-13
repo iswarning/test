@@ -30,7 +30,12 @@ Route::group(['middleware' =>
     Route::get('/account/{id}', AccountDetail::class)->name('accountDetail');
     Route::get('/projects', Projects::class)->name('projects');
     Route::get('/download', [CustomerDetail::class , 'downloadPDF'])->name('download');
+    Route::get('/layout', function () {
+        return view('layout');
+    });
 });
+
+
 
 
 Route::get('/', [LoginController::class, 'login'])->name('login');
