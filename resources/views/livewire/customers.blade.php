@@ -12,7 +12,21 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3>Danh sách khách hàng</h3>
+                            <div class="float-left">
+                                <h3 >Danh sách khách hàng </h3>
+                                <small class='badge badge-secondary'>
+                                    {{ count(App\Models\Customers::all()) }}
+                                    khách hàng và
+                                    {{ count(App\Models\Contracts::all()) }}
+                                    hợp đồng
+                                </small>
+                            </div>
+                            
+                            <div class="float-right">
+                                @if(Auth::user()->type == 1)
+                                    <x-jet-button wire:click="export">Xuất file</x-jet-button>
+                                @endif
+                            </div>
                         </div>
                         <div class="card-body">
                             <div>
@@ -23,7 +37,28 @@
                                 @endif
                             </div>
                             <div class="flex items-center justify-between mt-1 w-full">
-                                <x-jet-input autocomplete="off" id="searchInput" class="block mt-1 w-50" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model="keyWord" autofocus />
+                                <style>
+                                    #searchInput{
+                                        width: 30%;
+                                    }
+                                    #project{
+                                        width: 20%;
+                                    }
+                                </style>
+                                <x-jet-input autocomplete="off" id="searchInput" class="block mt-1" type="text" name="searchInput" placeholder="Tìm kiếm" wire:model="keyWord" autofocus />
+                                <div id='project'>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">Dự án</label>
+                                        </div>
+                                        <select class="custom-select" wire:model="selectProject">
+                                            <option value="0">Chọn dự án</option>
+                                            @foreach (App\Models\Project::all() as $project)
+                                                <option value="{{$project->id}}">{{ $project->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                                 @if(Auth::user()->type == 1)
                                     @if($dataTableCustomerVisible == true)
                                     <x-jet-button wire:click="historyShowList"> {{ __('Lịch sử chỉnh sửa') }} </x-jet-button>
@@ -31,6 +66,7 @@
                                     <x-jet-button wire:click="customerShowList"> {{ __('Danh sách khách hàng') }} </x-jet-button>
                                     @endif
                                 @endif
+                                
                                 @if(Auth::user()->type == 1 or Auth::user()->type == 2)
                                     <x-jet-button wire:click="createShowModal"> {{ __('Thêm khách hàng') }} </x-jet-button>
                                 @endif
@@ -305,7 +341,7 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Từ</label>
-                                            <x-jet-input autocomplete="off" type="text" id="selectTimeFrom" class='w-52' placeholder="Chọn ngày..." wire:model="selectTimeFrom"/>
+                                            <x-jet-input autocomplete="off" type="text" id="selectTimeFrom" class='w-52' placeholder="Chọn ngày tạo hợp đồng" wire:model="selectTimeFrom"/>
                                         </div>
 
                                     </div>
@@ -314,7 +350,7 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Đến</label>
-                                            <x-jet-input autocomplete="off" type="text" id="selectTimeTo" class='w-52' placeholder="Chọn ngày..." wire:model="selectTimeTo"/>
+                                            <x-jet-input autocomplete="off" type="text" id="selectTimeTo" class='w-52' placeholder="Chọn ngày tạo hợp đồng" wire:model="selectTimeTo"/>
                                         </div>
                                     </div>
                                 </div>
@@ -324,14 +360,14 @@
                                 <table class="table table-striped" wire:model.lazy="dataTableCustomerVisible">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Tên</th>
+                                            {{-- <th>ID</th> --}}
+                                            <th>Họ và Tên</th>
                                             <th>CMND</th>
                                             <th>Dự Án</th>
                                             <th>Mã Lô</th>
                                             <th>Tình trạng</th>
                                             <th>Tiến độ</th>
-                                            <th>Ngày bàn giao</th>
+                                            <th>Trạng thái</th>
                                             <th class="text-center">Sửa</th>
                                             <th class="text-center">Xóa</th>
                                         </tr>
@@ -344,7 +380,7 @@
 
                                                 @else
                                             <tr>
-                                                <td>{{$customer->customerID}}</td>
+                                                {{-- <td>{{$customer->customerID}}</td> --}}
                                                 <td>
                                                     <a class="text-indigo-600 hover:text-indigo-900" href="{{ URL::to('/customer/'.$customer->customerID)}}">
                                                         {{ $customer->customerName }}
@@ -356,10 +392,14 @@
                                                 <td>{{$this->contractStatus[$customer->contractStatus]}}</td>
                                                 <td>{{$customer->payment_progress}}</td>
 
-                                                @if(App\Models\Juridical::where('contract_id', $customer->contractID)->first() != null)
-                                                    <td>{{(App\Models\Juridical::where('contract_id', $customer->contractID)->first())->delivery_book_date}}</td>
+                                                @if(App\Models\BillLate::where('payment_id',$customer->paymentId)->first())
+                                                    <td>
+                                                        <a href='{{ route('customerDetail', $customer->customerID) }}' wire:click="status({{ $customer->customerID }})">Trễ hạn</a>
+                                                    </td>
                                                 @else
-                                                    <td></td>
+                                                <td>
+                                                    <a href='{{ route('customerDetail' , $customer->customerID) }}' wire:click="status({{ $customer->customerID }})">Đúng hạn</a>
+                                                </td>
                                                 @endif
 
 
@@ -427,6 +467,7 @@
 </div>
 
 <script>
+        
 
         $('#birthday').datepicker({ 
             yearRange: "-100:+0" ,

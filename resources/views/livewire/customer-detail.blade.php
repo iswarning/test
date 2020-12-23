@@ -21,9 +21,9 @@
                 <div class="row">
                     <div class="col-md-7"></div>
                     <div class="col-md-2">
-                        @if(Auth::user()->type == 1)
+                        {{-- @if(Auth::user()->type == 1)
                             <x-jet-button wire:click="export">Xuất file</x-jet-button>
-                        @endif
+                        @endif --}}
                     </div>
                     <div class="col-md-3">
                         
@@ -991,7 +991,7 @@
 
                                 <div class="row mt-4">
                                     <div class="col-md-6">
-                                        <x-jet-label for="bill_profile" value="{{ __('Hồ sơ thu lai của khách hàng') }}" />
+                                        <x-jet-label for="bill_profile" value="{{ __('Hồ sơ thu lại của khách hàng') }}" />
                                         <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="juridicalData.bill_profile" id="bill_profile" autocomplete="off"/>
 
                                     </div>

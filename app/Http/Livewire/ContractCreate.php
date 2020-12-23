@@ -23,7 +23,7 @@ class ContractCreate extends Component
     public $contractStatusCreated = [];
     public $paymentData = [];
     
-    // public $modalShowContractVisible = true;
+    public $modalShowContractVisible = false;
 
     public function rules()
     {
@@ -60,8 +60,9 @@ class ContractCreate extends Component
     public function mount($customerId)
     {
         $this->customerId = $customerId;
-        $this->contractStatus = ContractStatus::statusName;
-        $this->contractStatusCreated = ContractStatusCreated::statusName;
+        
+        // dd($this->contractStatus);
+        
     }
 
     public function render()
@@ -71,34 +72,32 @@ class ContractCreate extends Component
         ]);
     }
 
-    public function createShowModalContract()
+    public function createShowContract()
     {
-        // dd($this->customerId);
-        // $this->reset();
-        $this->contractId = null;
-        $this->contractData = [
-            'signed' => false ,
-            'status_created_by' => null,
-            'status' => null
-        ];
-        $this->payment_date_95 = null;
-        $this->payment_progress = null;
+        $this->reset();
+        $this->contractStatus = ContractStatus::statusName;
+        $this->contractStatusCreated = ContractStatusCreated::statusName;
         $this->modalShowContractVisible = true;
-        dd($this->modalShowContractVisible);
     }
 
     public function createContract()
     {
+        
+        // $this->ifSelectedDefault();
+        // $this->ifDatedDefault();
         $this->contractData['customer_id'] = $this->customerId;
         $this->validate();
-        $contract = Contracts::create($this->contractData);
-        if(isset($contract)){
-            $this->paymentData['payment_status'] = 0;
-            $this->contractId = $contract->id;
-            $this->paymentData['contract_id'] = $this->contractId;
-            Payment::create($this->paymentData);
+        $contracts = Contracts::create($this->contractData);
+        
+        if($contracts){
+            Payment::create([
+                'payment_progress' => $this->paymentData['payment_progress'] ,
+                'payment_date_95' => $this->paymentData['payment_date_95'] ,
+                'contract_id' => $contracts->id ,
+                'payment_status' => 0
+            ]);
         }
-        // $this->modalShowContractVisible = false;
+        $this->modalShowContractVisible = false;
         session()->flash('message', 'Tạo hợp đồng thành công!');
     }
 }

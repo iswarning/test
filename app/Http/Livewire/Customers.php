@@ -17,6 +17,8 @@ use App\Enums\ContractStatusCreated;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\RequiredIf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CustomerExport; 
 
 class Customers extends Component
 {
@@ -34,6 +36,7 @@ class Customers extends Component
     public $modalFormContractVisible = false;
     public $customerData = [];
     public $historyData = [];
+    public $customerExport = [];
     protected $paginationTheme = 'bootstrap';
 
     // History
@@ -45,6 +48,7 @@ class Customers extends Component
     public $selectTimeTo;
     public $selectBill;
     public $selectStatus;
+    public $selectProject = 0;
 
 
     public $projectData = [];
@@ -150,7 +154,7 @@ class Customers extends Component
         $this->contractData['customer_id'] = $customer->id;
         
         $contract = Contracts::create($this->contractData);
-        if($this->paymentData['payment_date_95'] == ""){
+        if(isset($this->paymentData['payment_date_95']) && $this->paymentData['payment_date_95'] == ""){
             $this->paymentData['payment_date_95'] = null;
         }
         $this->paymentData['contract_id'] = $contract->id;
@@ -239,24 +243,30 @@ class Customers extends Component
             // dd($this->selectTimeTo);
         }
 
+        if($this->selectProject != 0){
+            $customers->where('contracts.project_id','=', $this->selectProject);
+        }
+
         // if($this->selectTimeFrom != null && $this->selectTimeTo != null && $this->selectTimeFrom == $this->selectTimeTo)
         // {
         //     $customers->where('contracts.created_at','>', $this->selectTimeTo);
         // }
         
         
+        $customerExport = $customers->select('*',
+            'projects.name as projectName',
+            'customers.name as customerName',
+            'customers.id as customerID',
+            'contracts.id as contractID',
+            'contracts.status as contractStatus' ,
+            'contracts.created_at as contractCreated',
+            'payments.id as paymentId',
+        );
 
+        $this->customerExport = $customerExport->paginate(20)->toArray();
+        // dd($this->customerExport);
         return view('livewire.customers', [
-            'customers' => $customers
-                ->select('*',
-                    'projects.name as projectName',
-                    'customers.name as customerName',
-                    'customers.id as customerID',
-                    'contracts.id as contractID',
-                    'contracts.status as contractStatus' ,
-                    'contracts.created_at as contractCreated'
-                )
-                ->paginate($this->recordNum),
+            'customers' => $customerExport->paginate($this->recordNum),
             'projects' => Project::all() ,
             'histories' => History::orderBy('id','desc')->paginate(20) ,
         ]);
@@ -357,4 +367,18 @@ class Customers extends Component
         $this->modalFormContractVisible = false;
     }
 
+    public function export(){
+        // dd($this->customerExport);
+        return Excel::download(new CustomerExport($this->customerExport), 'customers.xlsx');
+    }
+
+    public function status($id)
+    {
+        $this->emit('customerDetail', $id);
+    }
+
+    public function exportPDF()
+    {
+           
+    }
 }

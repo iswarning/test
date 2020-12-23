@@ -371,7 +371,7 @@ class CustomerDetail extends Component
         if(isset($this->payment_date_95) && $this->payment_date_95 == ""){
             $this->payment_date_95 = null;
         }
-        if(isset($this->contractData['signed_date']) && $this->juridicalData['signed_date'] == ""){
+        if(isset($this->contractData['signed_date']) && $this->contractData['signed_date'] == ""){
             $this->contractData['signed_date'] = null;
         }
         if(isset($this->juridicalData['notarized_date']) && $this->juridicalData['notarized_date'] == ""){
