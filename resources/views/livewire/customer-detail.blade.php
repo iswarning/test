@@ -201,16 +201,16 @@
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link {{ $tab == 'customer' ? 'active' : '' }}" wire:click="$set('tab', 'customer')" href="#">Thông tin</a>
+                    <a class="nav-link {{ $tab == 'customer' ? 'active' : '' }}" wire:click="$set('tab', 'customer')" href="#customer">Thông tin</a>
                 </li>
                 @foreach($contract as $key => $item)
                     <li class="nav-item">
-                        <a class="nav-link {{ $tab == 'contract'.$key.'' ? 'active' : '' }}" wire:click="tabChange('contract{{$key}}', {{$item->id}})" href="#">Hợp đồng {{$item->contract_no}}</a>
+                        <a class="nav-link {{ $tab == 'contract'.$item->id.'' ? 'active' : '' }}" href="#contract{{ $item->id }}" wire:click="tabChange('contract{{$item->id}}', {{$item->id}})" >Hợp đồng {{$item->contract_no}}</a>
                     </li>
                 @endforeach
             </ul>
             @if($tab == 'customer')
-                <div class="tab-pane container">
+                <div class="tab-pane container" id='customer'>
 
                     {{--                Thong tin khach hang--}}
                     <p></p>
@@ -355,8 +355,8 @@
 
             <p></p>
             @foreach($contract as $key => $row)
-                @if($tab == 'contract'.$key.'')
-                    <div class="tab-pane container">
+                @if($tab == 'contract'.$row->id.'')
+                    <div class="tab-pane container" id='contract{{ $key }}'>
 
                         {{-- @livewire('contract.contract-detail', ['id' => $row->id], key($row->id)) --}}
                         

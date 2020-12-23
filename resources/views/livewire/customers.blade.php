@@ -375,14 +375,14 @@
                                     <tbody>
 
 
-                                        @foreach ($customers as $customer)
+                                        @foreach ($customers as $key => $customer)
                                             @if($customer->contractStatus == 2 && Auth::user()->type == 3)
 
                                                 @else
                                             <tr>
                                                 {{-- <td>{{$customer->customerID}}</td> --}}
                                                 <td>
-                                                    <a class="text-indigo-600 hover:text-indigo-900" href="{{ URL::to('/customer/'.$customer->customerID)}}">
+                                                    <a class="text-indigo-600 hover:text-indigo-900" href="{{ URL::to('customer/'.$customer->customerID.'?tab=contract'.$customer->contractID.'&&contractId='.$customer->contractID) }}">
                                                         {{ $customer->customerName }}
                                                     </a>
                                                 </td>
@@ -392,17 +392,17 @@
                                                 <td>{{$this->contractStatus[$customer->contractStatus]}}</td>
                                                 <td>{{$customer->payment_progress}}</td>
 
-                                                @if(App\Models\BillLate::where('payment_id',$customer->paymentId)->first())
+                                                
                                                     <td>
-                                                        <a href='{{ route('customerDetail', $customer->customerID) }}' wire:click="status({{ $customer->customerID }})">Trễ hạn</a>
+                                                        
+                                                        <a href="{{ URL::to('customer/'.$customer->customerID.'?tab=contract'.$customer->contractID.'&&contractId='.$customer->contractID) }}" >
+                                                            @if(App\Models\BillLate::where('payment_id',$customer->paymentId)->first())
+                                                            Trễ hạn
+                                                            @else
+                                                            Đúng hạn
+                                                            @endif
+                                                        </a>
                                                     </td>
-                                                @else
-                                                <td>
-                                                    <a href='{{ route('customerDetail' , $customer->customerID) }}' wire:click="status({{ $customer->customerID }})">Đúng hạn</a>
-                                                </td>
-                                                @endif
-
-
                                                 @if(Auth::user()->type != 3)
                                                     <td><x-jet-button class="ml-2" wire:click="updateShowModal({{ $customer->customerID }},{{$customer->contractID}})"> {{ __('Sửa') }} </x-jet-button></td>
                                                     <td><x-jet-button class="ml-2" wire:click="confirmDelete({{$customer->contractID}})"> {{ __('Xóa') }} </x-jet-button></td>

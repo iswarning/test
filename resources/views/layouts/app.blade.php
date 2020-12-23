@@ -71,7 +71,6 @@ input[type=number] {
 
     @livewireScripts
     
-    
 
 </body>
 

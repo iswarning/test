@@ -23,6 +23,7 @@ use Illuminate\Validation\Rules\RequiredIf;
 
 use App\Exports\CustomerPDF;
 use App\Exports\CustomerExport;
+use Illuminate\Http\Request;
 
 
 
@@ -53,10 +54,13 @@ class CustomerDetail extends Component
     public $contractInfo = [];
     public $bookHolder = [];
 
+    // protected $listeners = ['tabChange'];
     public $customerData = [];
     public $paymentData = [
         'payment_status' => 0
     ];
+    public $tabs;
+    public $conId;
     public $projectData = [];
     public $billlateData = [];
     public $juridicalData = [
@@ -70,6 +74,14 @@ class CustomerDetail extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $tab = 'customer';
+    protected $listeners = [
+        'receive'
+    ];
+    
+    public function receive($tab, $id)
+    {
+        $this->tabChange($tab, $id);
+    }
 
     public function rules()
     {
@@ -183,8 +195,15 @@ class CustomerDetail extends Component
         ];
     }
 
-    public function mount($id)
+    public function mount($id, Request $request)
     {
+        // dd($id, $request->tab, $request->contractId);
+        if($request->has(['tab','contractId'])){
+            $this->tabChange($request->tab, $request->contractId);
+        }
+        // $this->receive();
+        // $this->tabChange('contract1', 1);
+        // dd($id, $tab, $contractId);
         $this->customerId = $id;
         $this->customerData = Customers::find($this->customerId)->toArray();
         // Get project data for dropdown
