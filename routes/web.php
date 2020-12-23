@@ -6,10 +6,12 @@ use App\Http\Livewire\CustomerDetail;
 use App\Http\Livewire\AccountDetail;
 use App\Http\Livewire\Projects;
 use App\Http\Livewire\Customers;
+use App\Models\Customers as CustomerData;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CustomerDetailController;
+// use PDF;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,7 +36,12 @@ Route::group(['middleware' =>
 });
 
 
-
+Route::get('/render', function(){
+    return view('exportPDF', [
+        'data' => CustomerData::get()
+    ]);
+})->name('render');
+Route::get('/pdf', [Customers::class, 'exportPDF'])->name('pdf');
 
 Route::get('/', [LoginController::class, 'login'])->name('login');
 Route::post('/', [LoginController::class, 'postLogin'])->name('postLogin');

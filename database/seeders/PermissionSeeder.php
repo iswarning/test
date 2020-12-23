@@ -15,37 +15,37 @@ class PermissionSeeder extends Seeder
     {
         // Kế Toán
         Permission::create([
-            'name' => 'Kế Toán Trưởng',
+            'name' => 'Kế toán trưởng',
             'role_id' => 2
         ]);
         Permission::create([
-            'name' => 'Thủ Quỹ',
+            'name' => 'Thủ quỹ',
             'role_id' => 2
         ]);
         Permission::create([
-            'name' => 'Kế Toán Hợp Đồng',
+            'name' => 'Kế toán hợp đồng',
             'role_id' => 2
         ]);
         Permission::create([
-            'name' => 'Kế Toán Nội Bộ',
+            'name' => 'Kế toán nội bộ',
             'role_id' => 2
         ]);
         Permission::create([
-            'name' => 'Kế Toán Công Nợ',
+            'name' => 'Kế toán công nợ',
             'role_id' => 2
         ]);
         Permission::create([
-            'name' => 'Kế Toán Thuế',
+            'name' => 'Kế toán thuế',
             'role_id' => 2
         ]);
 
         // Pháp Lý
         Permission::create([
-            'name' => 'Trưởng Phòng Pháp Lý',
+            'name' => 'Trưởng phòng pháp lý',
             'role_id' => 3
         ]);
         Permission::create([
-            'name' => 'Nhân Viên Pháp Lý',
+            'name' => 'Nhân viên pháp lý',
             'role_id' => 3
         ]);
     }

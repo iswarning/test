@@ -57,9 +57,9 @@
                                             </div>
                                             <div class="col-md-6">
                                                     @if(!$accountId)
-                                                    <x-jet-label for="password" value="{{ __('Mật Khẩu') }}" />
+                                                    <x-jet-label for="password" value="{{ __('Mật khẩu') }}" />
                                                     @else
-                                                    <x-jet-label for="password" value="{{ __('Mật Khẩu Mới') }}" />
+                                                    <x-jet-label for="password" value="{{ __('Mật khẩu mới') }}" />
                                                     @endif
                                                     <x-jet-input id="password" class="block mt-1 w-full" type="password" wire:model.lazy="accountData.password" autocomplete="off"/>
                                                     @error('accountData.password')
@@ -119,14 +119,14 @@
                                 </x-jet-dialog-modal>
                             </div>
                             <br>
-                            <table class="table table-striped table-responsive">
+                            <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Họ và Tên</th>
+                                        <th>Họ và tên</th>
                                         <th>Email</th>
-                                        <th>Phòng Ban - Vị trí</th>
-                                        <th>Ngày Sinh</th>
+                                        <th>Phòng ban - vị trí</th>
+                                        <th>Ngày sinh</th>
                                         <th class="text-center">Sửa</th>
                                         
                                         <th class="text-center">Xóa</th>
@@ -152,10 +152,10 @@
                                                 @endif
                                         </td>
                                         <td>{{$account->birthday}}</td>
-                                        <td>
+                                        <td class="text-center">
                                             <x-jet-button class="ml-2" wire:click="updateShowModal({{ $account->id }})"> {{ __('Sửa') }} </x-jet-button>                                           
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             @if($account->email != "admin@gmail.com" && $account->type != 1)
                                                 <x-jet-button wire:click="deleteShowModal({{$account->id}})">{{ __('Xóa') }}</x-jet-button>
                                             @endif

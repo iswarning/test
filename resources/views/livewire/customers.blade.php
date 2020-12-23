@@ -25,6 +25,7 @@
                             <div class="float-right">
                                 @if(Auth::user()->type == 1)
                                     <x-jet-button wire:click="export">Xuất file</x-jet-button>
+                                    {{-- <x-jet-button wire:click="exportPDF">PDF</x-jet-button> --}}
                                 @endif
                             </div>
                         </div>
@@ -361,10 +362,10 @@
                                     <thead>
                                         <tr>
                                             {{-- <th>ID</th> --}}
-                                            <th>Họ và Tên</th>
+                                            <th>Họ và tên</th>
                                             <th>CMND</th>
-                                            <th>Dự Án</th>
-                                            <th>Mã Lô</th>
+                                            <th>Dự án</th>
+                                            <th>Mã lô</th>
                                             <th>Tình trạng</th>
                                             <th>Tiến độ</th>
                                             <th>Trạng thái</th>

@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\RequiredIf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CustomerExport; 
+use PDF;
 
 class Customers extends Component
 {
@@ -381,6 +382,8 @@ class Customers extends Component
 
     public function exportPDF()
     {
-           
+        $data = Customers::get();
+        $pdf = PDF::loadView('exportPDF', ['data' => $data]);
+        return $pdf->download('tuts_notes.pdf');
     }
 }

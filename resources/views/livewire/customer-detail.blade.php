@@ -229,7 +229,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-1"></div>
-                                <h5 class="col-md-5"> Họ và Tên: </h5>
+                                <h5 class="col-md-5"> Họ và tên: </h5>
                                 <div class="col-md-1"></div>
                                 <label class="col-md-5">{{$customerData['name']}}</label>
                             </div><hr/>
@@ -243,21 +243,21 @@
 
                             <div class="row">
                                 <div class="col-md-1"></div>
-                                <h5 class="col-md-5"> Địa Chỉ: </h5>
+                                <h5 class="col-md-5"> Địa chỉ: </h5>
                                 <div class="col-md-1"></div>
                                 <label class="col-md-5">{{$customerData['address']}}</label>
                             </div><hr/>
 
                             <div class="row">
                                 <div class="col-md-1"></div>
-                                <h5 class="col-md-5"> Hộ Khẩu: </h5>
+                                <h5 class="col-md-5"> Hộ khẩu: </h5>
                                 <div class="col-md-1"></div>
                                 <label class="col-md-5">{{$customerData['household']}}</label>
                             </div><hr/>
 
                             <div class="row">
                                 <div class="col-md-1"></div>
-                                <h5 class="col-md-5"> Ngày Sinh: </h5>
+                                <h5 class="col-md-5"> Ngày sinh: </h5>
                                 <div class="col-md-1"></div>
                                 <label class="col-md-5">{{$customerData['birthday']}}</label>
                             </div><hr/>
@@ -396,7 +396,7 @@
 
                                 <div class="row">
                                     <div class="col-md-1"></div>
-                                    <h5 class="col-md-5"> Đã ký/ Chưa ký:: </h5>
+                                    <h5 class="col-md-5"> Đã ký/ Chưa ký: </h5>
                                     <div class="col-md-1"></div>
                                     <label class="col-md-5">@if($row->signed != 0) Đã ký @else Chưa ký @endif</label>
                                 </div><hr/>
@@ -853,7 +853,7 @@
 
                                     <div class="row">
                                         <div class="col-md-1"></div>
-                                        <h5 class="col-md-5"> Hồ sơ thu lai của khách hàng: </h5>
+                                        <h5 class="col-md-5"> Hồ sơ thu lại của khách hàng: </h5>
                                         <div class="col-md-1"></div>
                                         <label class="col-md-5">
                                             @if(!isset($juridicalData['bill_profile']))
