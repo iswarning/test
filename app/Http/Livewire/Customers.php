@@ -234,25 +234,17 @@ class Customers extends Component
        
         if($this->selectTimeFrom != null)
         {
-            $customers->where('contracts.created_at','>=', $this->selectTimeFrom . " 00:00:00");
-            // dd($this->selectTimeFrom);
-            // dd($this->selectTimeFrom);
+            $customers->where('contracts.signed_date','>=', $this->selectTimeFrom . " 00:00:00");
         }
         if($this->selectTimeTo != null)
         {
-            $customers->where('contracts.created_at','<=', $this->selectTimeTo . " 23:59:59");
+            $customers->where('contracts.signed_date','<=', $this->selectTimeTo . " 23:59:59");
             // dd($this->selectTimeTo);
         }
 
         if($this->selectProject != 0){
             $customers->where('contracts.project_id','=', $this->selectProject);
         }
-
-        // if($this->selectTimeFrom != null && $this->selectTimeTo != null && $this->selectTimeFrom == $this->selectTimeTo)
-        // {
-        //     $customers->where('contracts.created_at','>', $this->selectTimeTo);
-        // }
-        
         
         $customerExport = $customers->select('*',
             'projects.name as projectName',
@@ -272,14 +264,6 @@ class Customers extends Component
             'histories' => History::orderBy('id','desc')->paginate(20) ,
         ]);
     }
-
-    /**
-     * Show the form modal
-     * of the create function
-     *
-      * @return void
-     */
-
 
     public function createShowModal()
     {
@@ -380,10 +364,10 @@ class Customers extends Component
         $this->emit('customerDetail', $id);
     }
 
-    public function exportPDF()
-    {
-        $data = Customers::get();
-        $pdf = PDF::loadView('exportPDF', ['data' => $data]);
-        return $pdf->download('tuts_notes.pdf');
-    }
+    // public function exportPDF()
+    // {
+    //     $data = Customers::get();
+    //     $pdf = PDF::loadView('exportPDF', ['data' => $data]);
+    //     return $pdf->download('tuts_notes.pdf');
+    // }
 }

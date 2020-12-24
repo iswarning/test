@@ -342,7 +342,7 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Từ</label>
-                                            <x-jet-input autocomplete="off" type="text" id="selectTimeFrom" class='w-52' placeholder="Chọn ngày tạo hợp đồng" wire:model="selectTimeFrom"/>
+                                            <x-jet-input autocomplete="off" type="text" id="selectTimeFrom" class='w-52' placeholder="Chọn ngày ký" wire:model="selectTimeFrom"/>
                                         </div>
 
                                     </div>
@@ -351,7 +351,7 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Đến</label>
-                                            <x-jet-input autocomplete="off" type="text" id="selectTimeTo" class='w-52' placeholder="Chọn ngày tạo hợp đồng" wire:model="selectTimeTo"/>
+                                            <x-jet-input autocomplete="off" type="text" id="selectTimeTo" class='w-52' placeholder="Chọn ngày ký" wire:model="selectTimeTo"/>
                                         </div>
                                     </div>
                                 </div>
