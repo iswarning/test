@@ -22,7 +22,7 @@ use PDF;
 use Illuminate\Validation\Rules\RequiredIf;
 
 use App\Exports\CustomerPDF;
-use App\Exports\CustomerExport;
+use App\Exports\CustomerExportIn;
 use Illuminate\Http\Request;
 
 
@@ -528,13 +528,8 @@ class CustomerDetail extends Component
         session()->flash('message', 'Thêm thanh toán trễ hạn thành công');
     }
 
-    public function export(){
-        return Excel::download(new CustomerExport($this->customerData), 'customers.xlsx');
+    public function export()
+    {
+        return Excel::download(new CustomerExportIn($this->customerData), 'customers.xlsx');
     }
-//
-//   public function downloadPDF()
-//   {
-//       return PDF::download(new CustomerPDF($this->customerData) ,'customers.pdf');
-//
-//   }
 }

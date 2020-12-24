@@ -21,9 +21,9 @@
                 <div class="row">
                     <div class="col-md-7"></div>
                     <div class="col-md-2">
-                        {{-- @if(Auth::user()->type == 1)
+                        @if(Auth::user()->type == 1)
                             <x-jet-button wire:click="export">Xuất file</x-jet-button>
-                        @endif --}}
+                        @endif
                     </div>
                     <div class="col-md-3">
                         
