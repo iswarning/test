@@ -90,7 +90,7 @@ class CustomerDetail extends Component
             'customerData.cmnd' => ['required', Rule::unique('customers', 'cmnd')->ignore($this->customerId)],
             'customerData.address' => 'required',
             'customerData.household' => 'required',
-            'customerData.birthday' => 'required|date_format:yy-m-d',
+            'customerData.birthday' => 'required',
             'customerData.phone' => 'required|min:10|max:12',
         ];
 
@@ -111,7 +111,7 @@ class CustomerDetail extends Component
 
             $rules['contractData.value'] = 'required';
             $rules['contractData.project_id'] = 'required';
-            $rules['contractData.signed_date'] = 'required|date_format:yy-m-d';
+            $rules['contractData.signed_date'] = 'required';
 
         }
 
@@ -130,7 +130,7 @@ class CustomerDetail extends Component
             $rules['billlateData.citation_rate'] = 'required';
             $rules['billlateData.number_notifi'] = 'required';
             $rules['billlateData.document'] = 'required';
-            $rules['billlateData.receipt_date'] = 'required|date_format:yy-m-d';
+            $rules['billlateData.receipt_date'] = 'required';
         }
 
         if($this->modalShowJuridicalVisible == true)
@@ -463,7 +463,7 @@ class CustomerDetail extends Component
         // $this->ifSelectedDefault();
         $this->validate([
             'paymentData.payment_progress' => 'required',
-            'paymentData.payment_date_95' => 'date_format:yy-m-d|nullable'
+            'paymentData.payment_date_95' => 'nullable'
         ]);
         Payment::find($this->paymentId)->update($this->paymentData);
         if($this->billlateId != null){

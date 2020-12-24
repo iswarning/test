@@ -74,9 +74,15 @@
                                 <!-- Create and update customer modal -->
 
                                 <x-jet-dialog-modal wire:model.lazy="modalFormCustomerVisible">
+                                    @if(isset($customerId))
+                                    <x-slot name="title">
+                                        {{ __('Sửa khách hàng') }}
+                                    </x-slot>
+                                    @else
                                         <x-slot name="title">
                                             {{ __('Thêm khách hàng') }}
                                         </x-slot>
+                                        @endif
 
                                         <x-slot name="content">
                                             <div class="row">
@@ -147,10 +153,15 @@
 
                                 <x-jet-dialog-modal wire:model.lazy="modalFormContractVisible">
                                     <div wire:model.lazy="modalFormCustomerVisible">
+                                        @if(isset($customerId))
+                                        <x-slot name="title">
+                                            {{ __('Sửa hợp đồng') }}
+                                        </x-slot>
+                                        @else
                                         <x-slot name="title">
                                             {{ __('Thêm hợp đồng') }}
-                                        </x-slot>
-
+                                        </x-slot>   
+                                        @endif
                                         <x-slot name="content">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -207,7 +218,7 @@
                                                         <div class="input-group-prepend">
                                                             <label class="input-group-text" for="inputGroupSelect01">Giữ chỗ</label>
                                                         </div>
-                                                        <select class="custom-select" wire:model.lazy="contractData.status_created_by">
+                                                        <select class="custom-select" wire:model="contractData.status_created_by">
                                                             <option>Chọn giữ chỗ</option>
                                                             @foreach($this->contractStatusCreated as $item)
                                                                 <option value="{{$loop->index}}">{{$item}}</option>

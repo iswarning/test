@@ -55,11 +55,12 @@ class Customers extends Component
     public $projectData = [];
     public $paymentData = [];
     public $modalFormVisible = false;
-    public $contractStatus = ContractStatus::statusName;
+    public $contractStatus = [];
     public $contractStatusCreated = [];
     public $contractData = [
         'signed' => false ,
-        'status' => null
+        'status' => null,
+        'status_created_by' => null,
     ];
 
     public function rules()
@@ -87,6 +88,9 @@ class Customers extends Component
             'customerData.phone' => ['required','min:10','max:12'],
 
         ];
+        if($this->contractData['status'] == 2){
+            $rules['contractData.status_created_by'] = 'required';
+        }
         
         return $rules;
     }
@@ -172,6 +176,9 @@ class Customers extends Component
         $this->ifDatedDefault();
         $this->ifSelectedDefault();
         $this->validate();
+        if($this->contractData['status'] == 2){
+            $this->contractData['status_created_by'] = null;
+        }
         ModelsCustomers::find($this->customerId)->update($this->customerData);
         $this->dataUpdated = ModelsCustomers::find($this->customerId)->toArray();
         Contracts::find($this->contractId)->update($this->contractData);
@@ -265,11 +272,16 @@ class Customers extends Component
         ]);
     }
 
+    public function mount()
+    {
+        $this->contractStatus = ContractStatus::statusName;
+        $this->contractStatusCreated = ContractStatusCreated::statusName;
+    }
+
     public function createShowModal()
     {
         $this->reset();
-        $this->contractStatus = ContractStatus::statusName;
-        $this->contractStatusCreated = ContractStatusCreated::statusName;
+
         $this->modalFormContractVisible = false;
         $this->modalFormCustomerVisible = true;
 
@@ -277,12 +289,18 @@ class Customers extends Component
 
     public function updateShowModal($customer_id, $contract_id)
     {
+        // $this->reset();
         $this->dataNotUpdate = ModelsCustomers::find($customer_id)->toArray();
+        // $this->contractStatus = ContractStatus::statusName;
+        // $this->contractStatusCreated = ContractStatusCreated::statusName;
         $this->resetValidation();
         $this->customerId = $customer_id;
         $this->contractId = $contract_id;
         // dd($this->contractId);
         $this->customerData = ModelsCustomers::find($this->customerId)->toArray();
+        if(isset($this->customerData['status_created_by']) && $this->customerData['status_created_by'] == 0){
+            $this->customerData['status_created_by'] = null;
+        }
         $this->contractData = Contracts::find($this->contractId)->toArray();
         $this->paymentData = Payment::where('contract_id', $this->contractId)->first()->toArray();
         $this->modalFormCustomerVisible = true;
