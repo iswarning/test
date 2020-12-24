@@ -281,7 +281,8 @@ class Customers extends Component
     public function createShowModal()
     {
         $this->reset();
-
+        $this->contractStatus = ContractStatus::statusName;
+        $this->contractStatusCreated = ContractStatusCreated::statusName;
         $this->modalFormContractVisible = false;
         $this->modalFormCustomerVisible = true;
 

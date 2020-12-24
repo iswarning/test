@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CustomerDetailController;
+use App\Http\Controllers\TestController;
+
+
 // use PDF;
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +26,7 @@ use App\Http\Controllers\CustomerDetailController;
 |
 */
 
-
+Route::get('/test', [TestController::class, 'index']);
 Route::group(['middleware' =>
     'guest',
 ], function () {
