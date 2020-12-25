@@ -48,7 +48,7 @@ class CustomerExport implements FromCollection, WithHeadings
                 '1' => $item['cmnd'],
                 '2' => $item['projectName'],
                 '3' => $item['lot_number'],
-                '4' => $item['status'],
+                '4' => $this->contractStatus[$item['status']],
                 '5' => $item['payment_progress'],
                 '6' => Billlate::where('payment_id',$item['paymentId'])->first() ? "Trễ hạn" : "Đúng hạn",
             );

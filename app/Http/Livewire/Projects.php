@@ -25,9 +25,9 @@ class Projects extends Component
     public function messages()
     {
         return [
-            'name.required' => 'required' ,
-            'name.unique' => 'Tên dự án đã tồn tại' ,
-            'description.required' => 'required' ,
+            'projectData.name.required' => 'Không để trống tên' ,
+            'projectData.name.unique' => 'Tên dự án đã tồn tại' ,
+            'projectData.description.required' => 'Không để trống mô tả' ,
         ];
     }
 

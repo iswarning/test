@@ -50,6 +50,8 @@ class Customers extends Component
     public $selectBill;
     public $selectStatus;
     public $selectProject = 0;
+    public $countContract;
+    public $countCustomer;
 
 
     public $projectData = [];
@@ -260,19 +262,39 @@ class Customers extends Component
         }
         
         $customerExport = $customers->select('*',
+            
             'projects.name as projectName',
             'customers.name as customerName',
             'customers.id as customerID',
+            // 'COUNT(customers.id as countCustomer)',
             'contracts.id as contractID',
             'contracts.status as contractStatus' ,
             'contracts.created_at as contractCreated',
             'payments.id as paymentId',
         );
 
-        $this->customerExport = $customerExport->paginate(20)->toArray();
+        $dataRender = $customerExport->paginate($this->recordNum);
+        $this->customerExport = $dataRender->toArray();
+        $this->countContract = count($dataRender);
+        $this->countCustomer = count($dataRender);
+        // $this->countCustomer
+    //     // dd($dataRender[1]->customerID);
+    //     $count = 0;
+    //    for($i = 0; $i < count($this->customerExport); $i++)
+    //    {
+    //        $count++;
+    //        if($i != 0){
+    //            if($dataRender[$i]->customerID == $dataRender[$i-1]->customerID)
+    //             {
+    //                 $count--;
+    //             }
+    //        }
+           
+    //    }
+    //    $this->countCustomer = $count;
         // dd($this->customerExport);
         return view('livewire.customers', [
-            'customers' => $customerExport->paginate($this->recordNum),
+            'customers' => $dataRender,
             'projects' => Project::all() ,
             'histories' => History::orderBy('id','desc')->paginate(20) ,
         ]);

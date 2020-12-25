@@ -370,9 +370,9 @@ class CustomerDetail extends Component
 
     public function ifSelectedDefault()
     {
-        // if(isset($this->contractData['status']) && $this->contractData['status'] == "Chọn trạng thái"){
-        //     $this->contractData['status'] = null;
-        // }
+        if(isset($this->contractData['status']) && $this->contractData['status'] == "Chọn trạng thái"){
+            $this->contractData['status'] = null;
+        }
         if(isset($this->contractData['status_created_by']) && $this->contractData['status_created_by'] == "Chọn giữ chỗ"){
             $this->contractData['status_created_by'] = null;
         }

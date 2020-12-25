@@ -1,4 +1,7 @@
+
 <x-slot name="header">
+    {{-- {{ dump($customers) }} --}}
+    
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Quản lý khách hàng
     </h2>
@@ -15,10 +18,28 @@
                             <div class="float-left">
                                 <h3 >Danh sách khách hàng </h3>
                                 <small class='badge badge-secondary'>
-                                    {{ count(App\Models\Customers::all()) }}
+                                    @if(!empty($keyWord))
+                                        @foreach($customers as $k => $customer)
+                                            @if($k != 0)
+                                                @if($customers[$k]->customerID == $customers[$k-1]->customerID)
+                                                    {{ $this->countCustomer-- }}
+                                                @else
+                                                    {{ $this->countCustomer++ }}
+                                                @endif
+                                            @endif
+                                                
+                                        @endforeach
+                                    @endif
+                                    {{-- {{ count($customers->customerID) }} --}}
                                     khách hàng và
-                                    {{ count(App\Models\Contracts::all()) }}
+                                    {{$this->countContract }}
                                     hợp đồng
+                                    {{-- {{ $this->countCustomer }} --}}
+                                    {{-- {{ $this->countCustomer }} --}}
+                                    {{-- khách hàng và --}}
+                                    {{-- {{ $this->countContract }} --}}
+                                    {{-- {{$this->countContract }} --}}
+                                    {{-- hợp đồng --}}
                                 </small>
                             </div>
                             
@@ -401,7 +422,11 @@
                                                 <td>{{$customer->cmnd}}</td>
                                                 <td>{{$customer->projectName}}</td>
                                                 <td>{{$customer->lot_number}}</td>
+                                                @if($customer->contractStatus == "Chọn giữ chỗ")
+                                                    <td></td>
+                                                @else
                                                 <td>{{$this->contractStatus[$customer->contractStatus]}}</td>
+                                                @endif
                                                 <td>{{$customer->payment_progress}}</td>
 
                                                 
