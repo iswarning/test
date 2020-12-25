@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-3">
                         
-                            <x-jet-button wire:click="createShowContract">Tạo Hợp Đồng</x-jet-button>
+                            <x-jet-button wire:click="createShowContract">Tạo hợp đồng</x-jet-button>
                             <x-jet-dialog-modal wire:model.lazy="modalShowContractVisible">
                                 @if($contractId)
                                     <x-slot name="title">

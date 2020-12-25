@@ -90,7 +90,10 @@ class CustomerDetail extends Component
             'customerData.cmnd' => ['required', Rule::unique('customers', 'cmnd')->ignore($this->customerId)],
             'customerData.address' => 'required',
             'customerData.household' => 'required',
-            'customerData.birthday' => 'required|date_format:yy-m-d',
+            'customerData.birthday' => [
+                'required',
+                'date_format:Y-m-d', 
+                'before:' . date('Y-m-d')],
             'customerData.phone' => 'required|min:10|max:12',
         ];
 
@@ -159,6 +162,7 @@ class CustomerDetail extends Component
             'customerData.household.required' => 'Không thể để trống hộ khẩu',
             'customerData.birthday.required' => 'Không thể để trống ngày sinh',
             'customerData.birthday.date_format' => 'Ngày sinh không hợp lệ',
+            'customerData.birthday.before' => 'Ngày sinh phải nhỏ hơn ngày hiện tại',
             'customerData.phone.required' => 'Không thể để trống số điện thoại',
             'customerData.phone.min' => 'Số điện thoại ít nhất 10 số',
             'customerData.phone.max' => 'Số điện thoại quá dài',

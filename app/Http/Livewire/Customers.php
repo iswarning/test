@@ -82,7 +82,10 @@ class Customers extends Component
 
             'customerData.name' => 'required',
             'customerData.cmnd' => ['required', Rule::unique('customers', 'cmnd')->ignore($this->customerId)],
-            'customerData.birthday' => 'required',
+            'customerData.birthday' => [
+                'required',
+                'date_format:Y-m-d', 
+                'before:' . date('Y-m-d')],
             'customerData.household' => 'required',
             'customerData.address' => 'required',
             'customerData.phone' => ['required','min:10','max:12'],
@@ -123,6 +126,8 @@ class Customers extends Component
             'customerData.phone.required' => 'Không thể để trống số điện thoại',
             'customerData.phone.min' => 'Số điện thoại ít nhất 10 số',
             'customerData.phone.max' => 'Số điện thoại quá dài',
+            'customerData.birthday.date_format' => 'Ngày sinh không hợp lệ',
+            'customerData.birthday.before' => 'Ngày sinh phải nhỏ hơn ngày hiện tại'
         ];
     }
 
@@ -155,6 +160,7 @@ class Customers extends Component
         $this->ifDatedDefault();
         $this->validate();
 
+        
         $customer = ModelsCustomers::create($this->customerData);
         $this->contractData['customer_id'] = $customer->id;
         
