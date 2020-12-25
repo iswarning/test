@@ -12,12 +12,12 @@ class TestController extends Controller
     {
         // dd($req->birthday);
         $Validator = Validator::make($req->all(), [
-            'birthday' => 'date_format:Y-m-d'
+            'birthday' => 'present|required'
         ]);
         if($Validator->fails()){
             dd($Validator->errors()->all());
         }
         die('fgh');
-        return view('test');
+        // return view('test');
     }
 }
