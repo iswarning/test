@@ -18,7 +18,7 @@ use App\Enums\ContractStatusCreated;
 use App\Models\Project;
 use App\Models\Juridical;
 
-class CustomerExportIn implements FromQuery, WithColumnFormatting, WithMapping, WithHeadings
+class CustomerExportIn implements FromQuery, WithMapping, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -82,7 +82,7 @@ class CustomerExportIn implements FromQuery, WithColumnFormatting, WithMapping, 
             $contractStatusCreated = "";
         }
         $payment = Payment::where('contract_id' , $contractData->contractID)->first();
-        $juridical = Juridical::where('contract_id', $contractData->contractID)->first();
+        // $juridical = Juridical::where('contract_id', $contractData->contractID)->first();
 
         $billate = [];
         if(BillLate::where('payment_id', $payment->id)->first() == null){
@@ -95,6 +95,21 @@ class CustomerExportIn implements FromQuery, WithColumnFormatting, WithMapping, 
             $billate['receipt_date'] = "";
         }else{
             $billate = BillLate::where('payment_id', $payment->id)->first()->toArray();
+        }
+        $juridical = [];
+        if(Juridical::where('contract_id', $contractData->contractID)->first() == null){
+            $juridical['contract_info'] = "";
+            $juridical['status'] = "";
+            $juridical['notarized_date'] = "";
+            $juridical['registration_procedures'] = "";
+            $juridical['delivery_book_date'] = "";
+            $juridical['liquidation'] = "";
+            $juridical['bill_profile'] = "";
+            $juridical['book_holder'] = "";
+            $juridical['delivery_land_date'] = "";
+            $juridical['commitment'] = "";
+        }else{
+            $juridical = Juridical::where('contract_id', $contractData->contractID)->first()->toArray();
         }
         return [
             $contractData->id,
@@ -123,6 +138,16 @@ class CustomerExportIn implements FromQuery, WithColumnFormatting, WithMapping, 
             $billate['number_notifi'],
             $billate['document'],
             $billate['receipt_date'],
+            $juridical['contract_info'],
+            $juridical['status'],
+            $juridical['notarized_date'],
+            $juridical['registration_procedures'],
+            $juridical['delivery_book_date'],
+            $juridical['liquidation'],
+            $juridical['bill_profile'],
+            $juridical['book_holder'],
+            $juridical['delivery_land_date'],
+            $juridical['commitment'],
         ];
     }
 
@@ -169,29 +194,29 @@ class CustomerExportIn implements FromQuery, WithColumnFormatting, WithMapping, 
 
 
 
-    public function columnFormats(): array
-    {
-        return [
-            'A' => NumberFormat::FORMAT_NUMBER,
-            'B' => NumberFormat::FORMAT_TEXT,
-            'C' => NumberFormat::FORMAT_NUMBER,
-            'D' => NumberFormat::FORMAT_NUMBER,
-            'E' => NumberFormat::FORMAT_NUMBER,
-            'F' => NumberFormat::FORMAT_TEXT,
-            'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+    // public function columnFormats(): array
+    // {
+    //     return [
+    //         'A' => NumberFormat::FORMAT_NUMBER,
+    //         'B' => NumberFormat::FORMAT_TEXT,
+    //         'C' => NumberFormat::FORMAT_NUMBER,
+    //         'D' => NumberFormat::FORMAT_NUMBER,
+    //         'E' => NumberFormat::FORMAT_TEXT,
+    //         'F' => NumberFormat::FORMAT_TEXT,
+    //         'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+    //         'H' => NumberFormat::FORMAT_TEXT,
+    //         'I' => NumberFormat::FORMAT_NUMBER,
+    //         'J' => NumberFormat::FORMAT_TEXT,
+    //         'K' => NumberFormat::FORMAT_TEXT,
+    //         'L' => NumberFormat::FORMAT_TEXT,
+    //         'M' => NumberFormat::FORMAT_TEXT,
+    //         'N' => NumberFormat::FORMAT_TEXT,
+    //         'O' => NumberFormat::FORMAT_TEXT,
+    //         'P' => NumberFormat::FORMAT_TEXT,
+    //         'Q' => NumberFormat::FORMAT_TEXT,
+    //         'R' => NumberFormat::FORMAT_TEXT,
 
-            'I' => NumberFormat::FORMAT_NUMBER,
-            'J' => NumberFormat::FORMAT_NUMBER,
-            'K' => NumberFormat::FORMAT_TEXT,
-            'L' => NumberFormat::FORMAT_TEXT,
-            'M' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-            'N' => NumberFormat::FORMAT_NUMBER,
-            'O' => NumberFormat::FORMAT_TEXT,
-            'P' => NumberFormat::FORMAT_TEXT,
-            'Q' => NumberFormat::FORMAT_TEXT,
-            'R' => NumberFormat::FORMAT_TEXT,
-
-        ];
-    }
+    //     ];
+    // }
 
 }

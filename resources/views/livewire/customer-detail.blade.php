@@ -118,7 +118,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <x-jet-label for="signed_date" value="{{ __('Giá bán') }}" />
-                                            <x-jet-input type="text" class="block mt-1 w-full" wire:model.lazy="contractData.value" id="value" autocomplete="off"/>
+                                            <x-jet-input type="number" class="block mt-1 w-full" wire:model.lazy="contractData.value" id="value" autocomplete="off"/>
                                             @error('contractData.value')
                                             <span class="text-danger">{{ $message }}</span>
                                             @endError
@@ -133,7 +133,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" /> 
-                                                <x-jet-input type="text" class="block mt-1 w-full" wire:model="payment_progress" id="payment_progress" autocomplete="off"/>
+                                                <x-jet-input type="number" class="block mt-1 w-full" wire:model="payment_progress" id="payment_progress" autocomplete="off"/>
                                                 @error('payment_progress')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @endError
@@ -433,7 +433,7 @@
                                     <div class="col-md-1"></div>
                                     <h5 class="col-md-5"> Giá bán: </h5>
                                     <div class="col-md-1"></div>
-                                    <label class="col-md-5">{{$row->value}}</label>
+                                    <label class="col-md-5">{{number_format($row->value)}}</label>
                                 </div><hr/>
 
                             </div>
@@ -463,7 +463,7 @@
                                     <div class="col-md-1"></div>
                                     <h5 class="col-md-5"> Tiến độ thanh toán: </h5>
                                     <div class="col-md-1"></div>
-                                    <label class="col-md-5">{{$paymentData['payment_progress']}}</label>
+                                    <label class="col-md-5">{{$paymentData['payment_progress']}}%</label>
                                 </div><hr/>
                         
                                 <div class="row">
@@ -559,7 +559,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
-                                            <x-jet-input id="payment_progress" class="block mt-1 w-full" type="text" wire:model.lazy="paymentData.payment_progress"  autocomplete="off"/>
+                                            <x-jet-input id="payment_progress" class="block mt-1 w-full" type="number" wire:model.lazy="paymentData.payment_progress"  autocomplete="off"/>
                                             @error('paymentData.payment_progress')
                                             <span class="text-danger">{{ $message }}</span>
                                             @endError
@@ -671,7 +671,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
-                                            <x-jet-input id="payment_progress" class="block mt-1 w-full" type="text" wire:model="paymentData.payment_progress"  autocomplete="off"/>
+                                            <x-jet-input id="payment_progress" class="block mt-1 w-full" type="number" wire:model="paymentData.payment_progress"  autocomplete="off"/>
                                             @error('paymentData.payment_progress')
                                             <span class="text-danger">{{ $message }}</span>
                                             @endError

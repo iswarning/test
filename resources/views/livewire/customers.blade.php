@@ -18,7 +18,7 @@
                             <div class="float-left">
                                 <h3 >Danh sách khách hàng </h3>
                                 <small class='badge badge-secondary'>
-                                    @if(!empty($keyWord))
+                                    {{-- @if(!empty($keyWord))
                                         @foreach($customers as $k => $customer)
                                             @if($k != 0)
                                                 @if($customers[$k]->customerID == $customers[$k-1]->customerID)
@@ -29,10 +29,11 @@
                                             @endif
                                                 
                                         @endforeach
-                                    @endif
-                                    {{-- {{ count($customers->customerID) }} --}}
+                                    @endif --}}
+                                    {{ count(App\Models\Customers::all()) }}
                                     khách hàng và
-                                    {{$this->countContract }}
+                                    {{-- {{$this->countContract }} --}}
+                                    {{ count($customers) }}
                                     hợp đồng
                                     {{-- {{ $this->countCustomer }} --}}
                                     {{-- {{ $this->countCustomer }} --}}
@@ -262,7 +263,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <x-jet-label for="value" value="{{ __('Giá bán') }}" />
-                                                    <x-jet-input autocomplete="off" type="text" class="block mt-1 w-full" wire:model.lazy="contractData.value" id="value"/>
+                                                    <x-jet-input autocomplete="off" type="number" class="block mt-1 w-full" wire:model.lazy="contractData.value" id="value"/>
                                                     @error('contractData.value')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @endError
@@ -272,7 +273,7 @@
                                             <div class="row mt-4">
                                                 <div class="col-md-6">
                                                     <x-jet-label for="payment_progress" value="{{ __('Tiến độ thanh toán') }}" />
-                                                    <x-jet-input autocomplete="off" type="text" class="block mt-1 w-full" wire:model.lazy="paymentData.payment_progress" id="payment_progress"/>
+                                                    <x-jet-input autocomplete="off" type="number" class="block mt-1 w-full" wire:model.lazy="paymentData.payment_progress" id="payment_progress"/>
                                                     @error('paymentData.payment_progress')
                                                     <span class="text-danger">{{ $message }}</span>
                                                     @endError
@@ -427,7 +428,7 @@
                                                 @else
                                                 <td>{{$this->contractStatus[$customer->contractStatus]}}</td>
                                                 @endif
-                                                <td>{{$customer->payment_progress}}</td>
+                                                <td>{{$customer->payment_progress}}%</td>
 
                                                 
                                                     <td>

@@ -276,7 +276,9 @@ class Customers extends Component
         $dataRender = $customerExport->paginate($this->recordNum);
         $this->customerExport = $dataRender->toArray();
         $this->countContract = count($dataRender);
+        
         $this->countCustomer = count($dataRender);
+        // dd($dataRender);
         // $this->countCustomer
     //     // dd($dataRender[1]->customerID);
     //     $count = 0;

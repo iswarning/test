@@ -168,6 +168,7 @@ class CustomerDetail extends Component
             'customerData.phone.max' => 'Số điện thoại quá dài',
 
             'paymentData.payment_progress.required' => 'Không thể để trống tiến độ thanh toán',
+            // 'payment_progress.required' => 'Không thể để trống tiến độ thanh toán',
             'payment_progress.required' => 'Không thể để trống tiến độ thanh toán',
 
             'contractData.contract_no.required' => 'Không thể để trống mã hợp đồng',
@@ -307,14 +308,13 @@ class CustomerDetail extends Component
             'status' => null,
             'project_id' => 0
         ];
-        // $this->payment_date_95 = null;
-        // $this->payment_progress = null;
+        $this->payment_date_95 = null;
+        $this->payment_progress = null;
         $this->modalShowContractVisible = true;
     }
 
     public function createContract()
     {
-        
         $this->ifSelectedDefault();
         $this->ifDatedDefault();
         $this->contractData['customer_id'] = $this->customerId;
@@ -387,17 +387,6 @@ class CustomerDetail extends Component
             $this->juridicalData['contract_info'] = null;
         }
     }
-
-
-    // public function isEmpty($string)
-    // {
-    //     $string = trim($string);
-    //     if($string === "")
-    //     {
-    //         return null;
-    //     }
-    //     return $string;
-    // }
     
     public function ifDatedDefault()
     {
