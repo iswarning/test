@@ -8,8 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Pridi:wght@200&display=swap" rel="stylesheet">
- <style> 
- #customers {
+ <style>
+     #customers {
     font-family: 'Noto Sans', serif;
   border-collapse: collapse;
   font-size: 12px;
@@ -32,7 +32,7 @@
    h2{
        text-align:center;
    }
-</style>
+ </style>
 </head>
 <body>
 

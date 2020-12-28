@@ -416,5 +416,6 @@ class Customers extends Component
             fn() => print($pdf),
             'customers.pdf'
         );
+        // set_time_limit(300);
     }
 }
