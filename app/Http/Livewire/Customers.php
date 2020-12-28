@@ -413,7 +413,9 @@ class Customers extends Component
         // return PDF::download(new CustomerPDF($this->customerExport['data']), 'customers.pdf');
         $pdf = PDF::loadView('exportPDF', ['customers' => $this->customerExport['data']])->output();
         return response()->streamDownload(
-            fn() => print($pdf),
+            function() use ($pdf){
+                return print($pdf);
+            },
             'customers.pdf'
         );
         // set_time_limit(300);

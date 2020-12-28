@@ -571,32 +571,36 @@ class CustomerDetail extends Component
         // dd($data);
         $pdf = DomPDFPDF::loadView('exportPDFIn', ['data' => $data])->output();
         return response()->streamDownload(
-            fn() => print($pdf),
+            function() use ($pdf){
+                return print($pdf);
+            },
             'customers.pdf'
         );
         // set_time_limit(1000);
     }
 
-    // public function exportPDF2(Request $req)
-    // {
-    //     $customerID = $req->id;
-    //     $contractID = $req->contractId;
-    //     $customerData = Customers::find($customerID);
-    //     $contractData = Contracts::find($contractID);
-    //     $paymentData = Payment::where('contract_id', $contractID)->first();
-    //     $billlateData = Billlate::where('payment_id', $paymentData->id)->first() ?? null;
-    //     $juridicalData = Juridical::where('contract_id', $contractID)->first() ?? null;
+    public function exportPDF2()
+    {
 
-    //     $pdf = DomPDFPDF::loadView('exportPDFIn2', [
-    //         'customerData' => $customerData,
-    //         'contractData' => $contractData,
-    //         'paymentData' => $paymentData,
-    //         'billlateData' => $billlateData,
-    //         'juridicalData' => $juridicalData,
-    //         ])->output();
-    //     return response()->streamDownload(
-    //         fn() => print($pdf),
-    //         'customers.pdf'
-    //     );
-    // }
+        // dd($this->customerId);
+        $customerData = Customers::find($this->customerId);
+        $contractData = Contracts::find($this->contractId);
+        $paymentData = Payment::where('contract_id', $this->contractId)->first();
+        $billlateData = Billlate::where('payment_id', $paymentData->id)->first() ?? null;
+        $juridicalData = Juridical::where('contract_id', $this->contractId)->first() ?? null;
+
+        $pdf = DomPDFPDF::loadView('exportPDFIn2', [
+            'customerData' => $customerData,
+            'contractData' => $contractData,
+            'paymentData' => $paymentData,
+            'billlateData' => $billlateData,
+            'juridicalData' => $juridicalData,
+            ])->output();
+        return response()->streamDownload(
+            function() use ($pdf){
+                return print($pdf);
+            },
+            'customers.pdf'
+        );
+    }
 }

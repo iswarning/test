@@ -26,10 +26,7 @@
                             <small wire:loading wire:target="export" class="badge badge-success">
                                 Đang tải xuống...
                             </small>
-                            <x-jet-button wire:click="exportPDF">Pdf</x-jet-button>
-                            <small wire:loading wire:target="exportPDF" class="badge badge-success">
-                                Đang tải xuống...
-                            </small>
+                            
                         @endif
                     </div>
                     <div class="col-md-3 py-2">
@@ -364,7 +361,11 @@
             @foreach($contract as $key => $row)
                 @if($tab == 'contract'.$row->id.'')
                     <div class="tab-pane container" id='contract{{ $key }}'>
-
+                        <x-jet-button wire:click="exportPDF2">Pdf</x-jet-button>
+                        <small wire:loading wire:target="exportPDF2" class="badge badge-success">
+                            Đang tải xuống...
+                        </small>
+                        <p></p>
                         {{-- @livewire('contract.contract-detail', ['id' => $row->id], key($row->id)) --}}
                         
                         {{-- Thông tin Hợp đồng --}}
