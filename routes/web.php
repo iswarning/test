@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\CustomerPDF;
 use App\Http\Livewire\Accounts;
 use App\Http\Livewire\ContractDetail;
 use App\Http\Livewire\CustomerDetail;
@@ -35,16 +36,19 @@ Route::group(['middleware' =>
     Route::get('/accounts', Accounts::class)->name('accounts');
     Route::get('/account/{id}', AccountDetail::class)->name('accountDetail');
     Route::get('/projects', Projects::class)->name('projects');
-    Route::get('/download', [CustomerDetail::class , 'downloadPDF'])->name('download');
+    // Route::get('/download', [CustomerDetail::class , 'downloadPDF'])->name('download');
 });
 
 
-Route::get('/render', function(){
-    return view('exportPDF', [
-        'data' => CustomerData::get()
-    ]);
-})->name('render');
-Route::get('/pdf', [Customers::class, 'exportPDF'])->name('pdf');
+// Route::get('/render', function(){
+//     return view('exportPDF', [
+//         'data' => CustomerData::get()
+//     ]);
+// })->name('render');
+
+// Route::get('/pdf', function(){ 
+//     return view('exportPDF');
+// });
 
 Route::get('/', [LoginController::class, 'login'])->name('login');
 Route::post('/', [LoginController::class, 'postLogin'])->name('postLogin');

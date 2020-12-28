@@ -23,6 +23,7 @@ use Illuminate\Validation\Rules\RequiredIf;
 
 use App\Exports\CustomerPDF;
 use App\Exports\CustomerExportIn;
+use Barryvdh\DomPDF\Facade as DomPDFPDF;
 use Illuminate\Http\Request;
 
 
@@ -545,5 +546,33 @@ class CustomerDetail extends Component
     public function export()
     {
         return Excel::download(new CustomerExportIn($this->customerData), 'customers.xlsx');
+    }
+
+    public function exportPDF()
+    {
+        $data = $this->customerData;
+        $contractData = Contracts::where('customer_id', $data['id'])->get();
+        $data['contractData'] = $contractData;
+        foreach($data['contractData'] as $k => $contract){
+            $contract['paymentData'] = Payment::where('contract_id', $contract['id'])->first()->toArray();
+            $billlateData = BillLate::where('payment_id', $contract['paymentData']['id'])->first() ?? null;
+            if($billlateData != null){
+                $contract['billlateData'] = $billlateData->toArray();
+            }else{
+                $contract['billlateData'] = null;
+            }
+            $juridicalData = Juridical::where('contract_id', $contract['id'])->first() ?? null;
+            if($juridicalData != null){
+                $contract['juridicalData'] = $juridicalData->toArray();
+            }else{
+                $contract['juridicalData'] = null;
+            }
+        }
+        // dd($data);
+        $pdf = DomPDFPDF::loadView('exportPDFIn', ['data' => $data])->output();
+        return response()->streamDownload(
+            fn() => print($pdf),
+            'customers.pdf'
+        );
     }
 }

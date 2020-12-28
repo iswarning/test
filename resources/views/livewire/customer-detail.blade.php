@@ -19,13 +19,20 @@
             <div class="container">
                 @if(Auth::user()->type != 3)
                 <div class="row">
-                    <div class="col-md-7"></div>
-                    <div class="col-md-2">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-5 py-2">
                         @if(Auth::user()->type == 1)
-                            <x-jet-button wire:click="export">Xuất file</x-jet-button>
+                            <x-jet-button wire:click="export">Excel</x-jet-button>
+                            <small wire:loading wire:target="export" class="badge badge-success">
+                                Đang tải xuống...
+                            </small>
+                            <x-jet-button wire:click="exportPDF">Pdf</x-jet-button>
+                            <small wire:loading wire:target="exportPDF" class="badge badge-success">
+                                Đang tải xuống...
+                            </small>
                         @endif
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3 py-2">
                         
                             <x-jet-button wire:click="createShowContract">Tạo hợp đồng</x-jet-button>
                             <x-jet-dialog-modal wire:model.lazy="modalShowContractVisible">

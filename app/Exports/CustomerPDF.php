@@ -3,23 +3,27 @@
 namespace App\Exports;
 
 use App\Models\Customers;
+use Barryvdh\DomPDF\Facade as PDF;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use PDF;
 
 class CustomerPDF
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public $customerData;
-    public function __construct($customerData)
+    // use Exportable;
+    public $dataRender;
+    public function __construct($dataRender)
     {
-        $this->customerData = $customerData;
-        $pdf = PDF::loadView('print',  [
-            'customerData' =>  $customerData ,
-        ]);
+        // dd($data);
+        $this->dataRender = $dataRender;
+        // dd($this->dataRender);
+        // return $this->exportPDF();
+        $this->exportPDF();
+    }
+
+    public function exportPDF()
+    {
+        return PDF::loadView('exportPDF', ['customers' => $this->dataRender]);
     }
 
 }

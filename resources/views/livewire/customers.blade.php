@@ -4,7 +4,7 @@
     
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Quản lý khách hàng
-    </h2>
+    </h2> 
 </x-slot>
 <div>
     <section>
@@ -17,37 +17,27 @@
                         <div class="card-header">
                             <div class="float-left">
                                 <h3 >Danh sách khách hàng </h3>
+                                
                                 <small class='badge badge-secondary'>
-                                    {{-- @if(!empty($keyWord))
-                                        @foreach($customers as $k => $customer)
-                                            @if($k != 0)
-                                                @if($customers[$k]->customerID == $customers[$k-1]->customerID)
-                                                    {{ $this->countCustomer-- }}
-                                                @else
-                                                    {{ $this->countCustomer++ }}
-                                                @endif
-                                            @endif
-                                                
-                                        @endforeach
-                                    @endif --}}
-                                    {{ count(App\Models\Customers::all()) }}
+                                    {{ $countCustomer }}
                                     khách hàng và
-                                    {{-- {{$this->countContract }} --}}
                                     {{ count($customers) }}
                                     hợp đồng
-                                    {{-- {{ $this->countCustomer }} --}}
-                                    {{-- {{ $this->countCustomer }} --}}
-                                    {{-- khách hàng và --}}
-                                    {{-- {{ $this->countContract }} --}}
-                                    {{-- {{$this->countContract }} --}}
-                                    {{-- hợp đồng --}}
                                 </small>
                             </div>
                             
                             <div class="float-right">
                                 @if(Auth::user()->type == 1)
-                                    <x-jet-button wire:click="export">Xuất file</x-jet-button>
-                                    {{-- <x-jet-button wire:click="exportPDF">PDF</x-jet-button> --}}
+                                    <x-jet-button wire:click="export">Excel</x-jet-button>
+                                    <small wire:loading wire:target="export" class="badge badge-success">
+                                        Đang tải xuống...
+                                    </small>
+                                    <x-jet-button wire:click="exportPDF">Pdf</x-jet-button><br>
+                                    <small wire:loading wire:target="exportPDF" class="badge badge-success">
+                                        Đang tải xuống...
+                                    </small>
+
+                                    {{-- <a href="{{ route('pdf') }}">PDF</a> --}}
                                 @endif
                             </div>
                         </div>
@@ -224,7 +214,7 @@
                                                             <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
                                                         </div>
                                                         <select class="custom-select" wire:model.lazy="contractData.status">
-                                                            <option>Chọn trạng thái</option>
+                                                            <option value="">Chọn trạng thái</option>
                                                             @foreach ($this->contractStatus as $status)
                                                                 <option value="{{$loop->index}}">{{ $status }}</option>
                                                             @endforeach

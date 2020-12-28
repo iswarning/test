@@ -18,8 +18,11 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\RequiredIf;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\CustomerExport; 
-use PDF;
+use App\Exports\CustomerExport;
+use App\Exports\CustomerPDF;
+use App\Http\Controllers\TestController;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class Customers extends Component
 {
@@ -48,10 +51,11 @@ class Customers extends Component
     public $selectTimeFrom;
     public $selectTimeTo;
     public $selectBill;
-    public $selectStatus;
+    public $selectStatus = null;
     public $selectProject = 0;
     public $countContract;
     public $countCustomer;
+    public $dataPDF;
 
 
     public $projectData = [];
@@ -79,7 +83,6 @@ class Customers extends Component
             'contractData.value' => 'required',
             'contractData.project_id' => 'required',
             'contractData.signed_date' => 'required',
-            'contractData.signed' => 'required',
             'contractData.project_id' => 'required' ,
 
             'customerData.name' => 'required',
@@ -116,7 +119,6 @@ class Customers extends Component
             'contractData.project_id.required' => 'Không thể để trống dự án',
             'contractData.signed_date.required' => 'Không thể để trống ngày ký',
             // 'contractData.signed_date.date_format' => 'Ngày ký không hợp lệ',
-            'contractData.signed.required' => 'Không thể để trống' ,
 
             'customerData.name.required' => 'Không thể để trống họ tên',
             'customerData.cmnd.required' => 'Không thể để trống chứng minh nhân dân',
@@ -162,7 +164,7 @@ class Customers extends Component
         $this->ifDatedDefault();
         $this->validate();
 
-        
+        // dd($this->contractData);
         $customer = ModelsCustomers::create($this->customerData);
         $this->contractData['customer_id'] = $customer->id;
         
@@ -262,39 +264,35 @@ class Customers extends Component
         }
         
         $customerExport = $customers->select('*',
-            
             'projects.name as projectName',
             'customers.name as customerName',
             'customers.id as customerID',
-            // 'COUNT(customers.id as countCustomer)',
             'contracts.id as contractID',
             'contracts.status as contractStatus' ,
             'contracts.created_at as contractCreated',
             'payments.id as paymentId',
         );
 
-        $dataRender = $customerExport->paginate($this->recordNum);
+        $dataRender = $customerExport->orderBy('customers.name', 'asc')->paginate($this->recordNum);
+        // dd($dataRender);
         $this->customerExport = $dataRender->toArray();
         $this->countContract = count($dataRender);
+        $this->countCustomer = count(ModelsCustomers::all());
         
-        $this->countCustomer = count($dataRender);
-        // dd($dataRender);
-        // $this->countCustomer
-    //     // dd($dataRender[1]->customerID);
-    //     $count = 0;
-    //    for($i = 0; $i < count($this->customerExport); $i++)
-    //    {
-    //        $count++;
-    //        if($i != 0){
-    //            if($dataRender[$i]->customerID == $dataRender[$i-1]->customerID)
-    //             {
-    //                 $count--;
-    //             }
-    //        }
-           
-    //    }
-    //    $this->countCustomer = $count;
-        // dd($this->customerExport);
+        if(!empty($this->keyWord) || $this->selectStatus != null || $this->selectBill != null || $this->selectTimeFrom != null || $this->selectTimeTo != null || $this->selectProject != 0){
+            $this->countCustomer = $this->countContract;
+            for($i = 0; $i < count($dataRender); $i++){
+                    if($i != 0){
+                        if($dataRender[$i]->customerID == $dataRender[$i-1]->customerID){
+                            $this->countCustomer--;
+                    }
+                }  
+            }
+        }
+        
+        // $test = new CustomerPDF($dataRender);
+        // $test->exportPDF();
+
         return view('livewire.customers', [
             'customers' => $dataRender,
             'projects' => Project::all() ,
@@ -409,15 +407,14 @@ class Customers extends Component
         return Excel::download(new CustomerExport($this->customerExport), 'customers.xlsx');
     }
 
-    public function status($id)
-    {
-        $this->emit('customerDetail', $id);
-    }
 
-    // public function exportPDF()
-    // {
-    //     $data = Customers::get();
-    //     $pdf = PDF::loadView('exportPDF', ['data' => $data]);
-    //     return $pdf->download('tuts_notes.pdf');
-    // }
+    public function exportPDF()
+    {
+        // return PDF::download(new CustomerPDF($this->customerExport['data']), 'customers.pdf');
+        $pdf = PDF::loadView('exportPDF', ['customers' => $this->customerExport['data']])->output();
+        return response()->streamDownload(
+            fn() => print($pdf),
+            'customers.pdf'
+        );
+    }
 }

@@ -17,7 +17,7 @@ class Accounts extends Component
     public $accountId;
     public $keyWord;
     public $recordNum = 20;
-    public $roleId = 0;
+    public $roleId = null;
     public $permissionId = null;
     public $modalFormVisible = false;
     public $modalFormDeleteVisible = false;
@@ -29,9 +29,7 @@ class Accounts extends Component
 
     public function rules()
     {
-        if(!isset($accountId)){
-            $rules['accountData.password'] = 'required|min:8';
-        }
+        
         $rules = [
             'accountData.name' => 'required',
             'accountData.email' => ['required',
@@ -40,6 +38,9 @@ class Accounts extends Component
             'accountData.birthday' => 'required',
             'roleId' => 'required'
         ];
+        if(!isset($accountId)){
+            $rules['accountData.password'] = 'required|min:8';
+        }
         
 
         return $rules;
