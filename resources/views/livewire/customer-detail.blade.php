@@ -441,7 +441,8 @@
                                     <div class="col-md-1"></div>
                                     <h5 class="col-md-5"> Giá bán: </h5>
                                     <div class="col-md-1"></div>
-                                    <label class="col-md-5">{{number_format($row->value)}}</label>
+                                
+                                    <label class="col-md-5">{{is_numeric($row->value) ? number_format($row->value) : $row->value }}</label>
                                 </div><hr/>
 
                             </div>
