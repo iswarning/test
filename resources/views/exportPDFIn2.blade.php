@@ -24,6 +24,11 @@
    h2{
        text-align:center;
    }
+   tr:first-child{
+       font-size: 20px !important;
+       color: white;
+       background-color: green;
+   }
 
 
       </style>
