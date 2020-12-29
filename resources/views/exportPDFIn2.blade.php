@@ -116,7 +116,7 @@
                     @if($contractData->status == 2)
                     <tr>
                         <td>Giữ chỗ: </td>
-                        <td>{{ App\Enums\ContractStatusCreated::statusName[$contractData->status_created_by] }}</td>
+                        <td>{{ App\Enums\ContractStatusCreated::statusName[$contractData->status_created_by] ?? '' }}</td>
                     </tr>
                     @endif
                     
@@ -161,15 +161,15 @@
 
                     <tr>
                         <td>Số lần đã gửi thông báo: </td>
-                        <td>{{ $billlateData->citation_rate }}</td>
+                        <td>{{ $billlateData->number_notifi }}</td>
                     </tr>
                     <tr>
                         <td>Văn bản, phương thức: </td>
-                        <td>{{ $billlateData->citation_rate }}</td>
+                        <td>{{ $billlateData->document }}</td>
                     </tr>
                     <tr>
                         <td>Ngày khách nhận thông báo: </td>
-                        <td>{{ $billlateData->citation_rate }}</td>
+                        <td>{{ $billlateData->receipt_date }}</td>
                     </tr>
 
                     @endif
@@ -193,11 +193,15 @@
                     </tr>
                     <tr>
                         <td>Ngày công chứng: </td>
-                        <td>{{ $juridicalData->notarized_date }}</td>
+                        <td>{{ $juridicalData->notarized_date ?? '' }}</td>
                     </tr>
                     <tr>
                         <td>Thủ tục đăng bộ: </td>
                         <td>{{ $juridicalData->registration_procedures }}</td>
+                    </tr>
+                    <tr>
+                        <td>Ngày bàn giao sổ: </td>
+                        <td>{{ $juridicalData->delivery_book_date ?? ''  }}</td>
                     </tr>
                     <tr>
                         <td>Thanh lý hợp đồng: </td>
@@ -209,15 +213,15 @@
                     </tr>
                     <tr>
                         <td>Hồ sơ thu lai của khách hàng: </td>
-                        <td>{{ $juridicalData->bill_profile }}</td>
+                        <td>{{ $juridicalData->bill_profile ?? ''}}</td>
                     </tr>
                     <tr>
                         <td>Ngày bàn giao đất: </td>
-                        <td>{{ $juridicalData->delivery_land_date }}</td>
+                        <td>{{ $juridicalData->delivery_land_date ?? ''  }}</td>
                     </tr>
                     <tr>
                         <td>Cam kết thỏa thuận: </td>
-                        <td>{{ $juridicalData->commitment }}</td>
+                        <td>{{ $juridicalData->commitment ?? ''}}</td>
                     </tr>
                 </tbody>
             </table>

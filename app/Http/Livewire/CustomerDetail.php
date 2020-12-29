@@ -440,6 +440,7 @@ class CustomerDetail extends Component
         $this->projectData = Project::all();
         $this->modalShowContractVisible = true;
         $this->contractData = Contracts::find($id)->toArray();
+        
     }
 
     public function updateContract()
@@ -447,6 +448,9 @@ class CustomerDetail extends Component
         $this->ifDatedDefault();
         $this->ifSelectedDefault();
         $this->contractData['id'] = $this->contractId;
+        if($this->contractData['status'] == 2){
+            $this->contractData['status_created_by'] = null;
+        }
         $this->validate();
         Contracts::find($this->contractId)->update($this->contractData);
         $this->modalShowContractVisible = false;
