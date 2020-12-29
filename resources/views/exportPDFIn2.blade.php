@@ -185,7 +185,7 @@
                     </tr>
                     <tr>
                         <td>Thông tin hợp đồng: </td>
-                        <td>{{ $juridicalData->contract_info }}</td>
+                        <td>{{ App\Enums\ContractInfo::infoName[$juridicalData->contract_info] }}</td>
                     </tr>
                     <tr>
                         <td>Tình trạng sổ: </td>
@@ -209,10 +209,10 @@
                     </tr>
                     <tr>
                         <td>Bộ phận giữ sổ: </td>
-                        <td>{{ $juridicalData->book_holder }}</td>
+                        <td>{{ App\Enums\BookHolder::roleName[$juridicalData->book_holder] }}</td>
                     </tr>
                     <tr>
-                        <td>Hồ sơ thu lai của khách hàng: </td>
+                        <td>Hồ sơ thu lại của khách hàng: </td>
                         <td>{{ $juridicalData->bill_profile ?? ''}}</td>
                     </tr>
                     <tr>

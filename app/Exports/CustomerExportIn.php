@@ -186,7 +186,7 @@ class CustomerExportIn implements FromQuery, WithMapping, WithHeadings
             'Thủ tục đăng bộ',
             'Thanh lý hợp đồng',
             'Bộ phận giữ sổ',
-            'Hồ sơ thu lai của khách hàng',
+            'Hồ sơ thu lại của khách hàng',
             'Ngày bàn giao đất',
             'Cam kết thỏa thuận',
         ];
