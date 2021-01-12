@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use \Venturecraft\Revisionable\RevisionableTrait;
+
+
 
 class User extends Authenticatable
 {
@@ -17,12 +20,14 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use RevisionableTrait;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+    protected $revisionEnabled = true;
     protected $fillable = [
         'name',
         'email',

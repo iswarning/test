@@ -338,7 +338,7 @@
                                             <label class="input-group-text" for="inputGroupSelect01">Trạng thái</label>
                                         </div>
                                         <select class="custom-select" wire:model.lazy="selectStatus">
-                                            <option>Chọn trạng thái</option>
+                                            <option value="">Chọn</option>
                                             @foreach ($this->contractStatus as $status)
                                                 <option value="{{$loop->index}}">{{ $status }}</option>
                                             @endforeach
@@ -351,7 +351,7 @@
                                             <label class="input-group-text" for="inputGroupSelect01">Thanh toán</label>
                                         </div>
                                         <select class="custom-select" wire:model.lazy="selectBill">
-                                            <option>Chọn thanh toán</option>
+                                            <option value="">Chọn</option>
                                             <option value="0">Đúng hạn</option>
                                             <option value="1">Trễ hạn</option>
                                         </select>
@@ -365,7 +365,7 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Từ</label>
-                                            <x-jet-input autocomplete="off" type="text" id="selectTimeFrom" class='w-52' placeholder="Chọn ngày ký" wire:model="selectTimeFrom"/>
+                                            <x-jet-input autocomplete="off" type="text" id="selectTimeFrom" style="width: 188px" placeholder="Chọn ngày ký" wire:model="selectTimeFrom"/>
                                         </div>
 
                                     </div>
@@ -374,7 +374,7 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Đến</label>
-                                            <x-jet-input autocomplete="off" type="text" id="selectTimeTo" class='w-52' placeholder="Chọn ngày ký" wire:model="selectTimeTo"/>
+                                            <x-jet-input autocomplete="off" type="text" id="selectTimeTo" style="width: 188px" placeholder="Chọn ngày ký" wire:model="selectTimeTo"/>
                                         </div>
                                     </div>
                                 </div>
@@ -476,15 +476,36 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($histories as $history)
+                                    @foreach ($histories as $h)
+                                    
                                     <tr>
-                                        <td>{{$history->title}} của <a href="{{route('customerDetail', $history->customer_id)}}"> khách hàng {{$history->customer_id}}</a> </td>
-                                        <td>{{Carbon\Carbon::parse($history->created_at)->format('d/m/Y H:i:s')}}</td>
+                                        @if($h->new_value != null)
+                                        <td>{{App\Models\User::find($h->user_id)->name}} đã thay đổi {{ $convert[$h->key] ?? $h->key }}:
+                                            @if($h->key === "project_id")
+                                            {{ App\Models\Project::find($h->new_value)->name }} của khách hàng 
+                                            @elseif($h->key === "status")
+                                            {{ App\Enums\ContractStatus::statusName[$h->new_value] }} của khách hàng
+                                            @elseif($h->key === "status_created_by" )
+                                            {{ App\Enums\ContractStatusCreated::statusName[$h->new_value]}} của khách hàng
+                                            @elseif($h->key === "contract_info") 
+                                            {{ App\Enums\ContractInfo::infoName[$h->new_value] }} của khách hàng
+                                            @elseif($h->key === "book_holder")
+                                            {{ App\Enums\BookHolder::roleName[$h->new_value] }} của khách hàng
+                                            @else
+                                            {{ $h->new_value }} của khách hàng
+                                            @endif
+                                            <a href="{{route('customerDetail', $h->revisionable_id)}}"> 
+                                             {{App\Models\Customers::find($h->revisionable_id)->name ?? ''}}
+                                            </a> 
+                                        </td>
+                                        <td>{{Carbon\Carbon::parse($h->created_at)->format('d/m/Y H:i:s')}}</td>
                                     </tr>
+
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
-                            {{ $histories->links() }}
+                            {{-- {{ $histories->links() }} --}}
                             @endif
                         </div>
                     </div>

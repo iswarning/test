@@ -17,6 +17,8 @@ use App\Enums\ContractStatus;
 use App\Enums\ContractStatusCreated;
 use App\Models\Project;
 use App\Models\Juridical;
+use App\Enums\BookHolder;
+use App\Enums\ContractInfo;
 
 class CustomerExportIn implements FromQuery, WithMapping, WithHeadings
 {
@@ -96,8 +98,8 @@ class CustomerExportIn implements FromQuery, WithMapping, WithHeadings
         }else{
             $billate = BillLate::where('payment_id', $payment->id)->first()->toArray();
         }
-        $juridical = [];
-        if(Juridical::where('contract_id', $contractData->contractID)->first() == null){
+        $juridical = Juridical::where('contract_id', $contractData->contractID)->first() ?? null;
+        if($juridical == null){
             $juridical['contract_info'] = "";
             $juridical['status'] = "";
             $juridical['notarized_date'] = "";
@@ -111,6 +113,7 @@ class CustomerExportIn implements FromQuery, WithMapping, WithHeadings
         }else{
             $juridical = Juridical::where('contract_id', $contractData->contractID)->first()->toArray();
         }
+        // dd($juridical);
         return [
             $contractData->id,
             $contractData->name,
@@ -138,14 +141,14 @@ class CustomerExportIn implements FromQuery, WithMapping, WithHeadings
             $billate['number_notifi'],
             $billate['document'],
             $billate['receipt_date'],
-            $juridical['contract_info'],
+            $juridical['contract_info'] ? ContractInfo::infoName[$juridical['contract_info']] : '',
             $juridical['status'],
             $juridical['notarized_date'],
             $juridical['registration_procedures'],
             $juridical['delivery_book_date'],
             $juridical['liquidation'],
+            $juridical['book_holder'] ? BookHolder::roleName[$juridical['book_holder']] : '',
             $juridical['bill_profile'],
-            $juridical['book_holder'],
             $juridical['delivery_land_date'],
             $juridical['commitment'],
         ];
@@ -184,6 +187,7 @@ class CustomerExportIn implements FromQuery, WithMapping, WithHeadings
             'Tình trạng sổ',
             'Ngày công chứng' ,
             'Thủ tục đăng bộ',
+            'Ngày bàn giao sổ',
             'Thanh lý hợp đồng',
             'Bộ phận giữ sổ',
             'Hồ sơ thu lại của khách hàng',

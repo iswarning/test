@@ -20,18 +20,22 @@
                 @if(Auth::user()->type != 3)
                 <div class="row">
                     <div class="col-md-4"></div>
-                    <div class="col-md-5 py-2">
-                        @if(Auth::user()->type == 1)
-                            <x-jet-button wire:click="export">Excel</x-jet-button>
-                            <small wire:loading wire:target="export" class="badge badge-success">
-                                Đang tải xuống...
-                            </small>
-                            
-                        @endif
-                    </div>
-                    <div class="col-md-3 py-2">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-6" style="padding-right: 95px;justify-content: flex-end;">
                         
-                            <x-jet-button wire:click="createShowContract">Tạo hợp đồng</x-jet-button>
+                       <div class="row" style="justify-content: flex-end;margin: 0;">
+
+                            
+                            <x-jet-button wire:click="createShowContract" style='font-size: 16px;'>Tạo hợp đồng</x-jet-button>
+                        </div>
+
+                        <div class="row" style="justify-content: flex-end;">
+                            
+                        </div>
+                        {{-- <br> --}}
+                        {{-- <p></p> --}}
+                            
+                            
                             <x-jet-dialog-modal wire:model.lazy="modalShowContractVisible">
                                 @if($contractId)
                                     <x-slot name="title">
@@ -214,7 +218,7 @@
                 @endforeach
             </ul>
             @if($tab == 'customer')
-                <div class="tab-pane container" id='customer'>
+                <div class="tab-pane container px-0" id='customer'>
 
                     {{--                Thong tin khach hang--}}
                     <p></p>
@@ -224,9 +228,11 @@
                                 <div class="col-md-8">
                                     <h3>Thông tin cơ bản của khách hàng</h3>
                                 </div>
-
+                                <div class="col-md-3">
+                                    
+                                </div>
                                 @if(Auth::user()->type == 1 or Auth::user()->type == 2)
-                                    <div class="col-md-2"><x-jet-button wire:click="updateShowModalCustomer({{$customerData['id']}})"> Sửa </x-jet-button></div>
+                                    <div class="col-md-1"><x-jet-button wire:click="updateShowModalCustomer({{$customerData['id']}})"> Sửa </x-jet-button></div>
                                 @endif
                             </div>
                         </div>
@@ -360,24 +366,43 @@
             <p></p>
             @foreach($contract as $key => $row)
                 @if($tab == 'contract'.$row->id.'')
-                    <div class="tab-pane container" id='contract{{ $key }}'>
-                        <x-jet-button wire:click="exportPDF2">Pdf</x-jet-button>
-                        <small wire:loading wire:target="exportPDF2" class="badge badge-success">
-                            Đang tải xuống...
-                        </small>
-                        <p></p>
+                    <div class="tab-pane container px-0" id='contract{{ $key }}'>
                         {{-- @livewire('contract.contract-detail', ['id' => $row->id], key($row->id)) --}}
                         
                         {{-- Thông tin Hợp đồng --}}
                         <div class="card">
                             <div class="card-header">
                                 <div class="row">
-                                    <div class="col-md-8">
-                                        <h3>Thông tin hợp đồng</h3>
+                                    <div class="col-md-4">
+                                        <h3>Thông tin hợp đồng </h3>
+                                        
                                     </div>
+                                    <div class="col-md-1 px-0 py-0">
+                                        {{-- <x-jet-button>
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+
+                                        </x-jet-button> --}}
+                                    </div>
+                                    <div class="col-md-4"></div>
                                     @if(Auth::user()->type != 3)
-                                    <div class="col-md-2"></div>
-                                    <div class="col-md-2"><x-jet-button wire:click="updateShowContract({{$row->id}})"> Sửa </x-jet-button></div>
+                                    <div class="col-md-1">
+                                        @if(Auth::user()->type == 1)
+                                            <x-jet-button wire:click="export">Excel</x-jet-button>            
+                                        @endif
+                                        <small wire:loading wire:target="export" class="badge badge-success" class='float-right' style="margin-top: 5px;">
+                                            Đang tải xuống...
+                                        </small>
+                                    </div>
+                                    @if(Auth::user()->type == 1)
+                                    <div class='col-md-1'>
+                                        <x-jet-button wire:click="exportPDF2">Pdf</x-jet-button>
+                                        <br>
+                                        <small wire:loading wire:target="exportPDF2" class="badge badge-success">
+                                            Đang tải xuống...
+                                        </small>
+                                    </div>
+                                    @endif
+                                    <div class="col-md-1"><x-jet-button wire:click="updateShowContract({{$row->id}})"> Sửa </x-jet-button></div>
                                     @endif
                                 </div>
                             </div>
@@ -460,8 +485,8 @@
                                         <h3>Thông tin thanh toán</h3>
                                     </div>
                                     @if(Auth::user()->type != 3)
-                                    <div class="col-md-2"></div>
-                                    <div class="col-md-2"><x-jet-button wire:click="updateShowPaymentAndBill({{$paymentData['id']}})"> Sửa </x-jet-button></div>
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-1"><x-jet-button wire:click="updateShowPaymentAndBill({{$paymentData['id']}})"> Sửa </x-jet-button></div>
                                     @endif
                                 </div>
                             </div>
@@ -800,8 +825,8 @@
                                         <h3>Thông tin pháp lý</h3>
                                     </div>
                                     @if($this->juridicalId)
-                                    <div class="col-md-2"></div>
-                                    <div class="col-md-2"><x-jet-button wire:click="updateShowJuridical({{$this->juridicalId}})"> Sửa </x-jet-button></div>
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-1"><x-jet-button wire:click="updateShowJuridical({{$this->juridicalId}})"> Sửa </x-jet-button></div>
                                     @endif
                                 </div>
                             </div>

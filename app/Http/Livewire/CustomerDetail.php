@@ -239,51 +239,51 @@ class CustomerDetail extends Component
         $this->validate();
         Customers::find($this->customerId)->update($this->customerData);
         $this->dataUpdated = Customers::find($this->customerId)->toArray();
-        $this->checkUpdateCustomer($this->dataNotUpdate, $this->dataUpdated);
+        // $this->checkUpdateCustomer($this->dataNotUpdate, $this->dataUpdated);
         $this->modalShowCustomerVisible = false;
         session()->flash('message', 'Cập nhật thông tin khách hàng thành công');
     }
 
-    public function checkUpdateCustomer($a, $b)
-    {
-        // Check Name
-        if($b['name'] != $a['name'])
-        {
-            $this->createHistoryCustomer(" Họ Tên: ".$b['name'], $b['id']);
-        }
-        // Check Cmnd
-        if($b['cmnd'] != $a['cmnd'])
-        {
-            $this->createHistoryCustomer(" Cmnd: ".$b['cmnd'], $b['id']);
-        }
-        // Check Phone
-        if($b['phone'] != $a['phone'])
-        {
-            $this->createHistoryCustomer(" Số điện thoại: ".$b['phone'], $b['id']);
-        }
-        // Check Household
-        if($b['household'] != $a['household'])
-        {
-            $this->createHistoryCustomer(" Hộ khẩu: ".$b['household'], $b['id']);
-        }
-        // Check Birthday
-        if($b['birthday'] != $a['birthday'])
-        {
-            $this->createHistoryCustomer(" Ngày sinh: ".$b['birthday'], $b['id']);
-        }
-        if($b['address'] != $a['address'])
-        {
-            $this->createHistoryCustomer(' Địa chỉ: '.$b['address'], $b['id']);
-        }
-    }
+    // public function checkUpdateCustomer($a, $b)
+    // {
+    //     // Check Name
+    //     if($b['name'] != $a['name'])
+    //     {
+    //         $this->createHistoryCustomer(" Họ Tên: ".$b['name'], $b['id']);
+    //     }
+    //     // Check Cmnd
+    //     if($b['cmnd'] != $a['cmnd'])
+    //     {
+    //         $this->createHistoryCustomer(" Cmnd: ".$b['cmnd'], $b['id']);
+    //     }
+    //     // Check Phone
+    //     if($b['phone'] != $a['phone'])
+    //     {
+    //         $this->createHistoryCustomer(" Số điện thoại: ".$b['phone'], $b['id']);
+    //     }
+    //     // Check Household
+    //     if($b['household'] != $a['household'])
+    //     {
+    //         $this->createHistoryCustomer(" Hộ khẩu: ".$b['household'], $b['id']);
+    //     }
+    //     // Check Birthday
+    //     if($b['birthday'] != $a['birthday'])
+    //     {
+    //         $this->createHistoryCustomer(" Ngày sinh: ".$b['birthday'], $b['id']);
+    //     }
+    //     if($b['address'] != $a['address'])
+    //     {
+    //         $this->createHistoryCustomer(' Địa chỉ: '.$b['address'], $b['id']);
+    //     }
+    // }
 
-    public function createHistoryCustomer($target, $id)
-    {
-        History::create([
-            'title' => Auth::user()->name." đã thay đổi ".$target ,
-            'customer_id' => $id
-        ]);
-    }
+    // public function createHistoryCustomer($target, $id)
+    // {
+    //     History::create([
+    //         'title' => Auth::user()->name." đã thay đổi ".$target ,
+    //         'customer_id' => $id
+    //     ]);
+    // }
 
     public function updated($propertyName)
     {

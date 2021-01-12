@@ -23,6 +23,7 @@ use App\Exports\CustomerPDF;
 use App\Http\Controllers\TestController;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\Revisions;
 
 class Customers extends Component
 {
@@ -193,8 +194,15 @@ class Customers extends Component
         $this->dataUpdated = ModelsCustomers::find($this->customerId)->toArray();
         Contracts::find($this->contractId)->update($this->contractData);
         $payment = Payment::where('contract_id',$this->contractId)->first();
+        $revision = Revisions::where('revisionable_id','=',$this->contractId)->get();
+        foreach($revision as $r){
+            Revisions::find($r['id'])->update([
+                'revisionable_id' => $this->customerId
+            ]);
+        }
+        
         Payment::find($payment->id)->update($this->paymentData);
-        $this->checkUpdateCustomer($this->dataNotUpdate, $this->dataUpdated);
+        // $this->checkUpdateCustomer($this->dataNotUpdate, $this->dataUpdated);
         // dd($this->paymentData);
         $this->modalFormContractVisible = false;
         $this->modalFormCustomerVisible = false;
@@ -230,7 +238,7 @@ class Customers extends Component
                     ->orWhere('customers.id','like',$searchKey);
             });
 
-        if($this->selectStatus != null && $this->selectStatus === "Chọn trạng thái"){
+        if($this->selectStatus != null && empty($this->selectStatus)){
             $this->selectStatus = null;
         }
         if($this->selectStatus != null)
@@ -239,7 +247,7 @@ class Customers extends Component
         }
         
 
-        if($this->selectBill != null && $this->selectBill === "Chọn thanh toán"){
+        if($this->selectBill != null && empty($this->selectBill)){
             $this->selectBill = null;
         }
         if($this->selectBill != null)
@@ -292,11 +300,53 @@ class Customers extends Component
         
         // $test = new CustomerPDF($dataRender);
         // $test->exportPDF();
+        $historires = DB::table('revisions')->get();
+        $convertEnToVi = [
+            'name' => 'Tên',
+            'address' => 'Địa chỉ',
+            'household' => 'Hộ Khẩu',
+            'birthday' => 'Ngày sinh',
+            'phone' => 'Số điện thoại',
+
+            'contract_no' => 'Số hợp đồng',
+            'area_signed' => 'Diện tích ký',
+            'type' => 'Loại hợp đồng',
+            'signed' => 'Trạng thái ký',
+            'signed_date' => 'Ngày ký',
+            'value' => 'Giá bán',
+            'lot_number' => 'Mã lô',
+            'status' => 'Trạng thái hợp đồng',
+            'project_id' => 'Dự án',
+            'status_created_by' => 'Giữ chỗ',
+
+            'payment_progress' => 'Tiến độ thanh toán',
+            'payment_date_95' => 'Ngày thanh toán 95%',
+
+            'day_late' => 'Ngày trễ',
+            'batch_late' => 'Đợt trễ',
+            'money_late' => 'Tiền trễ',
+            'citation_rate' => 'Lãi phạt',
+            'number_notifi' => 'Số lần đã gửi thông báo',
+            'document' => 'Văn bản , phương thức',
+            'receipt_date' => 'Ngày khách nhận thông báo',
+
+            'contract_info' => 'Thông tin hợp đồng',
+            'status' => 'Tình trạng sổ',
+            'notarized_date' => 'Ngày công chứng',
+            'registration_procedures' => 'Thủ tục đăng bộ',
+            'delivery_book_date' => 'Ngày bàn giao sổ',
+            'liquidation' => 'Thanh lý hợp đồng',
+            'bill_profile' => 'Hồ sơ thu lại của khách hàng',
+            'book_holder' => 'Bộ phận giữ sổ',
+            'delivery_land_date' => 'Ngày bàn giao đất',
+            'commitment' => 'Cam kết thỏa thuận',
+        ];
 
         return view('livewire.customers', [
             'customers' => $dataRender,
             'projects' => Project::all() ,
-            'histories' => History::orderBy('id','desc')->paginate(20) ,
+            'histories' => $historires,
+            'convert' => $convertEnToVi
         ]);
     }
 
@@ -319,7 +369,7 @@ class Customers extends Component
 
     public function updateShowModal($customer_id, $contract_id)
     {
-        // $this->reset();
+         // $this->reset();
         $this->dataNotUpdate = ModelsCustomers::find($customer_id)->toArray();
         // $this->contractStatus = ContractStatus::statusName;
         // $this->contractStatusCreated = ContractStatusCreated::statusName;
@@ -348,46 +398,46 @@ class Customers extends Component
         $this->dataTableHistoryVisible = false;
     }
 
-    public function checkUpdateCustomer($a, $b)
-    {
-        // Check Name
-        if($b['name'] != $a['name'])
-        {
-            $this->createHistoryCustomer(" Họ tên: ".$b['name'], $b['id']);
-        }
-        // Check Cmnd
-        if($b['cmnd'] != $a['cmnd'])
-        {
-            $this->createHistoryCustomer(" Cmnd: ".$b['cmnd'], $b['id']);
-        }
-        // Check Phone
-        if($b['phone'] != $a['phone'])
-        {
-            $this->createHistoryCustomer(" Số điện thoại: ".$b['phone'], $b['id']);
-        }
-        // Check Household
-        if($b['household'] != $a['household'])
-        {
-            $this->createHistoryCustomer(" Hộ khẩu: ".$b['household'], $b['id']);
-        }
-        // Check Birthday
-        if($b['birthday'] != $a['birthday'])
-        {
-            $this->createHistoryCustomer(" Ngày sinh: ".$b['birthday'], $b['id']);
-        }
-        if($b['address'] != $a['address'])
-        {
-            $this->createHistoryCustomer(' Địa chỉ: '.$b['address'], $b['id']);
-        }
-    }
+    // public function checkUpdateCustomer($a, $b)
+    // {
+    //     // Check Name
+    //     if($b['name'] != $a['name'])
+    //     {
+    //         $this->createHistoryCustomer(" Họ tên: ".$b['name'], $b['id']);
+    //     }
+    //     // Check Cmnd
+    //     if($b['cmnd'] != $a['cmnd'])
+    //     {
+    //         $this->createHistoryCustomer(" Cmnd: ".$b['cmnd'], $b['id']);
+    //     }
+    //     // Check Phone
+    //     if($b['phone'] != $a['phone'])
+    //     {
+    //         $this->createHistoryCustomer(" Số điện thoại: ".$b['phone'], $b['id']);
+    //     }
+    //     // Check Household
+    //     if($b['household'] != $a['household'])
+    //     {
+    //         $this->createHistoryCustomer(" Hộ khẩu: ".$b['household'], $b['id']);
+    //     }
+    //     // Check Birthday
+    //     if($b['birthday'] != $a['birthday'])
+    //     {
+    //         $this->createHistoryCustomer(" Ngày sinh: ".$b['birthday'], $b['id']);
+    //     }
+    //     if($b['address'] != $a['address'])
+    //     {
+    //         $this->createHistoryCustomer(' Địa chỉ: '.$b['address'], $b['id']);
+    //     }
+    // }
 
-    public function createHistoryCustomer($target, $id)
-    {
-        History::create([
-            'title' => Auth::user()->name." đã thay đổi ".$target ,
-            'customer_id' => $id
-        ]);
-    }
+    // public function createHistoryCustomer($target, $id)
+    // {
+    //     History::create([
+    //         'title' => Auth::user()->name." đã thay đổi ".$target ,
+    //         'customer_id' => $id
+    //     ]);
+    // }
 
     public function nextModal()
     {
